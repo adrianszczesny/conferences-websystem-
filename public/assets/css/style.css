@@ -1,0 +1,652 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic,500italic,700italic);
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    color: #999999;
+    line-height: 1;
+}
+body * {
+    text-shadow: none !important;
+    color: #696969;
+}
+h1, .h1, h2, .h2, h3, .h3 {
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+h6.trademarks, span.trademarks {
+    font-size: 12px;
+    color: #bababa;
+}
+p {
+    font-size: 13px;
+}
+textarea {
+    max-width: 100%;
+}
+input[type="text"], select, textarea, input[type="email"] {
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0;
+    border-radius: 0 !important;
+    padding: 0 15px;
+    color: #696969 !important;
+    height: 40px;
+}
+select {
+    -webkit-appearance: none;
+     appearance:         none;   
+    -webkit-border-radius: 0;  /* Safari 3-4, iOS 1-3.2, Android 1.6- */    
+    -moz-border-radius: 0;  /* Firefox 1-3.6 */     
+    border-radius: 0;
+    background-position: right 50%;
+    background-repeat: no-repeat;
+    background-image: url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='24' viewBox='0 0 24 24'><path fill='#444' d='M7.406 7.828l4.594 4.594 4.594-4.594 1.406 1.406-6 6-6-6z'></path></svg>") !important;
+    height: 40px !important;
+}
+.fa-mobile {
+    float: left;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-left: 5px;
+    color: #dbdbdb;
+}
+.fa-envelope-o {
+    margin-right: 12px;
+    color: #dbdbdb;
+}
+header h1 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #57aa26;
+}
+header h1 small {
+    font-weight: bold;
+    color: #57aa26;
+}
+header #logo {
+    margin-top: -22px;
+}
+.navbar {
+    min-height: 48px;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background-color: none;
+    background-image: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.navbar img {
+    margin: 20px 0 0 0;
+}
+.navbar h1 {
+    margin: 0;
+}
+.navbar .nav > li > a {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 26px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #999999;
+    background: none;
+    padding: 10px 5px;
+}
+.navbar .dropdown-menu {
+    padding: 0;
+}
+.navbar .dropdown-menu li a {
+    padding: 15px 10px;
+}
+.navbar .dropdown-menu li a:hover {
+    background: #f8f8f8;
+}
+.dropdown-menu {
+    min-width: 200px;
+}
+.dropdown-menu > .active > a {
+    background-color: #e7e7e7;
+}
+.navbar .nav > li.active > a,
+.navbar .nav > li.active:hover > a,
+.navbar .nav > li:hover > a,
+.navbar .nav > li > a:focus,
+.navbar .nav > li.active > a:focus {
+    background-color: none;
+    background-image: none;
+    color: #000;
+    filter: none;
+}
+.input-group-addon {
+    background: none;
+    border: 0;
+}
+
+#post-7 ul {
+    list-style: none;
+    padding: 0;
+}
+#post-7 ul li {
+    padding-left: 1.2em;
+}
+
+#post-7 ul li:before {
+    content: '\f105';
+    font-family: FontAwesome;
+    display: inline-block;
+    width: 1.2em;
+    margin-left: -1.2em;
+}​,
+
+.page-title h2 {
+    text-transform: uppercase;
+    font-size: 25px;
+    font-weight: 300;
+    margin-top: 50px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #dbdbdb;
+     letter-spacing: 3px;
+}
+.main-page article {
+    font-size: 13px;
+}
+.main-page article {
+    border-bottom: 2px solid #F5F5F5;
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+}
+.main-page div div:last-of-type article {
+    border-bottom: 0;
+    margin: 0;
+    padding: 0;
+}
+article {
+    border: 0;
+}
+article a h4 {
+    font-size: 13px;
+    color: #4b4b4b;
+    text-transform: uppercase;
+    margin-bottom: 0;
+}
+article span {
+    font-size: 13px;
+    color: #dbdbdb;
+}
+article {
+    font-size: 16px;
+    text-align: justify;
+    color: #696969;
+    margin-top: 10px;
+    line-height: 30px;
+}
+.nav-tabs > li > a {
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #fff;
+    border-radius: 0;
+    background: #57aa26;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+    color: #fff;
+    border: 1px solid transparent;
+    background: #303437;
+}
+#logo {
+    margin-top: 10px;
+}
+.nav-tabs {
+    border: none;
+}
+.navbar-nav {
+    margin: 25px 0 0 0;
+}
+
+.slider {
+    margin-top: 15px;
+    position: relative;
+}
+
+.slider p {
+    line-height: 37px;
+    color: #606060;
+    font-size: 28px;
+    position: absolute;
+    top: 65px;
+    left: 700px;
+    width: 50%;
+}
+
+.slider a {
+    background: #034896;
+    text-transform: uppercase;
+    border-radius: 0;
+    padding: 10px 38px;
+    margin-top: 15px;
+    position: absolute;
+    left: 900px;
+    bottom: 80px;
+}
+
+.slider a:active, .slider a:hover {
+    background: #034896;
+}
+
+.slider img {
+    width: 100%;
+    height: 300px;
+}
+.slider img.index-header {
+    height: 400px;
+    position: relative;
+}
+    .slider img.index-woman {
+        position: absolute;
+        z-index: 9;
+        left: 382px;
+        top: 0px;
+        width: inherit;
+        height: 400px;
+    }
+
+footer .container {
+    margin-top: 70px;
+    padding-top: 50px;
+    border-top: 1px solid rgba(219, 219, 219, 0.32);
+}
+footer p{
+    font-size: 13px;
+}
+footer .container div p:first-child{
+    font-weight: 500;
+}
+footer address {
+    font-size: 13px;
+    line-height: 1;
+    margin-left: 38px;
+    color: #28a4c9;
+}
+
+footer .contact {
+    margin-top: 25px;
+}
+
+footer .contact p {
+    font-size: 17px;
+    font-weight: 500;
+}
+
+footer .contact a {
+    border-radius: 0;
+    font-size: 14px;
+    text-transform: uppercase;
+    background-color: #034896;
+    padding: 10px 30px;
+}
+
+footer .contact a:hover {
+    background-color: #034896;
+}
+
+.company {
+    padding-top: 15px;
+}
+
+.company .image {
+    height: 150px;
+}
+.company img {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.company p {
+    font-size: 13px;
+    line-height: 30px;
+    text-align: justify;
+}
+
+.company p.title {
+    text-transform: uppercase;
+    font-weight: 500;
+    line-height: 1;
+    margin-top: 25px;
+}
+
+.wpcf7-submit {
+    text-transform: uppercase;
+    background: #034896;
+    color: #fff;
+    font-size: 14px;
+    border: 0;
+    padding: 7px 35px;
+}
+
+.job-title {
+    margin: 40px 0 0 0;
+}
+
+.top-left, .top-center, .center-left, .center {
+    border-right: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+    height: 170px;
+}
+
+.bottom-left, .bottom-center {
+    border-right: 1px solid #dbdbdb;
+    height: 170px;
+}
+
+.center-right {
+    border-top: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+    height: 170px;
+}
+
+.bottom-right, .top-right {
+    height: 170px;
+}
+
+.top-left img, .top-center img, .top-right img,
+.center-left img, .center img, .center-right img,
+.bottom-left img, .bottom-center img, .bottom-right img {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+.client-page-desc {
+    margin-bottom: 40px !important;
+}
+
+.client-other {
+    margin-top: 40px;
+}
+
+.main-page-title {
+    border-bottom: 1px solid #dbdbdb;
+    margin-top: 50px;
+    padding-bottom: 50px;
+}
+.main-page .post-40 ul, .main-page .post-40 ul li, .main-page .post-43 ul, .main-page .post-43 ul li {
+    padding-left: 15px;
+}
+.main-page-title h2 {
+    font-size: 25px;
+    font-weight: 300;
+    color: #696969;
+    margin: 6px 0;
+}
+.main-page-title a {
+    border: 2px solid #dbdbdb;
+    border-radius: 0;
+    padding: 10px 60px;
+    text-transform: uppercase;
+    color: #696969;
+}
+.main-page-desc {
+    margin: 60px 0;
+}
+.main-training-title {
+    text-transform: uppercase;
+    font-weight: 100;
+    letter-spacing: 2px;
+    font-size: 25px;
+}
+.main-training div > img{
+    display: block;
+    margin: 0 auto;
+}
+.main-training div p:first-of-type{
+    text-transform: uppercase;
+    font-weight: 500;
+    margin: 10px 0;
+}
+.main-training div > a{
+    margin-top: 15px;
+    display: block;
+    text-decoration: none;
+    font-size: 15px;
+}
+.reference {
+    position: relative;
+    margin-top: 100px;
+    background-image: url("./img/referencje.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    font-family: 'Roboto', sans-serif;
+}
+
+.reference ul li div:first-of-type div {
+    font-size: 17px;
+    line-height: 31px;
+    text-align: center;
+
+}
+.reference ul li div div{
+     color: #a2a2a2;
+}
+.reference h2 {
+    padding-top: 30px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 25px;
+    font-weight: 100;
+    letter-spacing: 3px;
+}
+
+.our-clients {
+    margin-top: 30px;
+    margin-bottom: 95px;
+}
+
+.our-clients .row:first-child {
+    border-bottom: 1px solid #dbdbdb;
+    padding-bottom: 5px;
+}
+
+.our-clients .row:last-child img {
+    margin: 20px auto 0 auto;
+    display: block;
+}
+
+.our-clients h6 {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0;
+}
+
+.see-all {
+    font-size: 12px;
+    color: #bababa;
+    margin-top: 30px;
+}
+.see-all i {
+    color: #bababa;
+}
+.see-all:hover {
+    text-decoration: none;
+    color: #bababa;
+}
+img.wp-smiley,
+img.emoji {
+    display: inline !important;
+    border: none !important;
+    box-shadow: none !important;
+    height: 1em !important;
+    width: 1em !important;
+    margin: 0 .07em !important;
+    vertical-align: -0.1em !important;
+    background: none !important;
+    padding: 0 !important;
+}
+
+.card-signin {
+    border: 0;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+    .card-signin .card-title {
+        margin-bottom: 2.5rem;
+        font-weight: 300;
+        font-size: 1.5rem;
+    }
+
+    .card-signin .card-img-left {
+        width: 60%;
+        /* Link to your background image using in the property below! */
+        background: scroll center url("../images/index_woman.png");
+        background-size: cover;
+    }
+
+    .card-signin .card-body {
+        padding: 10rem;
+    }
+
+.form-signin {
+    width: 100%;
+}
+
+    .form-signin .btn {
+        font-size: 80%;
+        border-radius: 5rem;
+        letter-spacing: .1rem;
+        font-weight: bold;
+        padding: 1rem;
+        transition: all 0.2s;
+    }
+
+.form-label-group {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+    .form-label-group input {
+        height: auto;
+        border-radius: 2rem;
+    }
+
+    .form-label-group > input,
+    .form-label-group > label {
+        padding: var(--input-padding-y) var(--input-padding-x);
+    }
+
+    .form-label-group > label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        width: 100%;
+        margin-bottom: 0;
+        /* Override default `<label>` margin */
+        line-height: 1.5;
+        color: #495057;
+        border: 1px solid transparent;
+        border-radius: .25rem;
+        transition: all .1s ease-in-out;
+    }
+
+    .form-label-group input::-webkit-input-placeholder {
+        color: transparent;
+    }
+
+    .form-label-group input:-ms-input-placeholder {
+        color: transparent;
+    }
+
+    .form-label-group input::-ms-input-placeholder {
+        color: transparent;
+    }
+
+    .form-label-group input::-moz-placeholder {
+        color: transparent;
+    }
+
+    .form-label-group input::placeholder {
+        color: transparent;
+    }
+
+    .form-label-group input:not(:placeholder-shown) {
+        padding-top: calc(var(--input-padding-y) + var(--input-padding-y) * (2 / 3));
+        padding-bottom: calc(var(--input-padding-y) / 3);
+    }
+
+        .form-label-group input:not(:placeholder-shown) ~ label {
+            padding-top: calc(var(--input-padding-y) / 3);
+            padding-bottom: calc(var(--input-padding-y) / 3);
+            font-size: 12px;
+            color: #777;
+        }
+info p {
+    font-size: 15px;
+}
+@media screen and (max-width: 767px) {
+    .page-header .heading {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .page-header .button-wrapper {
+        text-align: center;
+    }
+    .main-page-title a {
+        display: block;
+        margin: 0 auto;
+        clear: both;
+    }
+}
+@media screen and (max-width: 480px) {
+    .nav-tabs > li {
+        width: 100%;
+    }
+
+}
+@media screen and (max-width: 1200px) {
+    .slider img.index-woman {
+        left: 45px;
+        top: 0;
+        width: inherit;
+        height: 400px;
+    }
+    .slider p, .slider a {
+        left: 350px;
+        width: inherit;
+        height: inherit;
+        font-size: 20px;
+    }
+
+    .slider a {
+        bottom: 80px;
+    }
+
+}
+@media screen and (min-width: 1201px) and (max-width: 1250px) {
+    .slider img.index-woman {
+        position: absolute;
+        z-index: 9;
+        left: 250px;
+        top: -100px;
+        width: inherit;
+        height: inherit;
+    }
+}
+@media (min-width: 320px) and (max-width: 991px) {
+    .main-page-title a {
+        width: 100%;
+    }
+}
+@media (min-width: 768px) {
+    .navbar-nav > li > a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+}

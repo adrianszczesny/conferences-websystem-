@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+	 <title>
+        Logowanie    </title>
+	<meta charset="UTF-8">
+<% include ../../partials/head %>
+
+</head>
+
+<body>
+<% include ../../partials/header %>
+    <div class="container">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-4">
+						<h2>Lista aktualnych szkoleń</h2>
+					</div>
+                </div>
+            </div>
+			<table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Temat</th>												
+                        <th>Prowadzący</th>	
+						<th>Miasto</th>
+						<th>Data</th>					
+						<th>Cena netto</th>
+						<th>Zgłoś się</th>
+                    </tr>
+                </thead>
+                <tbody>
+				<% for(var i = 0; i < tabresult.length; i++) { %>
+				<tr>
+					<td><a href="/info:<%= tabresult[i][5] %>"> <%= tabresult[i][0] %></a></td>
+					<td><%= tabresult[i][1] %></td>
+					<td><%= tabresult[i][2] %></td>                        
+					<td><%= tabresult[i][3] %></td>
+					<td><%= tabresult[i][4] %></td>
+					<td><a href="/buy:<%= tabresult[i][5] %>" class="view" title="Zapisz się" data-toggle="tooltip"><i class="material-icons">&#xf044;</i></a></td>
+                </tr>
+				<% }; %>
+                </tbody>
+            </table>
+    </div>     
+</body>
+</html>  
