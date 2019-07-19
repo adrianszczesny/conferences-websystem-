@@ -49,7 +49,7 @@ Web application for organizing conferences
 ## Technologies:
 <dl>
   <dd> Back-end: Node.js - Express.js </dd>
-  <dd> Front-end: Bootstrap </dd>
+  <dd> Front-end: Bootstrap 4 </dd>
   <dd> Database: MySQL </dd>
 </dl>
             
