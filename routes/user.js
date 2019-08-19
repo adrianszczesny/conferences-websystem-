@@ -44,20 +44,6 @@ router.get('/', function(req, res) {
     console.log(req.session.user);
 	res.render("pages/home", {req: req.session.user});
 });
-/*
-router.get('/ui', function (req, res) {
-    res.render('pages/ui', { req: req.session.ID });
-})
-
-router.get('/ui_results', function (req, res) {
-    res.render('pages/ui_results', { req: req.session.ID });
-})
-router.post('/ui_results', function (req, res) {
-    //dietResult(req, res, '');
-})
-router.post('/ui', function (req, res) {
-    dietResult(req, res, '');
-})*/
 //logowania
 router.get('/loginPage', function (req, res) {
     res.render("pages/login", { req: req.session.user });
