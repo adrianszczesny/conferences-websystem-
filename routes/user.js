@@ -44,7 +44,10 @@ router.get('/', function(req, res) {
     console.log(req.session.user);
 	res.render("pages/home", {req: req.session.user});
 });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9ab83e482a0d3c6ba4c2b9fd81f91fa65f7a4800
 //logowania
 router.get('/loginPage', function (req, res) {
     res.render("pages/login", { req: req.session.user, error: false, mail: false, password: false });
