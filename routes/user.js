@@ -44,29 +44,16 @@ router.get('/', function(req, res) {
     console.log(req.session.user);
 	res.render("pages/home", {req: req.session.user});
 });
-/*
-router.get('/ui', function (req, res) {
-    res.render('pages/ui', { req: req.session.ID });
-})
 
-router.get('/ui_results', function (req, res) {
-    res.render('pages/ui_results', { req: req.session.ID });
-})
-router.post('/ui_results', function (req, res) {
-    //dietResult(req, res, '');
-})
-router.post('/ui', function (req, res) {
-    dietResult(req, res, '');
-})*/
 //logowania
 router.get('/loginPage', function (req, res) {
-    res.render("pages/login", { req: req.session.user });
+    res.render("pages/login", { req: req.session.user, error: false, mail: false, password: false });
 });
 
 
 // rejestracji
 router.get('/registerPage', function(req,res) {
-	res.render('pages/register', {req: req.session.id});
+	res.render('pages/register', {req: req.session.user});
 })
 
 router.post('/register', function (req, res) {
@@ -74,7 +61,7 @@ router.post('/register', function (req, res) {
     console.log(req.body.password);
 
     if (req.body.email == '' || req.body.password == '') {
-		res.render('pages/register', {req: req.session.id, noInput: true})
+		res.render('pages/register', {req: req.session.user, noInput: true})
 	}
 	else {
 		
@@ -87,8 +74,8 @@ router.post('/register', function (req, res) {
 				connection.query('INSERT INTO user (imie, email, password) VALUES (?, ?, ?)', [imie, email, haslo], function (error, results, fields) {
 					
                     // unikatowy login
-                    if (error) res.render('pages/register', { req: req.session.id, error: true });
-					else res.render('pages/login', {req: req.session.id});
+                    if (error) res.render('pages/register', { req: req.session.user, error: true });
+					else res.render('pages/login', {req: req.session.user});
 				});
 			});
 		
@@ -111,7 +98,7 @@ router.post('/logout', function(req,res) {
             req.session = null;
             if (err) console.log(err);
         })
-            res.render('pages/logout.ejs', { req: req.session.user});
+            res.render('pages/home.ejs', { req: req.session.user});
 		
 });
 
@@ -227,7 +214,7 @@ function loginAuth(req, res, url) {
 
     if (req.body.email == '') {
 		
-		res.render('pages/login', {req: req.session.user, noInput: true});
+		res.render('/loginPage', {req: req.session.user, noInput: true});
 		
 	} else {
 		loginAuthQuery(req, res, url);
@@ -240,7 +227,7 @@ function loginAuthQuery(req, res, url) {
         console.log(result);
 		
         if (result.length == 0 || error) {
-            res.render('pages/login', { req: req.session.user, error: true, email: true });
+            res.render('/loginPage', { req: req.session.user, error: true, email: true, password: true });
         }
         else {
 			
@@ -260,6 +247,7 @@ function loginAuthQuery(req, res, url) {
                 }
                 else {
                     console.log("bad");
+                    res.render('pages/login', { req: req.session.user,  error: true, password: true, email: null});
                 }
 		  	});
 		}

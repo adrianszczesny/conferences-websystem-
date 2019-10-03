@@ -8,22 +8,31 @@
 </head>
 
 <% include ../partials/header %>
-
+<body>
 <main>
         <div class="slider">
                             <img class="index-woman" src="/assets/images/index_woman.png" alt="" />
                         <img class="index-header" src="/assets/images/index-header.jpg" alt="header-image" />
-                            <p><br>Jesteśmy firmą świadczącą usługi szkoleniowe, których celem jest aktualizacja wiedzy oraz poszerzenie umiejętności związanych z&nbsp;praktycznym stosowaniem prawa. Pomagamy być na bieżąco z&nbsp;najnowszymi zmianami dzięki cyklicznym szkoleniom organizowanym na terenie całej Polski.</p>
+                            <l><br>Jesteśmy firmą świadczącą usługi szkoleniowe, których celem jest aktualizacja wiedzy oraz poszerzenie umiejętności związanych z&nbsp;praktycznym stosowaniem prawa. Pomagamy być na bieżąco z&nbsp;najnowszymi zmianami dzięki cyklicznym szkoleniom organizowanym na terenie całej Polski.</l>
                 
-                    </div>
+       </div>
        <div class="container main-page">
             <div class="row main-page-title">
+			 <% if (req == undefined) { %>
                 <div class="col-md-9 col-lg-8 col-sm-12">
                     <h2 class="text-center"><B>Zaloguj się, aby zobaczyć aktualne szkolenia</B></h2>
                 </div>
                 <div class="col-md-3 col-lg-4 col-sm-12">
                     <a class="btn btn-default" href="/loginPage">Logowanie</a>
                 </div>
+				<% } else { %>
+				<div class="col-md-9 col-lg-8 col-sm-12">
+                    <h2 class="text-center"><B>Sprawdź aktualne szkolenia</B></h2>
+                </div>
+                <div class="col-md-3 col-lg-4 col-sm-12">
+                    <a class="btn btn-default" href="/list">Aktualne szkolenia</a>
+                </div>
+				<% } %>
             </div>
             <div class="row">
                 <div class="col-md-12 col-lg-12 col-sm-12 main-page-desc">

@@ -1,60 +1,56 @@
 <!DOCTYPE html>
 <html lang="pl-PL">
 <head>
-	 <title>
-        Logowanie    </title>
-	<meta charset="UTF-8">
-<% include ../partials/head %>
+
+	<% include ../partials/head %> 
+	 <title> Logowanie </title>
 
 </head>
-
 <body>
 <% include ../partials/header %>
-<main>
-<form method="POST" action="/login">
-<div class="container">
-    <div class="row">
-      <div class="col-lg-10 col-xl-9 mx-auto">
-        <div class="card card-signin flex-row my-5">
-          <div class="card-img-left d-none d-md-flex">
-          </div>
-          	
-						<div class="card-body">
-							<h2 > Logowanie</h2>
-								<div class="form-group">
-									<label for="email" >E-Mail 
-									<input id="email" type="email" class="form-control" name="email" required></label>
-									<div class="invalid-feedback">
-										Nieprawidlowy email
-									</div>
-								</div>
 
-								<div class="form-group">
-									<label for="password">Haslo
+<main>
+<% if(error == true && email == true){ %>
+									<div class="alert alert-danger role="alert">Nieprawidlowy email</div>
+									<% } %> 
+<% if(error == true && password == true){ %>
+									<div class="alert alert-danger role="alert">Niepoprawne haslo</div>
+									 <% } %>
+
+<div class="slider">
+                            <img class="index-woman" src="/assets/images/index_woman.png" alt="" />
+                        <img class="index-header" src="/assets/images/index-header.jpg" alt="header-image" />
+                         <p> LOGOWANIE </p>
+							<form method="POST" action="/login">
+							<div class="form-group-email">
+									<label for="email" >E-Mail: 
+									<input id="email" type="email" class="form-control" name="email" required></label>
+									<% if(error == 'true' && email == 'true'){ %>
+									<div class="alert alert-danger role="alert">Nieprawidlowy email</div>
+									<% } %> 
+								</div>
+								
+
+							<div class="form-group-pass">
+									<label for="password"> Has³o:
 									<input id="password" type="password" class="form-control" name="password" required data-eye></label>
-									<div class="invalid-feedback">
-										Niepoprawne haslo
-									</div>
+									<% if(error == 'true' && password == 'true'){ %>
+									<div class="alert alert-danger role="alert">Niepoprawne haslo</div>
+									 <% } %>
 								</div>
 
 								
 
-								<div class="form-group m-0">
+								 <div class="form-group m-0">
 									<button type="submit" class="btn btn-primary btn-block">
 										Zaloguj
 									</button>
 								</div>
+								
 								</form>
-								<div class="mt-4 text-center">
-									Nie masz konta? <a href="/registerPage">Zarejestruj sie</a>
-								</div>
-							</div>
-					
-			
-        </div>
-      </div>
-    </div>
-  </div>
+				</div>
+
+
 
 
 

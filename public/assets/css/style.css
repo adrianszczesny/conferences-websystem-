@@ -13,6 +13,7 @@ body * {
 h1, .h1, h2, .h2, h3, .h3 {
     margin-top: 20px;
     margin-bottom: 25px;
+    align-content:center;
 }
 h6.trademarks, span.trademarks {
     font-size: 12px;
@@ -20,6 +21,7 @@ h6.trademarks, span.trademarks {
 }
 p {
     font-size: 13px;
+    align-content:center;
 }
 textarea {
     max-width: 100%;
@@ -214,12 +216,24 @@ article {
 .slider p {
     line-height: 37px;
     color: #606060;
-    font-size: 28px;
+    font-size: 30px;
     position: absolute;
+    align:center;
     top: 65px;
-    left: 700px;
+    left: 750px;
     width: 50%;
 }
+
+    .slider l {
+        line-height: 37px;
+        color: #606060;
+        font-size: 20px;
+        position: absolute;
+        align: center;
+        top: 65px;
+        left: 700px;
+        width: 50%;
+    }
 
 .slider a {
     background: #034896;
@@ -244,7 +258,7 @@ article {
     height: 400px;
     position: relative;
 }
-    .slider img.index-woman {
+.slider img.index-woman {
         position: absolute;
         z-index: 9;
         left: 382px;
@@ -252,12 +266,46 @@ article {
         width: inherit;
         height: 400px;
     }
+    .slider .form-group-email {
+        
+        line-height: 37px;
+        color: #606060;
+        font-size: 20px;
+        position: absolute;
+        align: center;
+        top: 120px;
+        left: 750px;
+        width: 50%;
+    }
 
-footer .container {
-    margin-top: 70px;
-    padding-top: 50px;
-    border-top: 1px solid rgba(219, 219, 219, 0.32);
-}
+    .slider .form-group-pass {
+        line-height: 37px;
+        color: #606060;
+        font-size: 20px;
+        position: absolute;
+        align: center;
+        top: 220px;
+        left: 750px;
+        width: 50%;
+    }
+
+    .slider .form-group-button {
+        line-height: 37px;
+        color: #606060;
+        font-size: 20px;
+        position: absolute;
+        align: center;
+        top: 200px;
+        left: 750px;
+        width: 50%;
+    }
+
+
+    footer .container {
+        margin-top: 70px;
+        padding-top: 50px;
+        border-top: 1px solid rgba(219, 219, 219, 0.32);
+    }
 footer p{
     font-size: 13px;
 }
@@ -339,7 +387,7 @@ footer .contact a:hover {
 }
 
 .bottom-left, .bottom-center {
-    border-right: 1px solid #dbdbdb;
+    border-right: 1px solid #082567;
     height: 170px;
 }
 
@@ -590,6 +638,7 @@ img.emoji {
 info p {
     font-size: 15px;
 }
+
 @media screen and (max-width: 767px) {
     .page-header .heading {
         text-align: center;
@@ -621,11 +670,24 @@ info p {
         left: 350px;
         width: inherit;
         height: inherit;
+        font-size: 30px;
+    }
+    .slider l {
+        left: 350px;
+        width: inherit;
+        height: inherit;
         font-size: 20px;
     }
 
     .slider a {
         bottom: 80px;
+    }
+
+    .slider .form-group-email, .slider .form-group-pass {
+        left: 350px;
+        width: inherit;
+        height: inherit;
+        font-size: 20px;
     }
 
 }
