@@ -15,9 +15,9 @@
 	<tbody>
         <div class="card mt-4">
             <div class="card-body">
-            <h3 class="card-title" align="center"><%= tabresult[0] %></h3>
-            <h4><b><%= tabresult[3] %></b>,<%= tabresult[5] %> </h4> 
-            <h5> <b><%= tabresult[4] %> r.</b> (godz. 9:00-15:00)</h5>
+            <h3 class="card-title" align="center"><%= tabresult[0].topic %></h3>
+            <h4><b><%= tabresult[0].city %></b>,<%= tabresult[0].hotel %> </h4> 
+            <h5> <b><%= tabresult[0].date %> r.</b> (godz. 9:00-15:00)</h5>
             </div>
         </div>
         <!-- /.card -->
@@ -27,16 +27,16 @@
             Cel szkolenia:
           </div>
           <div class="card-body">
-            <p><%= tabresult[8] %></p>
+            <p><%= tabresult[0].descriptions %></p>
           </div>
         </div>
 
 		<div class="card card-outline-secondary my-4">
           <div class="card-header">
-            Prowadzący: <%= tabresult[1] %>
+            Prowadzący: <%= tabresult[0].Name %>
           </div>
           <div class="card-body">
-            <p><%= tabresult[2] %><p>
+            <p><%= tabresult[0].description %><p>
           </div>
         </div>
 
@@ -54,39 +54,18 @@
             Cena:
           </div>
           <div class="card-body">
-            <p><b><%= tabresult[6] %> zł netto</b> + 23 % VAT (w przypadku, gdy szkolenie opłacone jest min. w 70% ze środków publicznych przysługuje Państwu zwolnienie z VAT, na podstawie oświadczenia)</p>
+            <p><b><%= tabresult[0].price %> zł netto</b> + 23 % VAT (w przypadku, gdy szkolenie opłacone jest min. w 70% ze środków publicznych przysługuje Państwu zwolnienie z VAT, na podstawie oświadczenia)</p>
           </div>
         </div>
-		<a href="/buy:<%= tabresult[7] %>" class="btn btn-success">Zapisz się</a>
+		<a href="/buy:<%= tabresult[0].id_event %>" class="btn btn-success">Zapisz się</a>
 		<!-- /.card -->
 </tbody>
       </div>
 	  </info>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         
 <% include ../../partials/error %>
 </main>
 <% include ../../partials/footer %>
-<<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-	<script src="js/user.js"></script>
+
 </body>
 </html> 

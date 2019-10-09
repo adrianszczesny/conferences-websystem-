@@ -42,12 +42,9 @@ router.get('/', function(req, res) {
     console.log(req.session.routerInfo);
     console.log("id");
     console.log(req.session.user);
-	res.render("pages/home", {req: req.session.user});
+    res.render("pages/home", { req: req.session.user, logout: false});
 });
-<<<<<<< HEAD
 
-=======
->>>>>>> 9ab83e482a0d3c6ba4c2b9fd81f91fa65f7a4800
 //logowania
 router.get('/loginPage', function (req, res) {
     res.render("pages/login", { req: req.session.user, error: false, mail: false, password: false });
@@ -92,7 +89,7 @@ router.post('/login', function(req,res) {
 //wylogowania
 router.get('/logoutPage', function (req, res) {
     req.session.user = null;
-    res.render('pages/logout', { req: req.session.user });
+    res.render('pages/home', { req: req.session.user, logout: true });
 })
 
 router.post('/logout', function(req,res) {
@@ -101,7 +98,7 @@ router.post('/logout', function(req,res) {
             req.session = null;
             if (err) console.log(err);
         })
-            res.render('pages/home.ejs', { req: req.session.user});
+    res.render('pages/home.ejs', { req: req.session.user, logout: true });
 		
 });
 
@@ -122,30 +119,23 @@ router.get('/info::id', function (req, res) {
     info(req, res, '');
 });
 
+router.get('/account', function (req, res) {
+    res.render('pages/client/account.ejs', { req: req.session.user });
+});
+
 function info(req, res, url) {
     let even = req.params.id;
     connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ',[even], function (error, result, fields) {
         console.log(result);
         console.log("info oooo ");
-        let tabresult = [];
-        let i = 0; 
-            tabresult[0] = result[0].topic;
-        tabresult[1] = result[0].Name;
-        tabresult[2] = result[0].description;
-        tabresult[3] = result[0].city;
         var date = result[0].date;
         var year = date.getFullYear();
         var month = date.getMonth();
         var day = date.getDate();
-        tabresult[4] = day + '.' + month + '.' + year;
-        tabresult[5] = result[0].hotel;
-        tabresult[6] = result[0].price;
-        tabresult[7] = result[0].id_event;
-        tabresult[8] = result[0].descriptions;
+        result[0].date = day + '.' + month + '.' + year;
         console.log("info oooo jjjjj ");
 
-        res.locals.tabresult = tabresult;
-        console.log(tabresult);
+        res.locals.tabresult = result;
         res.render('pages/client/info', { req: req.session.user, tabresult: res.locals.tabresult });
     });
 }
@@ -170,45 +160,37 @@ function list(req, res, url) {
         console.log(result);
         let tabresult = [];
         for (let i = 0; i < result.length; i++) {
-            tabresult[i] = new Array(6);
-            tabresult[i][0] = result[i].topic;
-            tabresult[i][1] = result[i].Name;
-            tabresult[i][2] = result[i].city;
-            var date = result[i].date;
-            var year = date.getFullYear();
-            var month = date.getMonth();
-            var day = date.getDate();  
-            tabresult[i][3] = day + '.' + month + '.' + year;
-            tabresult[i][4] = result[i].price;
-            tabresult[i][5] = result[i].id_event;
-        }
-        
-        res.locals.tabresult = tabresult;
-        res.render('pages/client/list', { req: req.session.id, tabresult: res.locals.tabresult });
-    });
-}
-function mylist(req, res, url) {
-
-    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event FROM trainer INNER JOIN event ON trainer.id_trainer = event.id_trainer INNER JOIN application ON event.id_event = application.id_event WHERE application.id_User= ? ',[req.session.user], function (error, result, fields) {
-        console.log(result);
-        console.log("sessionnid");
-        console.log(req.session.user);
-        let mytabresult = [];
-        for (let i = 0; i < result.length; i++) {
-            mytabresult[i] = new Array(6);
-            mytabresult[i][0] = result[i].topic;
-            mytabresult[i][1] = result[i].Name;
-            mytabresult[i][2] = result[i].city;
             var date = result[i].date;
             var year = date.getFullYear();
             var month = date.getMonth();
             var day = date.getDate();
-            mytabresult[i][3] = day + '.' + month + '.' + year;
-            mytabresult[i][4] = result[i].price;
-            mytabresult[i][5] = result[i].id_event;
+            result[i].date = day + '.' + month + '.' + year;
+       
         }
 
-        res.locals.mytabresult = mytabresult;
+        res.locals.tabresult = result;
+        res.render('pages/client/list', { req: req.session.id, tabresult: res.locals.tabresult });
+    });
+}
+
+
+function mylist(req, res, url) {
+
+    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, application.rabat FROM trainer INNER JOIN event ON trainer.id_trainer = event.id_trainer INNER JOIN application ON event.id_event = application.id_event WHERE application.id_User= ? ',[req.session.user], function (error, result, fields) {
+        console.log(result);
+        console.log("sessionnid");
+        console.log(req.session.user);
+        for (let i = 0; i < result.length; i++) {
+            var date = result[i].date;
+            var year = date.getFullYear();
+            var month = date.getMonth();
+            var day = date.getDate();
+            result[i].date = day + '.' + month + '.' + year;
+            result[i].price = result[i].price - result[i].rabat;
+         
+        }
+
+        res.locals.mytabresult = result;
         res.render('pages/client/mylist', { req: req.session.id, mytabresult: res.locals.mytabresult });
     });
 }
@@ -230,7 +212,7 @@ function loginAuthQuery(req, res, url) {
         console.log(result);
 		
         if (result.length == 0 || error) {
-            res.render('/loginPage', { req: req.session.user, error: true, email: true, password: true });
+            res.render('pages/login', { req: req.session.user, error: true, email: true, password: null });
         }
         else {
 			
@@ -246,7 +228,7 @@ function loginAuthQuery(req, res, url) {
                     console.log("3");
                     console.log(req.session.id);
                     console.log("4");
-                    res.render('pages/home', { req: req.session.user });
+                    res.render('pages/home', { req: req.session.user, logout: false});
                 }
                 else {
                     console.log("bad");

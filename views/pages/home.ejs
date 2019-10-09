@@ -7,9 +7,12 @@
     
 </head>
 
-<% include ../partials/header %>
 <body>
+<% include ../partials/header %>
 <main>
+ <% if(logout == true ){ %>
+        <div class="alert alert-success role="alert">Poprawnie wylogowano z konta</div>
+        <% } %>
         <div class="slider">
                             <img class="index-woman" src="/assets/images/index_woman.png" alt="" />
                         <img class="index-header" src="/assets/images/index-header.jpg" alt="header-image" />

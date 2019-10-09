@@ -10,37 +10,82 @@
 
 <body>
 <% include ../../partials/header %>
-    <div class="container">
-        <div class="table-wrapper">
-            <div class="table-title">
-                <div class="row">
-                    <div class="col-sm-4">
-						<h2>Lista Twoich szkoleń</h2>
+
+
+<div class="container">
+  <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
+  <t class="text-center">MOJE SZKOLENIA</t>
+		
+<ul id="list-nav" class="nav nav-tabs" role="tablist">
+	
+<li class="nav-item">
+<a class="nav-link active" href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Nadchodzące</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link" href="#last" role="tab" id="last-tab" data-toggle="tab" aria-controls="last">Archiwalne</a>
+</li>
+
+</ul>
+
+<!-- Content Panel -->
+<div id="list-nav-content" class="tab-content">
+
+<div role="tabpanel" class="tab-pane fade show active" id="home" aria-labelledby="home-tab">
+
+<tbody>
+		<% for(var i = 0; i < mytabresult.length; i++) { %>
+		<h4> </h4>
+		<div class="card">
+			<div class="card-body">
+				<div class="row justify-content-between">
+					<div class="col-6">
+						<h5 class="card-title"> <%= mytabresult[i].topic %> </h5>
+						<p class="card-text"><i class="fas fa-user-graduate"></i>  <%= mytabresult[i].Name %> </p>
+						<p class="card-text"><i class="fas fa-map-marker-alt"></i>  <%= mytabresult[i].city %></p>
+						<p class="card-text"><i class="fas fa-table"></i> <%= mytabresult[i].date %></p>
+						<p class="card-text"><i class="fas fa-coins"></i> <%= mytabresult[i].price %> zł </p>
 					</div>
-                </div>
-            </div>
-			<table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>Temat</th>												
-                        <th>Prowadzący</th>	
-						<th>Miasto</th>
-						<th>Data</th>					
-						<th>Cena netto</th>
-                    </tr>
-                </thead>
-                <tbody>
-				<% for(var i = 0; i < mytabresult.length; i++) { %>
-				<tr>
-					<td><a href="/info:<%= mytabresult[i][5] %>"> <%= mytabresult[i][0] %></a></td>
-					<td><%= mytabresult[i][1] %></td>
-					<td><%= mytabresult[i][2] %></td>                        
-					<td><%= mytabresult[i][3] %></td>
-					<td><%= mytabresult[i][4] %></td>
-                </tr>
-				<% }; %>
-                </tbody>
-            </table>
-    </div>     
+					<div class="row align-items-center">
+					<div class="col-auto ">					
+						<ul><a href="/info:<%= mytabresult[i].id_event %>" class="btn btn-primary " >Szczegóły</a></ul>
+					</div>
+					</div>
+				</div>
+			</div>		
+		</div>  
+        <% }; %>       
+   </tbody>
+ </div>
+
+
+<div role="tabpanel" class="tab-pane fade" id="last" aria-labelledby="last-tab">
+<p>szkolenie</p>
+</div>
+
+
+
+</div>
+
+
+</div>
+		
+
+<script>
+// Initialize tooltip component
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
+// Initialize popover component
+$(function () {
+  $('[data-toggle="popover"]').popover()
+})
+</script>
+
+
+
+	 <% include ../../partials/footer %>
+
 </body>
 </html>  

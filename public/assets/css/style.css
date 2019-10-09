@@ -208,6 +208,29 @@ article {
     margin: 25px 0 0 0;
 }
 
+.container t {
+    line-height: 37px;
+    color: #606060;
+    font-size: 35px;
+    position: absolute;
+    align: center;
+    top: 150px;
+    left: 300px;
+    width: 50%;
+}
+
+.container img.index-header {
+    margin-top: 15px;
+    height: 260px;
+    position: relative;
+}
+
+.container img.index-header-my {
+    margin-top: 15px;
+    height: 84px;
+    position: relative;
+}
+
 .slider {
     margin-top: 15px;
     position: relative;
@@ -220,18 +243,37 @@ article {
     position: absolute;
     align:center;
     top: 65px;
-    left: 750px;
+    left: 720px;
     width: 50%;
 }
-
+    .slider e {
+        line-height: 37px;
+        color: #606060;
+        font-size: 18px;
+        position: absolute;
+        align: center;
+        top: 80px;
+        left: 780px;
+        width: 50%;
+    }
+    .slider j {
+        line-height: 37px;
+        color: #606060;
+        font-size: 18px;
+        position: absolute;
+        align: center;
+        top: 160px;
+        left: 780px;
+        width: 50%;
+    }
     .slider l {
         line-height: 37px;
         color: #606060;
-        font-size: 20px;
+        font-size: 18px;
         position: absolute;
         align: center;
         top: 65px;
-        left: 700px;
+        left: 650px;
         width: 50%;
     }
 
@@ -261,11 +303,20 @@ article {
 .slider img.index-woman {
         position: absolute;
         z-index: 9;
-        left: 382px;
+        left: 352px;
         top: 0px;
         width: inherit;
         height: 400px;
     }
+0
+.slider alert {
+    position: absolute;
+    z-index: 9;
+    left: 700px;
+    top: 0px;
+    width: inherit;
+    height: 50px;
+}
     .slider .form-group-email {
         
         line-height: 37px;
@@ -273,8 +324,8 @@ article {
         font-size: 20px;
         position: absolute;
         align: center;
-        top: 120px;
-        left: 750px;
+        top: 150px;
+        left: 700px;
         width: 50%;
     }
 
@@ -284,8 +335,8 @@ article {
         font-size: 20px;
         position: absolute;
         align: center;
-        top: 220px;
-        left: 750px;
+        top: 230px;
+        left: 700px;
         width: 50%;
     }
 
@@ -295,8 +346,8 @@ article {
         font-size: 20px;
         position: absolute;
         align: center;
-        top: 200px;
-        left: 750px;
+        top: 290px;
+        left: 765px;
         width: 50%;
     }
 
@@ -660,23 +711,47 @@ info p {
 
 }
 @media screen and (max-width: 1200px) {
-    .slider img.index-woman {
+    .container img.index-header {
+        left: 0px;
+        top: 0;
+        width: inherit;
+        height: inherit;
+    }
+
+    .container img.index-header-my {
+        left: 0px;
+        top: 0;
+        width: inherit;
+        height: inherit;
+    }
+
+    .container t {
+
+        position: absolute;
+        top: 220px;
+        left: 0px;
+        width: inherit;
+        height: inherit;
+        font-size: 3vh;
+    }
+        .slider img.index-woman {
         left: 45px;
         top: 0;
         width: inherit;
         height: 400px;
     }
     .slider p, .slider a {
+        position: absolute;
         left: 350px;
         width: inherit;
         height: inherit;
         font-size: 30px;
     }
-    .slider l {
+    .slider l, .slider j, .slider e {
         left: 350px;
         width: inherit;
         height: inherit;
-        font-size: 20px;
+        font-size: 3vh;
     }
 
     .slider a {
