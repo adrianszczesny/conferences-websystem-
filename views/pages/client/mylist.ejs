@@ -15,6 +15,7 @@
 <div class="container">
   <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
   <t class="text-center">MOJE SZKOLENIA</t>
+  <h4> </h4>
 		
 <ul id="list-nav" class="nav nav-tabs" role="tablist">
 	
@@ -23,7 +24,7 @@
 </li>
 
 <li class="nav-item">
-<a class="nav-link" href="#last" role="tab" id="last-tab" data-toggle="tab" aria-controls="last">Archiwalne</a>
+<a class="nav-link" href="#last" role="tab" id="last-tab" data-toggle="tab" aria-controls="last" >Archiwalne</a>
 </li>
 
 </ul>
@@ -60,8 +61,31 @@
 
 
 <div role="tabpanel" class="tab-pane fade" id="last" aria-labelledby="last-tab">
-<p>szkolenie</p>
+<tbody>
+		<% for(var i = 0; i < lastmytabresult.length; i++) { %>
+		<h4> </h4>
+		<div class="card">
+			<div class="card-body">
+				<div class="row justify-content-between">
+					<div class="col-6">
+						<h5 class="card-title"> <%= lastmytabresult[i].topic %> </h5>
+						<p class="card-text"><i class="fas fa-user-graduate"></i>  <%= lastmytabresult[i].Name %> </p>
+						<p class="card-text"><i class="fas fa-map-marker-alt"></i>  <%= lastmytabresult[i].city %></p>
+						<p class="card-text"><i class="fas fa-table"></i> <%= lastmytabresult[i].date %></p>
+						<p class="card-text"><i class="fas fa-coins"></i> <%= lastmytabresult[i].price %> zł </p>
+					</div>
+					<div class="row align-items-center">
+					<div class="col-auto ">					
+						<ul><a href="/info:<%= lastmytabresult[i].id_event %>" class="btn btn-primary " >Szczegóły</a></ul>
+					</div>
+					</div>
+				</div>
+			</div>		
+		</div>  
+        <% }; %>       
+   </tbody>
 </div>
+
 
 
 

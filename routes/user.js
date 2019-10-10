@@ -120,8 +120,17 @@ router.get('/info::id', function (req, res) {
 });
 
 router.get('/account', function (req, res) {
-    res.render('pages/client/account.ejs', { req: req.session.user });
+    account(req, res, '');
 });
+
+function account(req, res) {
+        connection.query('SELECT * FROM user WHERE id_User = ?', [req.session.user], function (error, result, fields) {
+            res.locals.account = result;
+            console.log(result);
+            res.render('pages/client/account.ejs', { req: req.session.user, account: res.locals.account });
+        });
+    }
+
 
 function info(req, res, url) {
     let even = req.params.id;
@@ -177,22 +186,42 @@ function list(req, res, url) {
 function mylist(req, res, url) {
 
     connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, application.rabat FROM trainer INNER JOIN event ON trainer.id_trainer = event.id_trainer INNER JOIN application ON event.id_event = application.id_event WHERE application.id_User= ? ',[req.session.user], function (error, result, fields) {
+        var currentdate = mydate('date');
+        console.log(currentdate);
         console.log(result);
         console.log("sessionnid");
         console.log(req.session.user);
+        res.locals.mytabresult = [];
+        res.locals.lastmytabresult = [];
+        let j = 0;
+        let n = 0;
+
         for (let i = 0; i < result.length; i++) {
-            var date = result[i].date;
+            console.log(result[i].date);
+            let date = result[i].date;
             var year = date.getFullYear();
-            var month = date.getMonth();
-            var day = date.getDate();
+            let month = date.getMonth();
+            let day = date.getDate();
             result[i].date = day + '.' + month + '.' + year;
-            result[i].price = result[i].price - result[i].rabat;
+
+            if (result[i].date < currentdate) {
+
+             
+                result[i].price = result[i].price - result[i].rabat;
+                res.locals.mytabresult[j++] = result[i];
+            }
+            else {
+               
+                result[i].price = result[i].price - result[i].rabat;
+                res.locals.lastmytabresult[n++] = result[i];
+
+            }
          
         }
 
-        res.locals.mytabresult = result;
-        res.render('pages/client/mylist', { req: req.session.id, mytabresult: res.locals.mytabresult });
+    res.render('pages/client/mylist', { req: req.session.id, mytabresult: res.locals.mytabresult, lastmytabresult: res.locals.lastmytabresult });
     });
+   
 }
 
 function loginAuth(req, res, url) {

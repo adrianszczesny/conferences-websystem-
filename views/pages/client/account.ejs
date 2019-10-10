@@ -12,20 +12,52 @@
     <% include ../../partials/header %>
 
     <main>
+	<tbody>
 <form>
   <div class="form-group row">
     <label for="stalyEmail" class="col-sm-2 col-form-label">Email</label>
     <div class="col-sm-10">
-      <input type="text"class="form-control id="stalyEmail" value=<%= req %>  placeholder="Email">
+      <input type="text" class="form-control" id="stalyEmail" value="<%= account[0].email %>"  placeholder="Email">
     </div>
   </div>
   <div class="form-group row">
     <label for="przykladoweHaslo" class="col-sm-2 col-form-label">Hasło</label>
     <div class="col-sm-10">
-      <input type="password" class="form-control" id="przykladoweHaslo" placeholder="Hasło">
+      <input type="password" class="form-control" id="przykladoweHaslo"  value="<%= account[0].password %>" placeholder="Hasło">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="imie" class="col-sm-2 col-form-label">Imię i nazwisko</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="imie" value="<%= account[0].imie %>" placeholder="imie i nazwisko">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="nazwa" class="col-sm-2 col-form-label">Nazwa firmy/instytucji</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="nazwa" value="<%= account[0].nazwa %>" placeholder="nazwa">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="adres" class="col-sm-2 col-form-label">Adres</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="adres" value="<%= account[0].adres %>" placeholder="adres">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="nip" class="col-sm-2 col-form-label">NIP</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="nip"  value="<%= account[0].NIP %>" placeholder="nip">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="przykladoweHaslo" class="col-sm-2 col-form-label">Hasło</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="przykladoweHaslo" placeholder="uzupełnij...">
     </div>
   </div>
 </form>
+</tbody>
 </main>
 
 </body>
