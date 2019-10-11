@@ -12,51 +12,41 @@
 
 <body>
     <% include ../partials/header %>
+	 <% if(email == true){ %>
+        <div class="alert alert-danger role="alert">Istnieje konto na podany email</div>
+        <% } %>
     <main>
+	<div class="slider">
+            <img class="index-woman" src="/assets/images/index_woman.png" alt="" />
+            <img class="index-header" src="/assets/images/index-header.jpg" alt="header-image" />
+            <r> REJESTRACJA </r>
         <form method="POST" action="/register">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-10 col-xl-9 mx-auto">
-                        <div class="card card-signin flex-row my-5">
-                            <div class="card-img-left d-none d-md-flex">
-                            </div>
+             
+			 <n><br> Imię i nazwisko:</n>
+                <div class="form-group-reg-name">
+                    <label for="imie">
+                        <input id="name" type="name" class="form-control" name="name" placeholder="Wpisz swoje imię i nazwisko" required>
+                    </label>
+                </div>
+				<z> E-Mail:</z>
+                <div class="form-group-reg-email">
+                    <label for="email">
+                        <input id="email" type="email" class="form-control" name="email" placeholder="Wpisz E-mail" required>
+                    </label>
+                </div>
 
-                            <div class="card-body">
-                                <h2> Rejestracja </h2>
-                                <div class="form-group">
-                                    <label for="name">
-                                        Imię i nazwisko
-                                        <input id="name" type="text" class="form-control" name="name" required autofocus>
-                                    </label>
-                                    <div class="invalid-feedback">
-                                        Jak się nazywasz?
-                                    </div>
-                                </div>
+                <f> Hasło:</f>
+                <div class="form-group-reg-pass">
+                    <label for="password">
+                        <input id="password" type="password" class="form-control" name="password" placeholder="Wpisz Hasło" required data-eye>
+                    </label>
+               </div>
+    
 
-                                <div class="form-group">
-                                    <label for="email">
-                                        E-Mail
-                                        <input id="email" type="email" class="form-control" name="email" required>
-                                    </label>
-                                    <div class="invalid-feedback">
-                                        Nieprawidlowy email
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="password">
-                                        Hasło
-                                        <input id="password" type="password" class="form-control" name="password" required data-eye>
-                                    </label>
-                                    <div class="invalid-feedback">
-                                        Niepoprawne hasło
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
+                                <div class="form-group-rule">
                                     <div class="custom-checkbox custom-control">
                                         <input type="checkbox" name="agree" id="agree" class="custom-control-input" required="">
-                                        <label for="agree" class="custom-control-label">Akceptuje <a href="#">regulamin</a></label>
+                                        <label for="agree" class="custom-control-label">Akceptuje regulamin</label>
                                         <div class="invalid-feedback">
                                             Akceptuj zgodę
                                         </div>
@@ -66,22 +56,14 @@
 
 
 
-                                <div class="form-group m-0">
-                                    <button type="submit" class="btn btn-primary btn-block">
-                                        Zarejestruj
-                                    </button>
-                                </div>
+                                 <div class="form-group-reg-button">
+                    <button type="submit" class="btn btn-info ">
+                        Zarejestruj się
+                    </button>
+                </div>
         </form>
-        <div class="mt-4 text-center">
-            Masz juz konto? <a href="/loginPage">Zaloguj się</a>
-        </div>
-        </div>
-
-
-        </div>
-        </div>
-        </div>
-        </div>
+        
+        
 
     </main>
     <% include ../partials/error %>

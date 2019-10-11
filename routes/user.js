@@ -53,7 +53,7 @@ router.get('/loginPage', function (req, res) {
 
 // rejestracji
 router.get('/registerPage', function(req,res) {
-	res.render('pages/register', {req: req.session.user});
+	res.render('pages/register', {req: req.session.user, email:false});
 })
 
 router.post('/register', function (req, res) {
@@ -63,7 +63,12 @@ router.post('/register', function (req, res) {
     if (req.body.email == '' || req.body.password == '') {
 		res.render('pages/register', {req: req.session.user, noInput: true})
 	}
-	else {
+    else {
+        connection.query('SELECT * FROM user WHERE email = ?', [req.body.email], function (error, result, fields) {
+            if (result != undefined) {
+                res.render('pages/register.ejs', { req: req.session.user, email: true });
+            }
+        });
 		
             bcrypt.hash(req.body.password, 10 , function (err, p_hash) {
                 console.log(p_hash);
@@ -75,7 +80,7 @@ router.post('/register', function (req, res) {
 					
                     // unikatowy login
                     if (error) res.render('pages/register', { req: req.session.user, error: true });
-					else res.render('pages/login', {req: req.session.user});
+					else res.render('pages/login', {req: req.session.user, error: false, email:false, password:false});
 				});
 			});
 		
@@ -124,7 +129,7 @@ router.get('/account', function (req, res) {
 });
 
 function account(req, res) {
-        connection.query('SELECT * FROM user WHERE id_User = ?', [req.session.user], function (error, result, fields) {
+    connection.query('SELECT * FROM user INNER JOIN company ON user.id_company = company.id_company WHERE id_User = ?', [req.session.user], function (error, result, fields) {
             res.locals.account = result;
             console.log(result);
             res.render('pages/client/account.ejs', { req: req.session.user, account: res.locals.account });

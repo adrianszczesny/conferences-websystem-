@@ -317,6 +317,16 @@ article {
     width: inherit;
     height: 50px;
 }
+.slider r {
+    line-height: 37px;
+    color: #606060;
+    font-size: 30px;
+    position: absolute;
+    align: center;
+    top: 20px;
+    left: 720px;
+    width: 50%;
+}
     .slider .form-group-email {
         
         line-height: 37px;
@@ -350,13 +360,112 @@ article {
         left: 765px;
         width: 50%;
     }
+.slider n {
+    line-height: 37px;
+    color: #606060;
+    font-size: 18px;
+    position: absolute;
+    align: center;
+    top: 30px;
+    left: 740px;
+    width: 50%;
+}
+
+.slider .form-group-reg-name {
+    line-height: 37px;
+    color: #606060;
+    font-size: 20px;
+    position: absolute;
+    align: center;
+    top: 100px;
+    left: 700px;
+    width: 50%;
+}
+
+.slider z {
+    line-height: 37px;
+    color: #606060;
+    font-size: 18px;
+    position: absolute;
+    align: center;
+    top: 140px;
+    left: 770px;
+    width: 50%;
+}
+
+.slider .form-group-reg-email {
+    line-height: 37px;
+    color: #606060;
+    font-size: 20px;
+    position: absolute;
+    align: center;
+    top: 170px;
+    left: 700px;
+    width: 50%;
+}
+.slider f {
+    line-height: 37px;
+    color: #606060;
+    font-size: 18px;
+    position: absolute;
+    align: center;
+    top: 210px;
+    left: 760px;
+    width: 50%;
+}
+
+.slider .form-group-reg-pass {
+    line-height: 37px;
+    color: #606060;
+    font-size: 20px;
+    position: absolute;
+    align: center;
+    top: 240px;
+    left: 700px;
+    width: 50%;
+}
+
+.slider .form-group-rule {
+    line-height: 37px;
+    color: #606060;
+    font-size: 15px;
+    position: absolute;
+    align: center;
+    top: 280px;
+    left: 720px;
+    width: 50%;
+}
+.slider .form-group-rule s {
+    line-height: 37px;
+    color: #606060;
+    font-size: 18px;
+    position: absolute;
+    align: center;
+    top: 310px;
+    left: 760px;
+    width: 50%;
+}
+
+.slider .form-group-reg-button {
+    line-height: 37px;
+    color: #606060;
+    font-size: 20px;
+    position: absolute;
+    align: center;
+    top: 320px;
+    left: 745px;
+    width: 50%;
+}
 
 
-    footer .container {
-        margin-top: 70px;
-        padding-top: 50px;
-        border-top: 1px solid rgba(219, 219, 219, 0.32);
-    }
+
+
+
+footer .container {
+    margin-top: 70px;
+    padding-top: 50px;
+    border-top: 1px solid rgba(219, 219, 219, 0.32);
+}
 footer p{
     font-size: 13px;
 }
