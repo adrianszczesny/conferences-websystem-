@@ -3,9 +3,53 @@
 <html lang="pl" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>Zapisywanie</title>
+	<% include ../../partials/head %>
+
 </head>
 <body>
 
+<% include ../../partials/header %>
+
+<div class="container">
+  <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
+  <t class="text-center">ZGŁOSZENIE NA SZKOLENIE</t>
+  <h4> </h4>
+<tbody>
+  <div class="card"> 
+	 <h5 class="card-header"> Temat szkolenia: <%= tabresult[0].topic %> </h5>
+	 <div class="card-body">
+		<h6 class="card-title">Data : <%=tabresult[0].date %> </h6>
+		
+		<h6 class="card-title"> Miejsce: <%=tabresult[0].city %>, Hotel <%=tabresult[0].hotel %></h6>
+	</div>
+  </div>
+  <div class="card">
+  <h5 class="card-header">Uczestnicy </h5>
+  <div class="card-body">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity">City</label>
+      <input type="text" class="form-control" id="inputCity">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputState">State</label>
+      <select id="inputState" class="form-control">
+        <option selected>Choose...</option>
+        <option>...</option>
+      </select>
+    </div>
+    <div class="form-group col-md-2">
+      <label for="inputZip">Zip</label>
+      <input type="text" class="form-control" id="inputZip">
+    </div>
+  </div>
+    </div>
+</div>
+  
+</tbody>
+</div>
+<% include ../../partials/footer %>
 </body>
+
 </html>

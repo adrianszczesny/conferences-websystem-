@@ -14,7 +14,10 @@
     <% include ../partials/header %>
 	 <% if(email == true){ %>
         <div class="alert alert-danger role="alert">Istnieje konto na podany email</div>
-        <% } %>
+     <% } %>
+	 <% if(password == true){ %>
+        <div class="alert alert-danger role="alert">Wpisz dwa razy takie samo hasło</div>
+     <% } %>
     <main>
 	<div class="slider">
             <img class="index-woman" src="/assets/images/index_woman.png" alt="" />
@@ -22,23 +25,24 @@
             <r> REJESTRACJA </r>
         <form method="POST" action="/register">
              
-			 <n><br> Imię i nazwisko:</n>
+			 <n><br> E-mail: </n>
                 <div class="form-group-reg-name">
-                    <label for="imie">
-                        <input id="name" type="name" class="form-control" name="name" placeholder="Wpisz swoje imię i nazwisko" required>
-                    </label>
-                </div>
-				<z> E-Mail:</z>
-                <div class="form-group-reg-email">
                     <label for="email">
                         <input id="email" type="email" class="form-control" name="email" placeholder="Wpisz E-mail" required>
                     </label>
+					
+                </div>
+				<z>Hasło:</z>
+                <div class="form-group-reg-email">
+                    <label for="password">
+                        <input id="password" type="password" class="form-control" name="password" placeholder="Wpisz hasło" required data-eye>
+                    </label>
                 </div>
 
-                <f> Hasło:</f>
+                <f> Powtórz hasło:</f>
                 <div class="form-group-reg-pass">
-                    <label for="password">
-                        <input id="password" type="password" class="form-control" name="password" placeholder="Wpisz Hasło" required data-eye>
+                    <label for="password2">
+                        <input id="password2" type="password" class="form-control" name="password2" placeholder="Powtórz hasło" required data-eye>
                     </label>
                </div>
     

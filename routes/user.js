@@ -53,7 +53,7 @@ router.get('/loginPage', function (req, res) {
 
 // rejestracji
 router.get('/registerPage', function(req,res) {
-	res.render('pages/register', {req: req.session.user, email:false});
+	res.render('pages/register', {req: req.session.user, email:false, password: false});
 })
 
 router.post('/register', function (req, res) {
@@ -61,30 +61,35 @@ router.post('/register', function (req, res) {
     console.log(req.body.password);
 
     if (req.body.email == '' || req.body.password == '') {
-		res.render('pages/register', {req: req.session.user, noInput: true})
-	}
+        res.render('pages/register', { req: req.session.user, noInput: true })
+    }
     else {
-        connection.query('SELECT * FROM user WHERE email = ?', [req.body.email], function (error, result, fields) {
-            if (result != undefined) {
-                res.render('pages/register.ejs', { req: req.session.user, email: true });
-            }
-        });
-		
-            bcrypt.hash(req.body.password, 10 , function (err, p_hash) {
+        if (req.body.password == req.body.password2) {
+            connection.query('SELECT * FROM user WHERE email = ?', [req.body.email], function (error, result, fields) {
+                if (result.length != 0) {
+                    console.log(result.length);
+                    res.render('pages/register.ejs', { req: req.session.user, email: true, password: false });
+                }
+            });
+
+            bcrypt.hash(req.body.password, 10, function (err, p_hash) {
                 console.log(p_hash);
                 let haslo = p_hash;
-                let imie = req.body.name;
                 let email = req.body.email;
-				
-				connection.query('INSERT INTO user (imie, email, password) VALUES (?, ?, ?)', [imie, email, haslo], function (error, results, fields) {
-					
+
+                connection.query('INSERT INTO user ( email, password) VALUES (?, ?)', [email, haslo], function (error, results, fields) {
+
                     // unikatowy login
                     if (error) res.render('pages/register', { req: req.session.user, error: true });
-					else res.render('pages/login', {req: req.session.user, error: false, email:false, password:false});
-				});
-			});
-		
-	}
+                    else res.render('pages/login', { req: req.session.user,error: false, email: false, password: false });
+                });
+            });
+
+        }
+        else {
+            res.render('pages/register.ejs', { req: req.session.user, email: false, password:true });
+        }
+    }
 });
 
 router.post('/login', function(req,res) {
@@ -116,8 +121,7 @@ router.get('/mylist', function (req, res) {
 });
 router.get('/buy::id', function (req, res) {
     console.log(req.params.user);
-    buy(req, res, '');
-    list(req, res, '');
+    prebuy(req, res, '');
 });
 
 router.get('/info::id', function (req, res) {
@@ -128,10 +132,42 @@ router.get('/account', function (req, res) {
     account(req, res, '');
 });
 
-function account(req, res) {
-    connection.query('SELECT * FROM user INNER JOIN company ON user.id_company = company.id_company WHERE id_User = ?', [req.session.user], function (error, result, fields) {
-            res.locals.account = result;
+router.post('/update', function (req, res) {
+    update(req, res, '');  
+});
+
+function update(req, res) {
+    return new Promise(function (resolve, reject) {
+        bcrypt.hash(req.body.haslo, 10, function (err, p_hash) {
+            var haslo = p_hash;
+            connection.query('UPDATE user SET email = ?, password= ?, imie = ?, nazwisko = ?, numer = ?, stanowisko = ? WHERE id_User = ?', [req.body.email, haslo, req.body.imie, req.body.nazwisko, req.body.numer, req.body.stanowisko, req.session.user], function (error, result, fields) { });
+        });
+        connection.query('SELECT id_company FROM user WHERE id_User= ?', [req.session.user], function (error, result, fields) {
             console.log(result);
+            if (result[0].id_company == null) {
+                console.log("jestem w firmie null");
+                connection.query('INSERT INTO company (NIP, name, adres, name2, adres2, emailfv) VALUES (?, ?, ?, ?, ?, ?) ', [req.body.NIP, req.body.nazwa, req.body.adres, req.body.nazwa2, req.body.adres2, req.body.email2], function (error, results, fields) {
+                    console.log("wstawione");
+                    console.log(results.insertId);
+                    connection.query('UPDATE user SET id_company = ? WHERE id_User= ?', [results.insertId, req.session.user], function (error, resulty, fields) { });
+                    resolve(account(req, res));
+                });
+
+            }
+            else {
+                connection.query('UPDATE company SET name= ?, adres = ?, name2= ?, adres2 = ?,NIP = ?, emailfv= ?  WHERE id_company = ?', [req.body.nazwa, req.body.adres, req.body.nazwa2, req.body.adres2, req.body.NIP, req.body.email2, result[0].id_company], function (error, results, fields) {
+                    resolve(account(req, res));
+                });
+            }
+        });
+        
+    });
+}
+
+
+function account(req, res) {
+    connection.query('SELECT * FROM user LEFT JOIN company ON user.id_company = company.id_company WHERE id_User = ?', [req.session.user], function (error, result, fields) {
+            res.locals.account = result;
             res.render('pages/client/account.ejs', { req: req.session.user, account: res.locals.account });
         });
     }
@@ -142,10 +178,10 @@ function info(req, res, url) {
     connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ',[even], function (error, result, fields) {
         console.log(result);
         console.log("info oooo ");
-        var date = result[0].date;
-        var year = date.getFullYear();
-        var month = date.getMonth();
-        var day = date.getDate();
+        let date = result[0].date;
+        let year = date.getFullYear();
+        let month = date.getMonth();
+        let day = date.getDate();
         result[0].date = day + '.' + month + '.' + year;
         console.log("info oooo jjjjj ");
 
@@ -154,6 +190,21 @@ function info(req, res, url) {
     });
 }
 
+function prebuy(req, res, url) {
+    let even = req.params.id;
+    connection.query('SELECT event.topic, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event WHERE event.id_event= ? ', [even], function (error, result, fields) {
+        console.log(result);
+        console.log("info oooo ");
+        let date = result[0].date;
+        let year = date.getFullYear();
+        let month = date.getMonth();
+        let day = date.getDate();
+        result[0].date = day + '.' + month + '.' + year;
+
+        res.locals.tabresult = result;
+        res.render('pages/client/application', { req: req.session.user, tabresult: res.locals.tabresult });
+    });
+}
 
 
 function buy(req, res, url) {
@@ -161,7 +212,7 @@ function buy(req, res, url) {
     let us = req.session.user;
     let state = 1;
     let date = mydate('date');
-    connection.query('INSERT INTO application(id_event, id_User, state, date) VALUES (?, ?, ?, ?)', [even, us, state,date], function (error, result, fields) {
+        connection.query('INSERT INTO application(id_event, id_User, state, date) VALUES (?, ?, ?, ?)', [even, us, state,date], function (error, result, fields) {
         console.log(req.params.id);
         console.log(req.session.user);
         console.log("Dodano");
@@ -169,16 +220,19 @@ function buy(req, res, url) {
 }
 
 function list(req, res, url) {
-
-    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.state=1', function (error, result, fields) {
-        console.log(result);
+    var currentdate = mydate('date');
+    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.state=1 AND event.date > ? ORDER BY event.date ASC ',[currentdate],function (error, result, fields) {
+        
         let tabresult = [];
         for (let i = 0; i < result.length; i++) {
-            var date = result[i].date;
-            var year = date.getFullYear();
-            var month = date.getMonth();
-            var day = date.getDate();
+            console.log("data x2");
+            console.log(result[i].date);
+            let date = result[i].date;
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            let day = date.getDate() -1;
             result[i].date = day + '.' + month + '.' + year;
+            console.log(result[i].date);
        
         }
 
@@ -190,7 +244,7 @@ function list(req, res, url) {
 
 function mylist(req, res, url) {
 
-    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, application.rabat FROM trainer INNER JOIN event ON trainer.id_trainer = event.id_trainer INNER JOIN application ON event.id_event = application.id_event WHERE application.id_User= ? ',[req.session.user], function (error, result, fields) {
+    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, application.rabat FROM trainer INNER JOIN event ON trainer.id_trainer = event.id_trainer INNER JOIN application ON event.id_event = application.id_event WHERE application.id_User= ? ORDER BY event.date ASC',[req.session.user], function (error, result, fields) {
         var currentdate = mydate('date');
         console.log(currentdate);
         console.log(result);
@@ -200,28 +254,29 @@ function mylist(req, res, url) {
         res.locals.lastmytabresult = [];
         let j = 0;
         let n = 0;
+        if (result != undefined) {
+            for (let i = 0; i < result.length; i++) {
+                console.log(result[i].date);
+                let date = result[i].date;
+                var year = date.getFullYear();
+                let month = date.getMonth();
+                let day = date.getDate();
+                result[i].date = day + '.' + month + '.' + year;
 
-        for (let i = 0; i < result.length; i++) {
-            console.log(result[i].date);
-            let date = result[i].date;
-            var year = date.getFullYear();
-            let month = date.getMonth();
-            let day = date.getDate();
-            result[i].date = day + '.' + month + '.' + year;
+                if (result[i].date < currentdate) {
 
-            if (result[i].date < currentdate) {
 
-             
-                result[i].price = result[i].price - result[i].rabat;
-                res.locals.mytabresult[j++] = result[i];
+                    result[i].price = result[i].price - result[i].rabat;
+                    res.locals.mytabresult[j++] = result[i];
+                }
+                else {
+
+                    result[i].price = result[i].price - result[i].rabat;
+                    res.locals.lastmytabresult[n++] = result[i];
+
+                }
+
             }
-            else {
-               
-                result[i].price = result[i].price - result[i].rabat;
-                res.locals.lastmytabresult[n++] = result[i];
-
-            }
-         
         }
 
     res.render('pages/client/mylist', { req: req.session.id, mytabresult: res.locals.mytabresult, lastmytabresult: res.locals.lastmytabresult });
