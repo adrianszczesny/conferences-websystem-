@@ -17,39 +17,46 @@
   <h4> </h4>
 <tbody>
   <div class="card"> 
-	 <h5 class="card-header"> Temat szkolenia: <%= tabresult[0].topic %> </h5>
+	 <h5 class="card-header text-center">  <%= tabresult[0].topic %> </h5>
 	 <div class="card-body">
-		<h6 class="card-title">Data : <%=tabresult[0].date %> </h6>
+		<h6 class="card-title"><i class="fas fa-table"></i>  <%=tabresult[0].date %> </h6>
 		
-		<h6 class="card-title"> Miejsce: <%=tabresult[0].city %>, Hotel <%=tabresult[0].hotel %></h6>
+		<h6 class="card-title"> <i class="fas fa-map-marker-alt"></i> <%=tabresult[0].city %>, Hotel <%=tabresult[0].hotel %></h6>
 	</div>
   </div>
   <div class="card">
-  <h5 class="card-header">Uczestnicy </h5>
-  <div class="card-body">
+  <h5 class="card-header text-center">Uczestnicy </h5>
+  <div class="card-body" id="tbl" >
   <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="inputCity">City</label>
+    <div class="form-group col-md-4">
+      <label for="inputCity">Imię</label>
       <input type="text" class="form-control" id="inputCity">
     </div>
     <div class="form-group col-md-4">
-      <label for="inputState">State</label>
-      <select id="inputState" class="form-control">
-        <option selected>Choose...</option>
-        <option>...</option>
-      </select>
+      <label for="inputState">Nazwisko</label>
+	  <input type="text" class="form-control" id="inputCity">
     </div>
-    <div class="form-group col-md-2">
-      <label for="inputZip">Zip</label>
+    <div class="form-group col-md-4">
+      <label for="inputZip">Stanowisko</label>
       <input type="text" class="form-control" id="inputZip">
     </div>
   </div>
     </div>
 </div>
-  
+ 
+<input type="submit" class="button add_another" value="Add another line"/>
 </tbody>
 </div>
 <% include ../../partials/footer %>
+
+<script>
+$('document').ready(function() {
+  $('.add_another').click(function() {
+      $("#tbl").append('<tr><td><input type="text" class="txtbox" value="" />  </td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td></tr>');
+   });
+})
+</script>
+
 </body>
 
 </html>

@@ -202,7 +202,12 @@ function prebuy(req, res, url) {
         result[0].date = day + '.' + month + '.' + year;
 
         res.locals.tabresult = result;
-        res.render('pages/client/application', { req: req.session.user, tabresult: res.locals.tabresult });
+
+        connection.query('SELECT * FROM user LEFT JOIN company ON user.id_company = company.id_company WHERE id_User = ?', [req.session.user], function (error, results, fields) {
+            res.locals.account = results;
+        
+            res.render('pages/client/application', { req: req.session.user, account: res.locals.account, tabresult: res.locals.tabresult });
+    });
     });
 }
 
