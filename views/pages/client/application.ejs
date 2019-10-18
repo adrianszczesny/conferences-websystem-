@@ -10,51 +10,237 @@
 <body>
 
 <% include ../../partials/header %>
-
+<% let j = 1; %>
+<form  method="POST" action="/buy">
 <div class="container">
   <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
   <t class="text-center">ZGŁOSZENIE NA SZKOLENIE</t>
   <h4> </h4>
 <tbody>
   <div class="card"> 
-	 <h5 class="card-header text-center">  <%= tabresult[0].topic %> </h5>
+  <div class="card-header">
+	 <h4 class="text-center">  <%= tabresult[0].topic %> </h4>
+	 </div>
 	 <div class="card-body">
 		<h6 class="card-title"><i class="fas fa-table"></i>  <%=tabresult[0].date %> </h6>
 		
 		<h6 class="card-title"> <i class="fas fa-map-marker-alt"></i> <%=tabresult[0].city %>, Hotel <%=tabresult[0].hotel %></h6>
 	</div>
   </div>
+   <h4> </h4>
   <div class="card">
-  <h5 class="card-header text-center">Uczestnicy </h5>
-  <div class="card-body" id="tbl" >
-  <div class="form-row">
-    <div class="form-group col-md-4">
-      <label for="inputCity">Imię</label>
-      <input type="text" class="form-control" id="inputCity">
-    </div>
-    <div class="form-group col-md-4">
-      <label for="inputState">Nazwisko</label>
-	  <input type="text" class="form-control" id="inputCity">
-    </div>
-    <div class="form-group col-md-4">
-      <label for="inputZip">Stanowisko</label>
-      <input type="text" class="form-control" id="inputZip">
+   <div class="card-header">
+  <h5 class="text-center">Uczestnicy</h5>
+  </div>
+  <div class="card-body">
+    <div id="table" class="table-editable">
+      <span class="table-add float-right mb-3 mr-2"><a href="#!" class="text-success">
+	  <i class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
+      <table class="table table-bordered table-responsive-md table-striped text-center">
+        <thead>
+          <tr>
+            <th class="text-center">Imię</th>
+            <th class="text-center">Nazwisko</th>
+            <th class="text-center">stanowisko</th>
+            <th class="text-center">Usuń</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+		  <td>
+		  <input type="text" class="form-control" id="imie" name="imie" value="<%= account[0].imie %>" placeholder="Podaj imię ">
+		  </td>
+           <td>
+		  <input type="text" class="form-control" id="nazwisko" name="imie" value="<%= account[0].nazwisko %>" placeholder="Podaj nazwisko ">
+		  </td>
+            <td>
+		  <input type="text" class="form-control" id="stanowisko" name="imie" value="<%= account[0].stanowisko %>" placeholder="Podaj stanowisko ">
+		  </td>
+            <td>
+			<span class="table-remove"><button type="button"
+                  class="btn btn-danger btn-rounded btn-sm my-0">Usuń</button></span>
+            </td>
+          </tr>
+         
+        </tbody>
+      </table>
     </div>
   </div>
-    </div>
 </div>
+  <h4> </h4>
+ <div class="card">
+	 <div class="card-header">
+  <h5 class="text-center">Dane do faktury</h5>
+ </div>
+ <% if(odb == true) { %>
+  <div class="card-header">
+		<h5 class="text-center">Nabywca:</h5>
+  </div>
+   <%  } %>
+  <div class="card-body">
+    <div class="form-group row">
+		<label for="nip" class="col-sm-2 col-form-label">NIP:</label>
+		<div class="col-sm-10">
+			<input type="text" readonly class="form-control-plaintext" id="nip" name="NIP" value="<%= account[0].NIP %>" placeholder="Podaj NIP(bez myślników)">
+		</div>
+	</div>
  
-<input type="submit" class="button add_another" value="Add another line"/>
+	<div class="form-group row">
+		<label for="nazwa" class="col-sm-2 col-form-label">Nazwa firmy/instytucji:</label>
+		<div class="col-sm-10">
+			<input type="text" readonly class="form-control-plaintext" id="nazwa" name="nazwa" value="<%= account[0].name %>" placeholder="Podaj nazwe firmy/instytucji">
+		</div>
+	</div>
+  
+	<div class="form-group row">
+		<label for="adres" class="col-sm-2 col-form-label">Adres:</label>
+		<div class="col-sm-10">
+			<input type="text" readonly class="form-control-plaintext" id="adres" name="adres" value="<%= account[0].adres %>" placeholder="Podaj adres siedziby">
+		</div>
+	</div>
+
+	<div class="form-group row">
+    <label for="Email" class="col-sm-2 col-form-label">Email księgowości:</label>
+    <div class="col-sm-10">
+      <input type="text" readonly class="form-control-plaintext" id="email2" name="email2" value="<%= account[0].emailfv %>"  placeholder="Podaj email do przesłania faktury">
+    </div>
+  </div>
+ 
+  </div>
+</div>
+
+  <h4> </h4>
+ <% if(odb == true) { %>
+<div class="card">
+	<div class="card-header">
+		<h5 class="text-center">Odbiorca(opcjonalnie):</h5>
+	</div>
+
+ <h4> </h4>
+ <div class="card-body">
+	<div class="form-group row">
+		<label for="nazwa" class="col-sm-2 col-form-label">Nazwa firmy/instytucji:</label>
+		<div class="col-sm-10">
+			<input type="text" readonly class="form-control-plaintext" id="nazwa2" name="nazwa2" value="<%= account[0].name2 %>" placeholder="Podaj nazwe firmy/instytucji">
+		</div>
+	</div>
+
+	<div class="form-group row">
+		<label for="adres" class="col-sm-2 col-form-label">Adres:</label>
+		<div class="col-sm-10">
+			<input type="text" readonly class="form-control-plaintext" id="adres2" name="adres2" value="<%= account[0].adres2 %>" placeholder="Podaj adres siedziby">
+		</div>
+	</div>
+</div>
+</div>
+ <%  } %>
+ <h4> </h4>
+
+  <div class="card">
+	 <div class="card-header">
+  <h5 class="text-center">Warunki uczestnictwa</h5>
+ </div>
+ <div class="card-body">
+ <ul>
+ <li>Kartę zgłoszeniową należy przesłać za pomocą systemu w kolejnym kroku, mailem (konsult@konsult.edu.pl) <br>lub faksem (71 735 80 68).</li>
+ <h3></h3>
+<li>Płatności w terminie 7 dni od daty szkolenia na rachunek mBank SA nr 08 1140 2004 0000 3602 7741 6045.</li>
+<h3></h3>
+<li>O rezygnacji z uczestnictwa z powodu nieprzewidzianych okoliczności prosimy poinformować przed rozpoczęciem szkolenia. W przypadku braku otrzymania ww. informacji zastrzegamy sobie prawo obciążenia całkowitą kwotą za szkolenie.</li>
+<h3></h3>
+<li>Zwolnienie z VAT przysługuje jedynie po podpisaniu oświadczenia przez osobę upoważnioną 
+ i przekazaniu oryginału na szkoleniu lub odesłaniu oryginału pocztą.</li>
+ </ul>
+
+ </div>
+ </div>
+
+
+
+  <h2></h2>
+ <div class="form-group">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="invalidCheck3" required>
+      <label class="form-check-label" for="invalidCheck3">
+        *Akceptuję warunki szkolenia i należność w kwocie <%= tabresult[0].price %> zł + VAT / os. zobowiązuję się wpłacić w terminie 7 dni od daty szkolenia.
+      </label>
+      <div class="invalid-feedback">
+        You must agree before submitting.
+      </div>
+    </div>
+  </div>
+
+   <div class="form-group">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="invalidCheck3" required>
+      <label class="form-check-label" for="invalidCheck3">
+        *Wyrażam zgodę na przechowywanie i przetwarzanie moich danych osobowych dla potrzeb procesu rejestracji zgłoszenia oraz w celach marketingowych dla firmy KONSULT zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych oraz z ustawą z dnia 18.07.2002 r. o świadczeniu usług drogą elektroniczną.
+      </label>
+      <div class="invalid-feedback">
+        You must agree before submitting.
+      </div>
+    </div>
+  </div>
+  <h2></h2>
+  <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" id="zw">
+  <label class="form-check-label" for="zw">
+   <b>Zwolnie z VAT</b><br>
+   <b> Oświadczam, iż środki wydatkowane na ww. szkolenie pochodzą w co najmniej 70% ze środków publicznych a niniejsze oświadczenie ma na celu możliwość zastosowania stawki zwolnionej z VAT zgodnie z przepisami ustawy o podatku od towarów i usług.
+   </b>
+  </label>
+</div>
+
+<h2></h2>
+
+   <div class="col-md-12 text-center"> 
+                    <button type="submit" class="btn btn-info ">
+                        Zapisz się
+                    </button>
+                </div>
+</form>
+</div>
 </tbody>
 </div>
 <% include ../../partials/footer %>
 
 <script>
-$('document').ready(function() {
-  $('.add_another').click(function() {
-      $("#tbl").append('<tr><td><input type="text" class="txtbox" value="" />  </td><td><input type="text" class="txtbox" value="" /></td><td><input type="text" class="txtbox" value="" /></td></tr>');
-   });
-})
+
+const $tableID = $('#table');
+ const $BTN = $('#export-btn');
+ const $EXPORT = $('#export');
+ 
+
+ const newTr = `
+<tr class="hide">
+		  <td>
+		  <input type="text" class="form-control" id="imie" name="imie" placeholder="Podaj imię ">
+		  </td>
+           <td>
+		  <input type="text" class="form-control" id="nazwisko" name="nazwisko"  placeholder="Podaj nazwisko ">
+		  </td>
+            <td>
+		  <input type="text" class="form-control" id="stanowisko" name="stanowisko" placeholder="Podaj stanowisko">
+		  </td>
+            <td>
+			<span class="table-remove"><button type="button"
+                  class="btn btn-danger btn-rounded btn-sm my-0">Usuń</button></span>
+            </td>
+          </tr>`;
+
+ $('.table-add').on('click', 'i', () => {
+	 <%= j++; %>
+      $('tbody').append(newTr);
+ });
+
+ $tableID.on('click', '.table-remove', function () {
+   <%= j--; %>
+   $(this).parents('tr').detach();
+ });
+
+
+
+ 
 </script>
 
 </body>

@@ -136,6 +136,11 @@ router.post('/update', function (req, res) {
     update(req, res, '');  
 });
 
+router.post('/buy', function (req, res) {
+    buy(req, res, '');
+});
+
+
 function update(req, res) {
     return new Promise(function (resolve, reject) {
         bcrypt.hash(req.body.haslo, 10, function (err, p_hash) {
@@ -168,7 +173,7 @@ function update(req, res) {
 function account(req, res) {
     connection.query('SELECT * FROM user LEFT JOIN company ON user.id_company = company.id_company WHERE id_User = ?', [req.session.user], function (error, result, fields) {
             res.locals.account = result;
-            res.render('pages/client/account.ejs', { req: req.session.user, account: res.locals.account });
+            res.render('pages/client/account.ejs', { req: req.session.user, account: res.locals.account, update: false});
         });
     }
 
@@ -192,6 +197,7 @@ function info(req, res, url) {
 
 function prebuy(req, res, url) {
     let even = req.params.id;
+    let odbiorca = true;
     connection.query('SELECT event.topic, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event WHERE event.id_event= ? ', [even], function (error, result, fields) {
         console.log(result);
         console.log("info oooo ");
@@ -205,8 +211,15 @@ function prebuy(req, res, url) {
 
         connection.query('SELECT * FROM user LEFT JOIN company ON user.id_company = company.id_company WHERE id_User = ?', [req.session.user], function (error, results, fields) {
             res.locals.account = results;
-        
-            res.render('pages/client/application', { req: req.session.user, account: res.locals.account, tabresult: res.locals.tabresult });
+            console.log("odb");
+            console.log(results[0].name2);
+            if (results[0].name2 == "") odbiorca = false;
+            if (results[0].id_company == null) {
+                res.render('pages/client/account', { req: req.session.user, update: true });
+            }
+            else {
+                res.render('pages/client/application', { req: req.session.user, account: res.locals.account, tabresult: res.locals.tabresult, odb: odbiorca });
+            }
     });
     });
 }
@@ -217,11 +230,18 @@ function buy(req, res, url) {
     let us = req.session.user;
     let state = 1;
     let date = mydate('date');
-        connection.query('INSERT INTO application(id_event, id_User, state, date) VALUES (?, ?, ?, ?)', [even, us, state,date], function (error, result, fields) {
-        console.log(req.params.id);
-        console.log(req.session.user);
-        console.log("Dodano");
-        });
+    let zw = null;
+    console.log("zw");
+
+    console.log(req.body);
+    if (req.body.zw == true) {
+        zw = 1;
+    }
+        //connection.query('INSERT INTO application(id_event, id_User, state, date, zw ) VALUES (?, ?, ?, ?, ?)', [even, us, state,date,zw], function (error, result, fields) {
+       // console.log(req.params.id);
+       // console.log(req.session.user);
+       // console.log("Dodano");
+       // });
 }
 
 function list(req, res, url) {
