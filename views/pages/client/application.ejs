@@ -51,10 +51,10 @@
 		  <input type="text" class="form-control" id="imie" name="imie" value="<%= account[0].imie %>" placeholder="Podaj imię ">
 		  </td>
            <td>
-		  <input type="text" class="form-control" id="nazwisko" name="imie" value="<%= account[0].nazwisko %>" placeholder="Podaj nazwisko ">
+		  <input type="text" class="form-control" id="nazwisko" name="nazwisko" value="<%= account[0].nazwisko %>" placeholder="Podaj nazwisko ">
 		  </td>
             <td>
-		  <input type="text" class="form-control" id="stanowisko" name="imie" value="<%= account[0].stanowisko %>" placeholder="Podaj stanowisko ">
+		  <input type="text" class="form-control" id="stanowisko" name="stanowisko" value="<%= account[0].stanowisko %>" placeholder="Podaj stanowisko ">
 		  </td>
             <td>
 			<span class="table-remove"><button type="button"
@@ -183,7 +183,8 @@
   </div>
   <h2></h2>
   <div class="form-check">
-  <input class="form-check-input" type="checkbox" value="" id="zw">
+  <input type="hidden" name="check[0]" value="0" />
+	<input class="form-check-input" type="checkbox" name="check[0]" value="1" />
   <label class="form-check-label" for="zw">
    <b>Zwolnie z VAT</b><br>
    <b> Oświadczam, iż środki wydatkowane na ww. szkolenie pochodzą w co najmniej 70% ze środków publicznych a niniejsze oświadczenie ma na celu możliwość zastosowania stawki zwolnionej z VAT zgodnie z przepisami ustawy o podatku od towarów i usług.

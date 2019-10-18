@@ -233,15 +233,42 @@ function buy(req, res, url) {
     let zw = null;
     console.log("zw");
 
-    console.log(req.body);
-    if (req.body.zw == true) {
+    console.log(req.body.check[0][1]);
+    if (req.body.check[1] != undefined) {
         zw = 1;
     }
-        //connection.query('INSERT INTO application(id_event, id_User, state, date, zw ) VALUES (?, ?, ?, ?, ?)', [even, us, state,date,zw], function (error, result, fields) {
-       // console.log(req.params.id);
-       // console.log(req.session.user);
-       // console.log("Dodano");
-       // });
+    console.log(req.body.imie.length);
+
+
+    connection.query('SELECT id_company FROM user WHERE id_User = ?', [req.session.user], function (error, company, fields) {
+        console.log(company);
+        connection.query('SELECT * FROM user WHERE id_company = ?', [company[0].id_company], function (error, result, fields) {
+            console.log(result);
+            
+            for (let i = 0; i < req.body.imie.length; i++) {
+                for (let j = 0; j < result.length; j++) {
+                    console.log(req.body.imie[i]);
+                    console.log(result[j].imie);
+                    if (req.body.imie[i] == result[j].imie) {
+                        if (req.body.nazwisko[i] == result[j].nazwisko) {
+                          /*  connection.query('INSERT INTO application(id_event, id_User, state, date, zw ) VALUES (?, ?, ?, ?, ?)', [even, us, state, date, zw], function (error, result, fields) {
+                                console.log(req.params.id);
+                                console.log(req.session.user);
+                                console.log("Dodano");
+                            });*/
+                            console.log("Dodano");
+                        }
+                    }
+                }
+            }
+        });
+    });
+    /*
+        connection.query('INSERT INTO application(id_event, id_User, state, date, zw ) VALUES (?, ?, ?, ?, ?)', [even, us, state,date,zw], function (error, result, fields) {
+        console.log(req.params.id);
+        console.log(req.session.user);
+        console.log("Dodano");
+        });*/
 }
 
 function list(req, res, url) {
