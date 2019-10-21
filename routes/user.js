@@ -136,7 +136,7 @@ router.post('/update', function (req, res) {
     update(req, res, '');  
 });
 
-router.post('/buy', function (req, res) {
+router.post('/buy::id', function (req, res) {
     buy(req, res, '');
 });
 
@@ -224,51 +224,77 @@ function prebuy(req, res, url) {
     });
 }
 
-
 function buy(req, res, url) {
     let even = req.params.id;
-    let us = req.session.user;
+    console.log(even);
     let state = 1;
     let date = mydate('date');
     let zw = null;
+    let rabat = 0;
     console.log("zw");
 
     console.log(req.body.check[0][1]);
     if (req.body.check[1] != undefined) {
         zw = 1;
+        console.log(zw);
     }
     console.log(req.body.imie.length);
 
+    for (let i = 0; i < req.body.imie.length; i++) {
+        var szukanie = new Promise(function (resolve, reject) {
+            console.log(req.body);
 
-    connection.query('SELECT id_company FROM user WHERE id_User = ?', [req.session.user], function (error, company, fields) {
-        console.log(company);
-        connection.query('SELECT * FROM user WHERE id_company = ?', [company[0].id_company], function (error, result, fields) {
-            console.log(result);
-            
-            for (let i = 0; i < req.body.imie.length; i++) {
-                for (let j = 0; j < result.length; j++) {
-                    console.log(req.body.imie[i]);
-                    console.log(result[j].imie);
-                    if (req.body.imie[i] == result[j].imie) {
-                        if (req.body.nazwisko[i] == result[j].nazwisko) {
-                          /*  connection.query('INSERT INTO application(id_event, id_User, state, date, zw ) VALUES (?, ?, ?, ?, ?)', [even, us, state, date, zw], function (error, result, fields) {
-                                console.log(req.params.id);
-                                console.log(req.session.user);
-                                console.log("Dodano");
-                            });*/
-                            console.log("Dodano");
+            connection.query('SELECT id_company FROM user WHERE id_User = ?', [req.session.user], function (error, company, fields) {
+                console.log(req.session.user);
+                console.log(company);
+                connection.query('SELECT * FROM user WHERE id_company = ?', [company[0].id_company], function (error, result, fields) {
+                    console.log(result);
+
+
+                    var dodano = 0;
+                    //dodawanie sta³ych klientów
+                    for (let j = 0; j < result.length; j++) {
+                        console.log("imie z body:");
+                        console.log(req.body.imie[i]);
+                        console.log(" imie z bazy:");
+                        console.log(result[j].imie);
+                        if (req.body.imie[i].length > 1) {
+                            if (req.body.imie[i] == result[j].imie) {
+                                console.log(" nazwisko z body:");
+                                console.log(req.body.nazwisko[i]);
+                                console.log("nazwisko z bazy:");
+                                console.log(result[j].nazwisko);
+                                if (req.body.nazwisko[i] == result[j].nazwisko) {
+                                    connection.query('INSERT INTO application (id_event, id_User, state, date, zw, rabat ) VALUES (?, ?, ?, ?, ?, ?)', [even, result[j].id_User, state, date, zw, rabat], function (error, results, fields) {
+                                        console.log(req.params.id);
+                                        console.log(req.session.user);
+                                        console.log("Dodano");
+                                        console.log(req.body.nazwisko[i]);
+                                        dodano++;
+                                    });
+                                }
+                            }
                         }
+
                     }
-                }
-            }
+                    resolve(() => {
+                        if (dodano == 0) {
+                            connection.query('INSERT INTO user( imie, nazwisko, id_company) VALUES (?, ?, ?)', [req.body.imie[i], req.body.nazwisko[i], company[0].id_company], function (error, results, fields) {
+                                connection.query('INSERT INTO application (id_event, id_User, state, date, zw, rabat) VALUES (?, ?, ?, ?, ?, ?)', [even, results.insertId, state, date, zw, rabat], function (error, resulty, fields) {
+                                    console.log("Dodano nowego ");
+                                    console.log(req.body.nazwisko[i]);
+                                });
+
+                            });
+                        }
+                    });
+                });
+            });
         });
-    });
-    /*
-        connection.query('INSERT INTO application(id_event, id_User, state, date, zw ) VALUES (?, ?, ?, ?, ?)', [even, us, state,date,zw], function (error, result, fields) {
-        console.log(req.params.id);
-        console.log(req.session.user);
-        console.log("Dodano");
-        });*/
+     
+    }
+       
+    res.render('pages/home', { req: req.session.user, logout: false});
 }
 
 function list(req, res, url) {
