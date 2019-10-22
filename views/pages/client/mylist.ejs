@@ -35,6 +35,9 @@
 <div role="tabpanel" class="tab-pane fade show active" id="home" aria-labelledby="home-tab">
 
 <tbody>
+		<% if(mytabresult.length == 0){ %>
+		<h4><br> Brak nadchodzących szkoleń. </h4>
+		<%}%>
 		<% for(var i = 0; i < mytabresult.length; i++) { %>
 		<h4> </h4>
 		<div class="card">
@@ -62,6 +65,9 @@
 
 <div role="tabpanel" class="tab-pane fade" id="last" aria-labelledby="last-tab">
 <tbody>
+		<% if(lastmytabresult.length == 0){ %>
+		<h4><br>Brak przebytych szkoleń. </h4>
+		<%}%>
 		<% for(var i = 0; i < lastmytabresult.length; i++) { %>
 		<h4> </h4>
 		<div class="card">

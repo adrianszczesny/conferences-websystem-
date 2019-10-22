@@ -40,8 +40,7 @@ router.use(express.static("../public"));
 router.get('/', function(req, res) {
 	addRouteInfo(req);
     console.log(req.session.routerInfo);
-    console.log("id");
-    console.log(req.session.user);
+    console.log("id:" + req.session.user );
     res.render("pages/home", { req: req.session.user, logout: false});
 });
 
@@ -226,72 +225,95 @@ function prebuy(req, res, url) {
 
 function buy(req, res, url) {
     let even = req.params.id;
-    console.log(even);
     let state = 1;
     let date = mydate('date');
     let zw = null;
     let rabat = 0;
-    console.log("zw");
 
-    console.log(req.body.check[0][1]);
     if (req.body.check[1] != undefined) {
         zw = 1;
-        console.log(zw);
+        console.log("zw" + zw);
     }
-    console.log(req.body.imie.length);
+    console.log("ilosc osób:" + req.body.imie.length);
+    let num = req.body.imie.length;
+    if (req.body.imie.length > 1 && req.body.imie[0].length < 2) {
+        num = 1;
+        console.log("num" + num);
+    }
 
-    for (let i = 0; i < req.body.imie.length; i++) {
+   for (let i = 0; i < num; i++) {
+       
         var szukanie = new Promise(function (resolve, reject) {
-            console.log(req.body);
-
+         
             connection.query('SELECT id_company FROM user WHERE id_User = ?', [req.session.user], function (error, company, fields) {
-                console.log(req.session.user);
-                console.log(company);
                 connection.query('SELECT * FROM user WHERE id_company = ?', [company[0].id_company], function (error, result, fields) {
-                    console.log(result);
-
-
-                    var dodano = 0;
-                    //dodawanie sta³ych klientów
+                    
+                    //sprawdzenie sta³ych klientów
                     for (let j = 0; j < result.length; j++) {
                         console.log("imie z body:");
                         console.log(req.body.imie[i]);
                         console.log(" imie z bazy:");
                         console.log(result[j].imie);
                         if (req.body.imie[i].length > 1) {
-                            if (req.body.imie[i] == result[j].imie) {
+                            if (req.body.imie[i] == result[j].imie && req.body.nazwisko[i] == result[j].nazwisko) {
                                 console.log(" nazwisko z body:");
                                 console.log(req.body.nazwisko[i]);
                                 console.log("nazwisko z bazy:");
                                 console.log(result[j].nazwisko);
-                                if (req.body.nazwisko[i] == result[j].nazwisko) {
-                                    connection.query('INSERT INTO application (id_event, id_User, state, date, zw, rabat ) VALUES (?, ?, ?, ?, ?, ?)', [even, result[j].id_User, state, date, zw, rabat], function (error, results, fields) {
-                                        console.log(req.params.id);
-                                        console.log(req.session.user);
-                                        console.log("Dodano");
-                                        console.log(req.body.nazwisko[i]);
-                                        dodano++;
-                                    });
-                                }
+                                resolve([1, company[0].id_company, result[j].id_User, null, null]);
+                            }
+                            else {
+                                resolve([0, company[0].id_company, null, req.body.imie[i], req.body.nazwisko[i] ]);
                             }
                         }
+                        else {
+                            if (req.body.imie == result[j].imie && req.body.nazwisko == result[j].nazwisko) {
+                                console.log(" nazwisko z body asda:");
+                                console.log(req.body.nazwisko);
+                                console.log("nazwisko z bazya asd:");
+                                console.log(result[j].nazwisko);
+                                resolve([1, company[0].id_company, result[j].id_User, null ,null]);
+                            }
+                            else {
+                                resolve([0, company[0].id_company, null, req.body.imie, req.body.nazwisko ]);
+                            }
 
+                        }
                     }
-                    resolve(() => {
+                    
+                });
+            });
+        }); //koniec promise
+
+
+        szukanie.then(([dodano, company, us, imie, nazwisko]) => {
+            console.log("dodano");
+            console.log(dodano);
+            console.log("company");
+            console.log(company);
+            console.log("us");
+            console.log(us);
+            if (dodano == 1) {
+                connection.query('INSERT INTO application (id_event, id_User, id_zgl, state, date, zw, rabat ) VALUES (?, ?, ?, ?, ?, ?, ?)', [even, us, req.session.user, state, date, zw, rabat], function (error, results, fields) {
+                    console.log(even);
+                    console.log(req.session.user);
+                    console.log("Dodano starego");
+                    console.log(req.body.nazwisko[i]);
+                });
+            }
+
                         if (dodano == 0) {
-                            connection.query('INSERT INTO user( imie, nazwisko, id_company) VALUES (?, ?, ?)', [req.body.imie[i], req.body.nazwisko[i], company[0].id_company], function (error, results, fields) {
-                                connection.query('INSERT INTO application (id_event, id_User, state, date, zw, rabat) VALUES (?, ?, ?, ?, ?, ?)', [even, results.insertId, state, date, zw, rabat], function (error, resulty, fields) {
+                            connection.query('INSERT INTO user( imie, nazwisko, id_company) VALUES (?, ?, ?)', [imie,nazwisko, company], function (error, results, fields) {
+                                connection.query('INSERT INTO application (id_event, id_User, id_zgl, state, date, zw, rabat) VALUES (?, ?, ?, ?, ?, ?, ?)', [even, results.insertId, req.session.user, state, date, zw, rabat], function (error, resulty, fields) {
                                     console.log("Dodano nowego ");
                                     console.log(req.body.nazwisko[i]);
                                 });
 
                             });
                         }
-                    });
-                });
-            });
         });
-     
+                
+            
     }
        
     res.render('pages/home', { req: req.session.user, logout: false});
@@ -322,7 +344,7 @@ function list(req, res, url) {
 
 function mylist(req, res, url) {
 
-    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, application.rabat FROM trainer INNER JOIN event ON trainer.id_trainer = event.id_trainer INNER JOIN application ON event.id_event = application.id_event WHERE application.id_User= ? ORDER BY event.date ASC',[req.session.user], function (error, result, fields) {
+    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, application.rabat FROM trainer INNER JOIN event ON trainer.id_trainer = event.id_trainer INNER JOIN application ON event.id_event = application.id_event WHERE application.id_User= ? OR application.id_zgl = ? ORDER BY event.date ASC', [req.session.user, req.session.user], function (error, result, fields) {
         var currentdate = mydate('date');
         console.log(currentdate);
         console.log(result);
@@ -337,8 +359,8 @@ function mylist(req, res, url) {
                 console.log(result[i].date);
                 let date = result[i].date;
                 var year = date.getFullYear();
-                let month = date.getMonth();
-                let day = date.getDate();
+                let month = date.getMonth()+1;
+                let day = date.getDate()-1;
                 result[i].date = day + '.' + month + '.' + year;
 
                 if (result[i].date < currentdate) {
