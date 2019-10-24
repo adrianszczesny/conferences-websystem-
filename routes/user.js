@@ -143,16 +143,43 @@ router.get('/details::id', (req, res) => {
     details(req, res, '');
 });
 
+router.get('/deleteapp::id', (req, res) => {
+    deleteapp(req, res, '');
+});
+
+
+
+
+
+
+function deleteapp(req, res) {
+    let application = req.params.id;
+    connection.query(' DELETE FROM application WHERE id_application = ?',[application],(error, event, fields)=>{
+    details(req, res);
+    });
+
+}
+
+
+
 function details(req, res) {
     let application = req.params.id;
-    connection.query('SELECT * FROM application WHERE id_
 
+    connection.query(' SELECT user.id_company, application.id_event FROM user INNER JOIN application ON user.id_User = application.id_User WHERE application.id_application = ?', [ application ], (error, result, fields) => {
+       
+        connection.query('SELECT user.imie, user.nazwisko, user.stanowisko, application.id_application FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?' ,  [result[0].id_event, result[0].id_company ], (error, results, fields) => {
+           
+            res.locals.detaisltab = results;
+            console.log(results);
+            connection.query('SELECT * FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [result[0].id_event], function (error, event, fields) {
+                res.locals.eventtab = event;
 
-
-    connection.query('SELECT * FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [even], function (error, result, fields) {
-
-
-
+            res.render('pages/client/details', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab  });
+            });
+         
+        });
+         
+    });
 }
 
 
@@ -250,7 +277,7 @@ function buy(req, res, url) {
         zw = 1;
         console.log("zw" + zw);
     }
-    console.log("ilosc osób:" + req.body.imie.length);
+    console.log("ilosc osï¿½b:" + req.body.imie.length);
     let num = req.body.imie.length;
     if (req.body.imie.length > 1 && req.body.imie[0].length < 2) {
         num = 1;
@@ -264,7 +291,7 @@ function buy(req, res, url) {
             connection.query('SELECT id_company FROM user WHERE id_User = ?', [req.session.user], function (error, company, fields) {
                 connection.query('SELECT * FROM user WHERE id_company = ?', [company[0].id_company], function (error, result, fields) {
                     
-                    //sprawdzenie sta³ych klientów
+                    //sprawdzenie staï¿½ych klientï¿½w
                     for (let j = 0; j < result.length; j++) {
                         console.log("imie z body:");
                         console.log(req.body.imie[i]);

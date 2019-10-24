@@ -11,7 +11,7 @@
 
 <% include ../../partials/header %>
 <% let j = 1; %>
-<form  method="POST" action="/buy:<%= tabresult[0].id_event%>">
+<form  method="POST" action="/buy:<%= tabresult[0].id_event %>">
 <div class="container">
   <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
   <t class="text-center">ZGŁOSZENIE NA SZKOLENIE</t>
@@ -230,12 +230,10 @@ const $tableID = $('#table');
           </tr>`;
 
  $('.table-add').on('click', 'i', () => {
-	 <%= j++; %>
       $('tbody').append(newTr);
  });
 
  $tableID.on('click', '.table-remove', function () {
-   <%= j--; %>
    $(this).parents('tr').detach();
  });
 

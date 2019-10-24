@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+	 <title>
+       Szczegóły zamówienia   </title>
+	<meta charset="UTF-8">
+<% include ../../partials/head %>
+
+</head>
+<body>
+<% include ../../partials/header %>
+    <!-- Główna-->
+	<div class="container">
+	<div class="col-lg-9">
+	<tbody>
+        <div class="card mt-4">
+            <div class="card-body">
+            <h3 class="card-title" align="center"><%= eventtab[0].topic %></h3>
+            <h4>Prowadzący: <%= eventtab[0].Name %></h4>
+            <h4><b>Miasto: <%= eventtab[0].city %></b>, Hotel <%= eventtab[0].hotel %> </h4> 
+            <h5> <b> Data: <%= eventtab[0].date %> r.</b> (godz. 9:00-15:00)</h5>
+            <a href="/info:<%= eventtab[0].id_event %>" class="btn btn-success">Zobacz więcej informacji o szkoleniu</a>
+            </div>
+        </div>
+        <!-- /.card -->
+		<info>
+
+
+            <!-- uczestnicy -->
+                <div class="card card-outline-secondary my-4">
+                        <div class="card-header">
+                         Uczestnicy:
+                        </div>
+                            <div class="card-body">
+                                <div id="table" class="table-editable">
+                                        <span class="table-add float-right mb-3 mr-2"><a href="/buy:<%= eventtab[0].id_event %>" class="text-success">
+                                        <i class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
+                                        <table class="table table-bordered table-responsive-md table-striped text-center">
+                                          <thead>
+                                            <tr>
+                                              <th class="text-center">Imię</th>
+                                              <th class="text-center">Nazwisko</th>
+                                              <th class="text-center">Stanowisko</th>
+                                              <th class="text-center">Rezygnacja</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <% for( let i =0; i< detailstab.length; i++){ %>
+                                            
+                                            <tr>
+                                            <td>
+                                            <input type="text" readonly class="form-control" id="imie" name="imie" value="<%= detailstab[i].imie %>" placeholder="Podaj imię ">
+                                            </td>
+                                             <td>
+                                            <input type="text" readonly class="form-control" id="nazwisko" name="nazwisko" value="<%= detailstab[i].nazwisko %>" placeholder="Podaj nazwisko ">
+                                            </td>
+                                              <td>
+                                            <input type="text" readonly class="form-control" id="stanowisko" name="stanowisko" value="<%= detailstab[i].stanowisko %>" placeholder="Podaj stanowisko ">
+                                            </td>
+                                            <td>
+                                                <a href="/deleteapp:<%= appliaction[i].id_application %>" class="btn btn-warning">Rezygnacja</a>  
+                                            </td>
+                                            </tr>
+                                           <% } %>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                      <a href="/buy:<%= eventtab[0].id_event %>" class="btn btn-success">Dodaj nowego uczestnia</a>
+                            </div>
+                      </div>
+                  
+
+        
+        
+		
+		<!-- /.card -->
+</tbody>
+      </div>
+	  </info>
+        
+<% include ../../partials/error %>
+</main>
+<% include ../../partials/footer %>
+
+</body>
+</html> 
