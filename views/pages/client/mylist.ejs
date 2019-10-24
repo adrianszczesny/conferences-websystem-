@@ -38,7 +38,7 @@
 		<% if(mytabresult.length == 0){ %>
 		<h4><br> Brak nadchodzących szkoleń. </h4>
 		<%}%>
-		<% for(var i = 0; i < mytabresult.length; i++) { %>
+		<% for(let i = 0; i < mytabresult.length; i++) { %>
 		<h4> </h4>
 		<div class="card">
 			<div class="card-body">
@@ -52,7 +52,7 @@
 					</div>
 					<div class="row align-items-center">
 					<div class="col-auto ">					
-						<ul><a href="/info:<%= mytabresult[i].id_event %>" class="btn btn-primary " >Szczegóły</a></ul>
+						<ul><a href="/details:<%= mytabresult[i].id_event %>" class="btn btn-primary " >Szczegóły</a></ul>
 					</div>
 					</div>
 				</div>

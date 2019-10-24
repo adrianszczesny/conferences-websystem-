@@ -149,13 +149,37 @@ router.get('/deleteapp::id', (req, res) => {
 
 
 
-
+function changedate(data) {
+    let date = data;
+    let year = date.getFullYear();
+    let month = date.getMonth()+1;
+    let day = date.getDate();
+    return day + '.' + month + '.' + year;
+}
 
 
 function deleteapp(req, res) {
     let application = req.params.id;
-    connection.query(' DELETE FROM application WHERE id_application = ?',[application],(error, event, fields)=>{
-    details(req, res);
+    connection.query('SELECT id_event FROM application WHERE application.id_application = ?', [application], (error, event, fields) => {
+        let even = event[0].id_event;
+        connection.query(' DELETE FROM application WHERE id_application = ?', [application], (error, event, fields) => {
+            connection.query('SELECT user.id_company FROM user WHERE user.id_User = ?', [req.session.user], (error, company, fields) => {
+                console.log("company", company);
+                connection.query('SELECT user.imie, user.nazwisko, user.stanowisko, application.id_application FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [even, company[0].id_company], (error, results, fields) => {
+
+                    res.locals.detailstab = results;
+                    console.log("results", results);
+                    connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [even], function (error, event, fields) {
+                        event[0].date = changedate(event[0].date);
+                        res.locals.eventtab = event
+                        res.render('pages/client/details.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab });
+                    });
+
+                });
+
+            });
+
+        });
     });
 
 }
@@ -163,18 +187,19 @@ function deleteapp(req, res) {
 
 
 function details(req, res) {
-    let application = req.params.id;
+    let event = req.params.id;
+    console.log("applicatiom:" + event);
 
-    connection.query(' SELECT user.id_company, application.id_event FROM user INNER JOIN application ON user.id_User = application.id_User WHERE application.id_application = ?', [ application ], (error, result, fields) => {
-       
-        connection.query('SELECT user.imie, user.nazwisko, user.stanowisko, application.id_application FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?' ,  [result[0].id_event, result[0].id_company ], (error, results, fields) => {
+    connection.query('SELECT user.id_company FROM user WHERE user.id_User = ?', [req.session.user ], (error, company, fields) => {
+        console.log("company",company);
+        connection.query('SELECT user.imie, user.nazwisko, user.stanowisko, application.id_application FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?' ,  [event, company[0].id_company ], (error, results, fields) => {
            
-            res.locals.detaisltab = results;
-            console.log(results);
-            connection.query('SELECT * FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [result[0].id_event], function (error, event, fields) {
-                res.locals.eventtab = event;
-
-            res.render('pages/client/details', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab  });
+            res.locals.detailstab = results;
+            console.log("results", results);
+            connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [event], function (error, event, fields) {
+                event[0].date = changedate(event[0].date);
+                res.locals.eventtab = event
+                res.render('pages/client/details.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab  });
             });
          
         });
@@ -225,11 +250,8 @@ function info(req, res, url) {
     connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ',[even], function (error, result, fields) {
         console.log(result);
         console.log("info oooo ");
-        let date = result[0].date;
-        let year = date.getFullYear();
-        let month = date.getMonth();
-        let day = date.getDate();
-        result[0].date = day + '.' + month + '.' + year;
+
+        result[0].date = changedate(result[0].date);
         console.log("info oooo jjjjj ");
 
         res.locals.tabresult = result;
@@ -303,10 +325,10 @@ function buy(req, res, url) {
                                 console.log(req.body.nazwisko[i]);
                                 console.log("nazwisko z bazy:");
                                 console.log(result[j].nazwisko);
-                                resolve([1, company[0].id_company, result[j].id_User, null, null]);
+                                resolve([1, company[0].id_company, result[j].id_User, null, null, null]);
                             }
                             else {
-                                resolve([0, company[0].id_company, null, req.body.imie[i], req.body.nazwisko[i] ]);
+                                resolve([0, company[0].id_company, null, req.body.imie[i], req.body.nazwisko[i], req.body.stanowisko[i]]);
                             }
                         }
                         else {
@@ -315,10 +337,10 @@ function buy(req, res, url) {
                                 console.log(req.body.nazwisko);
                                 console.log("nazwisko z bazya asd:");
                                 console.log(result[j].nazwisko);
-                                resolve([1, company[0].id_company, result[j].id_User, null ,null]);
+                                resolve([1, company[0].id_company, result[j].id_User, null ,null, null]);
                             }
                             else {
-                                resolve([0, company[0].id_company, null, req.body.imie, req.body.nazwisko ]);
+                                resolve([0, company[0].id_company, null, req.body.imie, req.body.nazwisko, req.body.stanowisko]);
                             }
 
                         }
@@ -329,15 +351,15 @@ function buy(req, res, url) {
         }); //koniec promise
 
 
-        szukanie.then(([dodano, company, us, imie, nazwisko]) => {
+        szukanie.then(([dodano, company, us, imie, nazwisko, stanowisko]) => {
             console.log("dodano");
             console.log(dodano);
             console.log("company");
             console.log(company);
             console.log("us");
-            console.log(us);
+            console.log(stanowisko);
             if (dodano == 1) {
-                connection.query('INSERT INTO application (id_event, id_User, id_zgl, state, date, zw, rabat ) VALUES (?, ?, ?, ?, ?, ?, ?)', [even, us, req.session.user, state, date, zw, rabat], function (error, results, fields) {
+                connection.query('INSERT INTO application (id_event, id_User, id_zgl, state, date, zw, rabat ) VALUES (?, ?, ?, ?, ?, ?, ?)', [even, us, req.session.user, state, date, zw, rabat], function (error, result, fields) {
                     console.log(even);
                     console.log(req.session.user);
                     console.log("Dodano starego");
@@ -346,7 +368,7 @@ function buy(req, res, url) {
             }
 
                         if (dodano == 0) {
-                            connection.query('INSERT INTO user( imie, nazwisko, id_company) VALUES (?, ?, ?)', [imie,nazwisko, company], function (error, results, fields) {
+                            connection.query('INSERT INTO user( imie, nazwisko, stanowisko, id_company) VALUES (?, ?, ?, ?)', [imie, nazwisko, stanowisko, company], function (error, results, fields) {
                                 connection.query('INSERT INTO application (id_event, id_User, id_zgl, state, date, zw, rabat) VALUES (?, ?, ?, ?, ?, ?, ?)', [even, results.insertId, req.session.user, state, date, zw, rabat], function (error, resulty, fields) {
                                     console.log("Dodano nowego ");
                                     console.log(req.body.nazwisko[i]);
@@ -387,11 +409,11 @@ function list(req, res, url) {
 
 function mylist(req, res, url) {
 
-    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, application.rabat FROM trainer INNER JOIN event ON trainer.id_trainer = event.id_trainer INNER JOIN application ON event.id_event = application.id_event WHERE application.id_User= ? OR application.id_zgl = ? ORDER BY event.date ASC', [req.session.user, req.session.user], function (error, result, fields) {
+    connection.query('SELECT MIN(application.id_application),application.id_application, event.id_event, event.topic, trainer.Name, event.city, event.date, event.price,  application.rabat FROM trainer INNER JOIN event ON trainer.id_trainer = event.id_trainer INNER JOIN application ON event.id_event = application.id_event WHERE application.id_User= ? OR application.id_zgl = ? GROUP BY event.id_event ', [req.session.user, req.session.user], function (error, result, fields) {
         var currentdate = mydate('date');
         console.log(currentdate);
         console.log(result);
-        console.log("sessionnid");
+        console.log("sessionnid"); 
         console.log(req.session.user);
         res.locals.mytabresult = [];
         res.locals.lastmytabresult = [];
@@ -400,13 +422,9 @@ function mylist(req, res, url) {
         if (result != undefined) {
             for (let i = 0; i < result.length; i++) {
                 console.log(result[i].date);
-                let date = result[i].date;
-                let year = date.getFullYear();
-                let month = date.getMonth()+1;
-                let day = date.getDate()-1;
-                result[i].date = day + '.' + month + '.' + year;
-
-                if (result[i].date < currentdate) {
+                result[i].date = changedate(result[i].date);
+               
+                if (result[i].date > currentdate) {
 
 
                     result[i].price = result[i].price - result[i].rabat;

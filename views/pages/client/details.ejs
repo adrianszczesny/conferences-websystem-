@@ -9,26 +9,31 @@
 </head>
 <body>
 <% include ../../partials/header %>
+
+<tlo>
     <!-- Główna-->
 	<div class="container">
-	<div class="col-lg-9">
+	
 	<tbody>
         <div class="card mt-4">
+		<div class="card-header text-center">
+                         <h3 class="card-title" align="center"> <%= eventtab[0].topic %></h3>
+                        </div>
             <div class="card-body">
-            <h3 class="card-title" align="center"><%= eventtab[0].topic %></h3>
-            <h4>Prowadzący: <%= eventtab[0].Name %></h4>
-            <h4><b>Miasto: <%= eventtab[0].city %></b>, Hotel <%= eventtab[0].hotel %> </h4> 
-            <h5> <b> Data: <%= eventtab[0].date %> r.</b> (godz. 9:00-15:00)</h5>
+            
+            <h5><i class="fas fa-user-graduate"></i>  <%= eventtab[0].Name %></h5>
+            <h5><b><i class="fas fa-map-marker-alt"></i> <%= eventtab[0].city %></b>, Hotel <%= eventtab[0].hotel %> </h5> 
+            <h5> <b><i class="fas fa-table"></i> <%= eventtab[0].date %> r.</b> (godz. 9:00-15:00)</h5>
+			<h5> <i class="fas fa-coins"> <%= eventtab[0].price %> zł/os. netto</i></h5>
             <a href="/info:<%= eventtab[0].id_event %>" class="btn btn-success">Zobacz więcej informacji o szkoleniu</a>
             </div>
         </div>
         <!-- /.card -->
-		<info>
 
 
             <!-- uczestnicy -->
                 <div class="card card-outline-secondary my-4">
-                        <div class="card-header">
+                        <div class="card-header text-center">
                          Uczestnicy:
                         </div>
                             <div class="card-body">
@@ -44,8 +49,8 @@
                                               <th class="text-center">Rezygnacja</th>
                                             </tr>
                                           </thead>
-                                          <tbody>
-                                            <% for( let i =0; i< detailstab.length; i++){ %>
+                                                                                
+											<% for(let i = 0; i < detailstab.length; i++) { %>
                                             
                                             <tr>
                                             <td>
@@ -58,26 +63,52 @@
                                             <input type="text" readonly class="form-control" id="stanowisko" name="stanowisko" value="<%= detailstab[i].stanowisko %>" placeholder="Podaj stanowisko ">
                                             </td>
                                             <td>
-                                                <a href="/deleteapp:<%= appliaction[i].id_application %>" class="btn btn-warning">Rezygnacja</a>  
+                                                
+												<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter">
+													Zrezygnuj
+												</button>
+												<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												 <div class="modal-dialog modal-dialog-centered" role="document">
+												  <div class="modal-content">
+												   <div class="modal-header">
+													   <h5 class="modal-title" id="exampleModalLongTitle">Rezygnacja</h5>
+													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														 <span aria-hidden="true">&times;</span>
+													 </button>
+													 </div>
+												  <div class="modal-body">
+													  Sure? 
+												  </div>
+												   <div class="modal-footer">
+												   <a href="/deleteapp:<%= detailstab[i].id_application %>" class="btn btn-danger">Zrezygnuj</a>
+														 </div>
+													</div>
+												 </div>
+												</div>
                                             </td>
                                             </tr>
                                            <% } %>
-                                          </tbody>
+                                         
                                         </table>
                                       </div>
-                                      <a href="/buy:<%= eventtab[0].id_event %>" class="btn btn-success">Dodaj nowego uczestnia</a>
-                            </div>
+                                      
+									</div>
+									
                       </div>
-                  
-
-        
-        
+                  <div class="card card-outline-secondary my-4">
+                        <div class="card-header text-center">
+                         Dokumenty:
+                        </div>
+                            <div class="card-body">
+							</div>
+							</div>
 		
 		<!-- /.card -->
-</tbody>
+
+		<a href="https://www.freepik.com/free-photos-vectors/background">Background vector created by starline - www.freepik.com</a>
       </div>
-	  </info>
-        
+</tbody>	  
+  </tlo>     
 <% include ../../partials/error %>
 </main>
 <% include ../../partials/footer %>
