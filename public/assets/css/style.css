@@ -5,7 +5,7 @@ body {
     font-size: 18px;
     color: #999999;
     line-height: 1;
-    background-image: url("../images/");
+   
 }
     body * {
         text-shadow: none !important;
@@ -19,6 +19,9 @@ header {
     color: #999999;
     line-height: 1;
     background-color:white;
+}
+footer {
+    background-color: white;
 }
 
 h1, .h1, h2, .h2, h3, .h3 {
@@ -210,7 +213,8 @@ article {
     text-transform: uppercase;
     color: #fff;
     border-radius: 0;
-    background: #57aa26;
+    background: #a3c5ff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
@@ -228,6 +232,10 @@ article {
     margin: 25px 0 0 0;
 }
 
+.container a,
+.container a:hover{
+    text-decoration:none;
+}
 .container t {
     line-height: 37px;
     color: #606060;
@@ -242,14 +250,16 @@ article {
 
 .container img.index-header {
     margin-top: 15px;
-    height: 260px;
+    height: 259px;
     position: relative;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .container img.index-header-my {
     margin-top: 15px;
-    height: 84px;
+    height: 83.5px;
     position: relative;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .slider {

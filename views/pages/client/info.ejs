@@ -11,13 +11,15 @@
 <% include ../../partials/header %>
 
 	<div class="container">
-	<div class="col-lg-9">
 	<tbody>
-        <div class="card mt-4">
-            <div class="card-body">
+	<h4></h4>
+        <div class="card ">
+            <div class="card-header">
             <h3 class="card-title" align="center"><%= tabresult[0].topic %></h3>
-            <h4><b><%= tabresult[0].city %></b>,<%= tabresult[0].hotel %> </h4> 
-            <h5> <b><%= tabresult[0].date %> r.</b> (godz. 9:00-15:00)</h5>
+			</div>
+            <div class="card-body">
+			<h4><b><i class="fas fa-map-marker-alt"></i> <%= tabresult[0].city %></b>,<%= tabresult[0].hotel %> </h4> 
+            <h5> <b><i class="fas fa-table"></i> <%= tabresult[0].date %> r.</b> (godz. 9:00-15:00)</h5>
             </div>
         </div>
         <!-- /.card -->
@@ -33,9 +35,11 @@
 
 		<div class="card card-outline-secondary my-4">
           <div class="card-header">
-            Prowadzący: <%= tabresult[0].Name %>
+            Prowadzący:
           </div>
           <div class="card-body">
+		  <h5 class= "card-title" ><%= tabresult[0].Name %></h5>
+		
             <p><%= tabresult[0].description %><p>
           </div>
         </div>
@@ -56,8 +60,10 @@
           <div class="card-body">
             <p><b><%= tabresult[0].price %> zł netto</b> + 23 % VAT (w przypadku, gdy szkolenie opłacone jest min. w 70% ze środków publicznych przysługuje Państwu zwolnienie z VAT, na podstawie oświadczenia)</p>
           </div>
-        </div>
-		<a href="/buy:<%= tabresult[0].id_event %>" class="btn btn-success">Zapisz się</a>
+        </div> 
+		<div class="col-md-12 text-center"> 
+		<a href="/buy:<%= tabresult[0].id_event %>" class="btn btn-success ">Zapisz się</a>
+		</div>
 		<!-- /.card -->
 </tbody>
       </div>

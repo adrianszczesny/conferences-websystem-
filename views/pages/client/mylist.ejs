@@ -17,9 +17,9 @@
   <t class="text-center">MOJE SZKOLENIA</t>
   <h4> </h4>
 		
-<ul id="list-nav" class="nav nav-tabs" role="tablist">
+<ul id="list-nav" class="nav nav-tabs nav-justified" role="tablist">
 	
-<li class="nav-item">
+<li class="nav-item ">
 <a class="nav-link active" href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Nadchodzące</a>
 </li>
 
@@ -41,22 +41,21 @@
 		<% for(let i = 0; i < mytabresult.length; i++) { %>
 		<h4> </h4>
 		<div class="card">
-			<div class="card-body">
-				<div class="row justify-content-between">
-					<div class="col-6">
+			<a href="/details:<%= mytabresult[i].id_event %>" class="card-body">
+				<div class="row">
+					<div class="col-9 align-self-center">
 						<h5 class="card-title"> <%= mytabresult[i].topic %> </h5>
+						
+					</div>
+					<div class="col-2 ">					
 						<p class="card-text"><i class="fas fa-user-graduate"></i>  <%= mytabresult[i].Name %> </p>
 						<p class="card-text"><i class="fas fa-map-marker-alt"></i>  <%= mytabresult[i].city %></p>
 						<p class="card-text"><i class="fas fa-table"></i> <%= mytabresult[i].date %></p>
 						<p class="card-text"><i class="fas fa-coins"></i> <%= mytabresult[i].price %> zł </p>
 					</div>
-					<div class="row align-items-center">
-					<div class="col-auto ">					
-						<ul><a href="/details:<%= mytabresult[i].id_event %>" class="btn btn-primary " >Szczegóły</a></ul>
 					</div>
-					</div>
-				</div>
-			</div>		
+				
+			</a>		
 		</div>  
         <% }; %>       
    </tbody>
