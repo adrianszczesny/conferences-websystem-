@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <% include ../../partials/head %>
+    <title> Logowanie </title>
+
+</head>
+
+<body>
+    <% include ../../partials/header-manager %>
+
+    <main>
+        <% if(error == true && email == true){ %>
+        <div class="alert alert-danger role="alert">Nieprawidłowy email</div>
+        <% } %>
+        <% if(error == true && password == true){ %>
+        <div class="alert alert-danger role="alert">Niepoprawne hasło</div>
+        <% } %>
+
+        <div class="slider">
+            <img class="index-woman" src="/assets/images/index_woman.png" alt="" />
+            <img class="index-header" src="/assets/images/index-header.jpg" alt="header-image" />
+            <p> LOGOWANIE </p>
+            <form method="POST" action="/login-worker">
+                <e><br> E-Mail:</e>
+                <div class="form-group-email">
+                    <label for="email">
+                        <input id="email" type="email" class="form-control" name="email" placeholder="Wpisz E-mail" required>
+                    </label>
+                </div>
+
+                <j><br> Hasło:</j>
+                <div class="form-group-pass">
+                    <label for="password">
+                        <input id="password" type="password" class="form-control" name="password" placeholder="Wpisz Hasło" required data-eye>
+                    </label>
+               </div>
+
+
+
+                <div class="form-group-button">
+                    <button type="submit" class="btn btn-info ">
+                        Zaloguj
+                    </button>
+                </div>
+
+            </form>
+        </div>
+		 <div class="container main-page">
+            <div class="row main-page-title">
+				<div class="col-md-9 col-lg-8 col-sm-12">
+                    <h2 class="text-center"><B>Nie pamiętasz hasła?</B></h2>
+                </div>
+                <div class="col-md-3 col-lg-4 col-sm-12">
+                    <a class="btn btn-default" href="/login">Zresetuj hasło</a>
+                </div>
+				
+            </div>
+		</div>
+
+
+
+
+
+
+        <% include ../../partials/error %>
+    </main>
+    <% include ../../partials/footer %>
+    <
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
