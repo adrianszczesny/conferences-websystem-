@@ -205,18 +205,20 @@ async function conferences(req, res) {
             for (let i = 0; i < results.length; i++) {
                 results[i].date = changedate(results[i].date);
 
-                num(results[i].id_event).then(result => {
-                    console.log(result);
-                    number[i] = result;
+                connection.query('SELECT COUNT(id_application) AS ile FROM application WHERE id_event = ?', [results[i].id_event], (error, result, fields) => {
+                        console.log(result[0].ile);
+                        number[i] = result;
+                       
+                        if (i == results.length - 1) {
+                            console.log(i,results.length);
+                            res.locals.num = number;
+                            console.log(number);
+                            res.locals.tabresult = results;
+                            res.render('pages/work/manager/list', { req: req.session.id, tabresult: res.locals.tabresult, num: res.locals.num });
+                        } 
                 });
-                if (i == results.length-1) {
-                    console.log(number);
-                    resolve([number, results]);
-                }
-
             }
-          
-            
+   
         });
     });
 
@@ -224,9 +226,9 @@ async function conferences(req, res) {
 
 
         con.then(([number, event]) => {
-            res.locals.num = number;
+          
             console.log(number);
-            res.locals.tabresult = event;
+          
 
 
             res.render('pages/work/manager/list', { req: req.session.id, tabresult: res.locals.tabresult, num: res.locals.num });
