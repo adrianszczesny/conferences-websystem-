@@ -223,6 +223,33 @@ router.post('/newevent', upload.single('program'), (req, res) => {
     addnewevent(req, res, '');
 });
 
+router.get('/eventdetails::id', (req, res) => {
+    eventdetails(req, res, '');
+});
+
+
+function eventdetails(req, res) {
+    let event = req.params.id;
+    console.log("applicatiom:" + event);
+
+        connection.query('SELECT user.imie, user.nazwisko, user.stanowisko, application.id_application FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? ', [event], (error, results, fields) => {
+
+            res.locals.detailstab = results;
+            console.log("results", results);
+            connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [event], function (error, event, fields) {
+                event[0].date = changedate(event[0].date);
+                res.locals.eventtab = event
+                res.render('pages/work/manager/details.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab, admin:true });
+            });
+
+        });
+
+
+}
+
+
+
+
 function newevent(req, res) {
     connection.query('SELECT id_trainer, Name FROM trainer', [], (error, trainer, fields) => {
         connection.query('SELECT id_employee,name,last_name FROM employee', [], (error, employee, fields) =>{
@@ -272,7 +299,7 @@ function num(id_event){
 
 function conferences(req, res) {
         var currentdate = mydate('date');
-        connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, event.NoC FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.state=1 AND event.date > ? ORDER BY event.date ASC ', [currentdate], function (error, result, fields) {
+    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, event.NoC, employee.name, employee.last_name FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer INNER JOIN employee ON event.id_employee = employee.id_employee WHERE event.state=1 AND event.date > ? ORDER BY event.date ASC ', [currentdate], function (error, result, fields) {
 
             for (let i = 0; i < result.length; i++) {
                 result[i].date = changedate(result[i].date);
@@ -284,7 +311,7 @@ function conferences(req, res) {
 
 function lastconferences(req, res) {
     var currentdate = mydate('date');
-    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, event.NoC FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.state=1 AND event.date < ? ORDER BY event.date ASC ', [currentdate], function (error, result, fields) {
+    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, event.NoC, employee.name, employee.last_name FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer INNER JOIN employee ON event.id_employee = employee.id_employee WHERE event.state = 1 AND event.date < ? ORDER BY event.date ASC ', [currentdate], function (error, result, fields) {
 
        
         for (let i = 0; i < result.length; i++) {

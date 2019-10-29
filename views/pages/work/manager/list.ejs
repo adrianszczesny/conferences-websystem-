@@ -21,7 +21,7 @@
 	     for(var i = 0; i < tabresult.length; i++) { %>
 		<h4> </h4>
 		<div class="card">
-			<a href="/info:<%= tabresult[i].id_event %>" class="card-body">
+			<a href="/eventdetails:<%= tabresult[i].id_event %>" class="card-body">
 				<div class="row ">
 					<div class="col-7 align-self-center">
 						<h5 class="card-title"> <%= tabresult[i].topic %> </h5>
@@ -36,7 +36,7 @@
 					</div>
 					<div class="col-2 align-self-center">					
 							
-							
+							<p class="card-text"><%= tabresult[i].name %> <%= tabresult[i].last_name %></p>
 							<p class="card-text"> ilosc osob: <%= tabresult[i].NoC %></p>
 							
 					</div>

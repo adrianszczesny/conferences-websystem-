@@ -61,6 +61,14 @@
             <p><b><%= tabresult[0].price %> zł netto</b> + 23 % VAT (w przypadku, gdy szkolenie opłacone jest min. w 70% ze środków publicznych przysługuje Państwu zwolnienie z VAT, na podstawie oświadczenia)</p>
           </div>
         </div> 
+		 <div class="card card-outline-secondary my-4">
+                        <div class="card-header text-center">
+                         Program szkolenia: 
+                        </div>
+                            <div class="card-body text-center" >
+							 <a href="/info/download:<%= tabresult[0].id_event %>" class="btn btn-primary">Pobierz program szkolenia</a>
+							</div>
+							</div>
 		<div class="col-md-12 text-center"> 
 		<a href="/buy:<%= tabresult[0].id_event %>" class="btn btn-success ">Zapisz się</a>
 		</div>
