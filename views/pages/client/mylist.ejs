@@ -70,7 +70,7 @@
 		<% for(var i = 0; i < lastmytabresult.length; i++) { %>
 		<h4> </h4>
 		<div class="card">
-			<div class="card-body">
+			<a href="/details:<%= lastmytabresult[i].id_event %>" class="card-body">
 				<div class="row justify-content-between">
 					<div class="col-6">
 						<h5 class="card-title"> <%= lastmytabresult[i].topic %> </h5>
@@ -85,7 +85,7 @@
 					</div>
 					</div>
 				</div>
-			</div>		
+			</a>		
 		</div>  
         <% }; %>       
    </tbody>

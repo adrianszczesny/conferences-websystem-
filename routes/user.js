@@ -5,6 +5,20 @@ var path 		= require("path");
 var bcrypt = require('bcryptjs');
 var router = express.Router();
 var mydate = require('current-date');
+var fileUpload = require('express-fileupload');
+var multer = require('multer');
+
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './programs');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname );
+    }
+});
+
+var upload = multer({ storage: storage });
 
 	var bodyParser = require('body-parser');
 
@@ -35,6 +49,7 @@ var connection = mysql.createConnection({
     database: "websystem"
 });
 router.use(express.static("../public"));
+
 
  //odnosniki 
 //home
@@ -117,6 +132,14 @@ router.get('/list', (req, res) =>  {
     list(req, res, '');
 });
 
+router.get('/info/download::id', (req, res) => {
+    console.log(req.params.id)
+    connection.query('SELECT program FROM event WHERE id_event= ?', [req.params.id], (error, result, fields) => {
+        console.log(result[0].program);
+        res.download(result[0].program);
+    });
+});
+
 // lista szkolen, na ktore user jest zapisany
 router.get('/mylist', (req, res) =>  {
     mylist(req, res, '');
@@ -160,7 +183,7 @@ router.get('/deleteapp::id', (req, res) => {
 
 //admin
 router.get('/work', (req, res) => {
-    if (req.session.user != undefined) {
+    if (req.session.user != undefined && req.session.admin==true) {
         conferences(req, res, '')
     }
     else {
@@ -175,12 +198,66 @@ router.post('/login-worker', (req, res) => {
 
 
 router.get('/conferences', (req, res) => {
-   conferences(req, res, '');
+    if (req.session.user != undefined && req.session.admin == true) {
+        conferences(req, res, '')
+    }
+    else {
+        res.render("pages/work/login", { req: req.session.user, error: false, mail: false, password: false, admin:false });
+    }
 });
 
 router.get('/lastconfernces', (req, res) => {
     lastconferences(req, res, '');
 });
+
+router.get('/newevent', (req, res) => {
+    newevent(req, res, '');
+});
+
+router.get('/list/download::id', (req, res) => {
+
+    res.download('programs/1572349896264-PB_Wrocław.doc');
+});
+
+router.post('/newevent', upload.single('program'), (req, res) => {
+    addnewevent(req, res, '');
+});
+
+function newevent(req, res) {
+    connection.query('SELECT id_trainer, Name FROM trainer', [], (error, trainer, fields) => {
+        connection.query('SELECT id_employee,name,last_name FROM employee', [], (error, employee, fields) =>{
+            res.locals.trainer = trainer;
+            res.locals.employee = employee;
+            res.render('pages/work/manager/newevent', { req: req.session.id, trainer: res.locals.trainer, employee: res.locals.employee,  admin: true });
+        })
+    })
+
+}
+
+function addnewevent(req, res) {
+    var parts = req.body.data.split('-'); 
+    var mydate = new Date(parts[0], parts[1] - 1, parts[2]);
+    console.log(mydate);
+    let trainer = req.body.trainer * 1 ;
+    let employee = req.body.employee * 1;
+    console.log(trainer);
+    console.log(employee);
+
+
+    let program = '/programs/' + req.file.filename;
+ 
+
+    console.log('req.body >>>', req.file.filename);
+    console.log('req.body >>>', req.file.orginalname);
+
+
+ connection.query('INSERT INTO event(topic, date, city, hotel, time, descriptions, id_trainer, id_employee, price, state,NoC, NoI, program)  VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', [req.body.topic, mydate, req.body.city, req.body.hotel, req.body.time, req.body.descriptions, trainer, employee, req.body.price, 1, 0, 0, program], (error, result, fields) => { });
+    console.log(req.body);
+    conferences(req, res, '');
+}
+
+
+
 
 function num(id_event){
     return new Promise((resolve, reject) => {
@@ -193,61 +270,30 @@ function num(id_event){
 }
 
 
-async function conferences(req, res) {
-    var con = new Promise((resolve, reject) => {
-
+function conferences(req, res) {
         var currentdate = mydate('date');
-        connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.state=1 AND event.date > ? ORDER BY event.date ASC ', [currentdate], function (error, results, fields) {
+        connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, event.NoC FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.state=1 AND event.date > ? ORDER BY event.date ASC ', [currentdate], function (error, result, fields) {
 
-            let number = [];
-
-
-            for (let i = 0; i < results.length; i++) {
-                results[i].date = changedate(results[i].date);
-
-                connection.query('SELECT COUNT(id_application) AS ile FROM application WHERE id_event = ?', [results[i].id_event], (error, result, fields) => {
-                        console.log(result[0].ile);
-                        number[i] = result;
-                       
-                        if (i == results.length - 1) {
-                            console.log(i,results.length);
-                            res.locals.num = number;
-                            console.log(number);
-                            res.locals.tabresult = results;
-                            res.render('pages/work/manager/list', { req: req.session.id, tabresult: res.locals.tabresult, num: res.locals.num });
-                        } 
-                });
+            for (let i = 0; i < result.length; i++) {
+                result[i].date = changedate(result[i].date);
             }
-   
-        });
-    });
-
-     
-
-
-        con.then(([number, event]) => {
-          
-            console.log(number);
-          
-
-
-            res.render('pages/work/manager/list', { req: req.session.id, tabresult: res.locals.tabresult, num: res.locals.num });
-        });
-
+            res.locals.tabresult = result;
+            res.render('pages/work/manager/list', { req: req.session.id, tabresult: res.locals.tabresult, admin:true });
+       });
 }
 
 function lastconferences(req, res) {
     var currentdate = mydate('date');
-    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.state=1 AND event.date < ? ORDER BY event.date ASC ', [currentdate], function (error, result, fields) {
+    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, event.NoC FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.state=1 AND event.date < ? ORDER BY event.date ASC ', [currentdate], function (error, result, fields) {
 
-        let tabresult = [];
+       
         for (let i = 0; i < result.length; i++) {
             result[i].date = changedate(result[i].date);
         }
 
         res.locals.tabresult = result;
 
-        res.render('pages/work/manager/list', { req: req.session.id, tabresult: res.locals.tabresult });
+        res.render('pages/work/manager/list', { req: req.session.id, tabresult: res.locals.tabresult, admin: true });
     });
 }
 
@@ -268,10 +314,11 @@ function deleteapp(req, res) {
     connection.query('SELECT id_event FROM application WHERE application.id_application = ?', [application], (error, event, fields) => {
         let even = event[0].id_event;
         connection.query(' DELETE FROM application WHERE id_application = ?', [application], (error, event, fields) => {
-            connection.query('SELECT user.id_company FROM user WHERE user.id_User = ?', [req.session.user], (error, company, fields) => {
-                console.log("company", company);
-                connection.query('SELECT user.imie, user.nazwisko, user.stanowisko, application.id_application FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [even, company[0].id_company], (error, results, fields) => {
-                  
+            connection.query('UPDATE event SET NoC=NoC-1 WHERE id_event = ?', [even], (error, event, fields) => {
+                connection.query('SELECT user.id_company FROM user WHERE user.id_User = ?', [req.session.user], (error, company, fields) => {
+                    console.log("company", company);
+                    connection.query('SELECT user.imie, user.nazwisko, user.stanowisko, application.id_application FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [even, company[0].id_company], (error, results, fields) => {
+
                         res.locals.detailstab = results;
                         console.log("results", results);
                         connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [even], function (error, event, fields) {
@@ -280,9 +327,9 @@ function deleteapp(req, res) {
                             res.render('pages/client/details.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab });
 
                         });
-                  
-                });
 
+                    });
+                });
             });
 
         });
@@ -466,20 +513,25 @@ function buy(req, res, url) {
             console.log(stanowisko);
             if (dodano == 1) {
                 connection.query('INSERT INTO application (id_event, id_User, id_zgl, state, date, zw, rabat ) VALUES (?, ?, ?, ?, ?, ?, ?)', [even, us, req.session.user, state, date, zw, rabat], function (error, result, fields) {
-                    console.log(even);
-                    console.log(req.session.user);
-                    console.log("Dodano starego");
-                    console.log(req.body.nazwisko[i]);
+                    connection.query('UPDATE event SET NoC=NoC+1 WHERE id_event = ?', [even], (error, event, fields) => {
+                        console.log(even);
+                        console.log(req.session.user);
+                        console.log("Dodano starego");
+                        console.log(req.body.nazwisko[i]);
+                    });
                 });
             }
+
 
                         if (dodano == 0) {
                             connection.query('INSERT INTO user( imie, nazwisko, stanowisko, id_company) VALUES (?, ?, ?, ?)', [imie, nazwisko, stanowisko, company], function (error, results, fields) {
                                 connection.query('INSERT INTO application (id_event, id_User, id_zgl, state, date, zw, rabat) VALUES (?, ?, ?, ?, ?, ?, ?)', [even, results.insertId, req.session.user, state, date, zw, rabat], function (error, resulty, fields) {
-                                    console.log("Dodano nowego ");
-                                    console.log(req.body.nazwisko[i]);
-                                });
+                                    connection.query('UPDATE event SET NoC=NoC+1 WHERE id_event = ?', [even], (error, event, fields) => {
+                                        console.log("Dodano nowego ");
+                                        console.log(req.body.nazwisko[i]);
 
+                                    });
+                                });
                             });
                         }
         });
@@ -527,9 +579,10 @@ function mylist(req, res, url) {
         let n = 0;
         if (result != undefined) {
             for (let i = 0; i < result.length; i++) {
+                
                 console.log(result[i].date);
                 result[i].date = changedate(result[i].date);
-               
+                console.log(result[i].date);
                 if (result[i].date > currentdate) {
 
 
@@ -616,7 +669,7 @@ function loginAuthQueryWork(req, res, url) {
         console.log(result);
 
         if (result.length == 0 || error) {
-            res.render('pages/work/login', { req: req.session.user, error: true, email: true, password: null });
+            res.render('pages/work/login', { req: req.session.user, error: true, email: true, password: null, admin: false });
         }
         else {
 
@@ -628,20 +681,20 @@ function loginAuthQueryWork(req, res, url) {
                     req.session.user = result[0].id_employee;
                     
                     console.log("2");
-                    req.session.UserName = result[0].name;
+                    req.session.admin = true;
                     console.log("3");
                     console.log(req.session.id);
                     console.log("4");
                     if (result[0].manager == 1) {
                         conferences(req, res, '');
                     }
-                    else {
+                    else {a
 
                     }
                 }
                 else {
                     console.log("bad");
-                    res.render('pages/work/login', { req: req.session.user, error: true, password: true, email: null });
+                    res.render('pages/work/login', { req: req.session.user, error: true, password: true, email: null, admin:false });
                 }
             });
         }
