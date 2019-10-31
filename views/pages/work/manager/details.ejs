@@ -28,7 +28,7 @@
 			<h5> <i class="fas fa-coins"> <%= eventtab[0].price %> zł/os. netto</i></h5>
 			</div>
 			<div class="col-2 align-self-center">
-            <a href="/info:<%= eventtab[0].id_event %>" class="btn btn-success">Edytuj szkolenie</a>
+            <a href="/editevents:<%= eventtab[0].id_event %>" class="btn btn-success">Edytuj szkolenie</a>
 			</div>
 			</div>
             </div>
@@ -42,7 +42,7 @@
                          Uczestnicy:
                         </div>
                             <div class="card-body">
-                                <div id="table" class="table-editable">
+                                <div id="table" class="table-editable ">
                                         <span class="table-add float-right mb-3 mr-2"><a href="/buy:<%= eventtab[0].id_event %>" class="text-success">
                                         <i class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
                                         <table class="table table-bordered table-responsive-md table-striped text-center">
@@ -51,7 +51,8 @@
                                               <th class="text-center">Imię</th>
                                               <th class="text-center">Nazwisko</th>
                                               <th class="text-center">Instytucja</th>
-                                              <th class="text-center">Rezygnacja</th>
+                                              <th class="text-center">Rabat</th>
+											   <th class="text-center"> </th>
                                             </tr>
                                           </thead>
                                                                                 
@@ -59,24 +60,23 @@
                                             
                                             <tr>
                                             <td>
-                                            <%= detailstab[i].imie %>
+                                            <a href="/showuser:<%= detailstab[i].id_user %>" ><%= detailstab[i].imie %></a>
                                             </td>
                                              <td>
-                                            <%= detailstab[i].nazwisko %>
+                                            <a href="/showuser:<%= detailstab[i].id_application %>" ><%= detailstab[i].nazwisko %></a>
                                             </td>
                                               <td>
-                                            <%= detailstab[i].stanowisko %>
+                                            <a href="/showcompany<%= detailstab[i].id_company %>" > <%= detailstab[i].name %> </a>
                                             </td>
                                             <td>
-                                                
-												<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter">
-													Zrezygnuj
+												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#rabat">
+													<%= detailstab[i].rabat %>
 												</button>
-												<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												<div class="modal fade" id="rabat" tabindex="-1" role="dialog" aria-labelledby="rabatTitle" aria-hidden="true">
 												 <div class="modal-dialog modal-dialog-centered" role="document">
 												  <div class="modal-content">
 												   <div class="modal-header">
-													   <h5 class="modal-title" id="exampleModalLongTitle">Rezygnacja</h5>
+													   <h5 class="modal-title" id="rabatTitle">Nadaj rabat</h5>
 													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 														 <span aria-hidden="true">&times;</span>
 													 </button>
@@ -85,11 +85,35 @@
 													  Sure? 
 												  </div>
 												   <div class="modal-footer">
-												   <a href="/deleteapp:<%= detailstab[i].id_application %>" class="btn btn-danger">Zrezygnuj</a>
+												   <a href="/deleteapp:<%= detailstab[i].id_application %>" class="btn btn-danger">Potwierdź</a>
 														 </div>
 													</div>
 												 </div>
 												</div>
+                                                </td>
+												<td>
+												<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rezygnacja">
+													Usuń
+												</button>
+												<div class="modal fade" id="rezygnacja" tabindex="-1" role="dialog" aria-labelledby="rezygnacjaTitle" aria-hidden="true">
+												 <div class="modal-dialog modal-dialog-centered" role="document">
+												  <div class="modal-content">
+												   <div class="modal-header">
+													   <h5 class="modal-title" id="rezygnacjaTitle">Rezygnacja</h5>
+													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														 <span aria-hidden="true">&times;</span>
+													 </button>
+													 </div>
+												  <div class="modal-body">
+													  Sure? 
+												  </div>
+												   <div class="modal-footer">
+												   <a href="/deleteapp:<%= detailstab[i].id_application %>" class="btn btn-danger">Usuń</a>
+														 </div>
+													</div>
+												 </div>
+												</div>
+											
                                             </td>
                                             </tr>
                                            <% } %>

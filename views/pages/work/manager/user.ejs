@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <% include ../../../partials/head %>
+    <title> Moje dane </title>
+
+</head>
+
+<body>
+    <% include ../../../partials/header-manager %>
+
+    <main>
+	 
+<div class= "container">
+ <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
+  <t class="text-center">DANE UŻYTKOWNIKA</t>
+  <h4> </h4>
+
+  <tbody>
+  <form method="POST" action="/update">
+  <div class="card">
+  <div class="card-body">
+  <div class="form-group row">
+    <label for="Email" class="col-sm-2 col-form-label">Email:</label>
+    <div class="col-sm-10 align-self-center">
+      <input type="text" class="form-control" id="email" name="email" value="<%= account[0].email %>"  placeholder="Podaj email">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="Haslo" class="col-sm-2 col-form-label">Hasło:</label>
+    <div class="col-sm-10 align-self-center">
+      <input type="password" class="form-control" id="haslo" name="haslo" value="<%= account[0].password %>" placeholder="Podaj hasło">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="imie" class="col-sm-2 col-form-label">Imię:</label>
+    <div class="col-sm-10 align-self-center">
+      <input type="text" class="form-control" id="imie" name="imie" value="<%= account[0].imie %>" placeholder="Podaj imię ">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="nazwisko" class="col-sm-2 col-form-label">Nazwisko:</label>
+    <div class="col-sm-10 align-self-center">
+      <input type="text" class="form-control" id="nazwisko" name="nazwisko" value="<%= account[0].nazwisko %>" placeholder="Podaj nazwisko">
+    </div>
+  </div>
+   <div class="form-group row">
+    <label for="stanowisko" class="col-sm-2 col-form-label">Stanowisko:</label>
+    <div class="col-sm-10 align-self-center ">
+      <input type="text" class="form-control" id="stanowisko" name="stanowisko" value="<%= account[0].stanowisko %>" placeholder="Podaj swoje stanowisko">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="numer" class="col-sm-2 col-form-label">Numer telefonu:</label>
+    <div class="col-sm-10 align-self-center">
+      <input type="text" class="form-control" id="numer" name="numer" value="<%= account[0].numer %>" placeholder="Podaj swój numer telefonu">
+    </div>
+  </div>
+   </div>
+    </div>
+   <h4> </h4>
+ 
+ 
+ <div class="card">
+	 <div class="card-header">
+		<h4 class="text-center">Dane do faktury</h4>
+  </div>
+  </div>
+  <div class="card">
+  <div class="card-header">
+		<h5 class="text-center">Nabywca:</h5>
+  </div>
+ 
+  <div class="card-body">
+    <div class="form-group row">
+		<label for="nip" class="col-sm-2 col-form-label">NIP:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="nip" name="NIP" value="<%= account[0].NIP %>" placeholder="Podaj NIP(bez myślników)">
+		</div>
+	</div>
+ 
+	<div class="form-group row">
+		<label for="nazwa" class="col-sm-2 col-form-label">Nazwa firmy/instytucji:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="nazwa" name="nazwa" value="<%= account[0].name %>" placeholder="Podaj nazwe firmy/instytucji">
+		</div>
+	</div>
+  
+	<div class="form-group row">
+		<label for="adres" class="col-sm-2 col-form-label">Adres:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="adres" name="adres" value="<%= account[0].adres %>" placeholder="Podaj adres siedziby">
+		</div>
+	</div>
+
+	<div class="form-group row">
+    <label for="Email" class="col-sm-2 col-form-label">Email do e-faktury:</label>
+    <div class="col-sm-10 align-self-center">
+      <input type="text" class="form-control" id="email2" name="email2" value="<%= account[0].emailfv %>"  placeholder="Podaj email do przesłania faktury">
+    </div>
+  </div>
+ 
+  </div>
+</div>
+
+
+
+<div class="card">
+	<div class="card-header">
+		<h5 class="text-center">Odbiorca(opcjonalnie):</h5>
+	</div>
+
+ <h4> </h4>
+ <div class="card-body">
+	<div class="form-group row">
+		<label for="nazwa" class="col-sm-2 col-form-label">Nazwa firmy/instytucji:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="nazwa2" name="nazwa2" value="<%= account[0].name2 %>" placeholder="Podaj nazwe firmy/instytucji">
+		</div>
+	</div>
+
+	<div class="form-group row">
+		<label for="adres" class="col-sm-2 col-form-label">Adres:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="adres2" name="adres2" value="<%= account[0].adres2 %>" placeholder="Podaj adres siedziby">
+		</div>
+	</div>
+</div>
+</div>
+ <br><br>
+   <div class="col-md-12 text-center"> 
+                    <button type="submit" class="btn btn-info ">
+                        Zapisz dane
+                    </button>
+                </div>
+</form>
+</div>
+</tbody>
+</main>
+<% include ../../../partials/footer %>
+</body>
+</html>
