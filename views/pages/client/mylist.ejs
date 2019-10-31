@@ -70,22 +70,22 @@
 		<% for(var i = 0; i < lastmytabresult.length; i++) { %>
 		<h4> </h4>
 		<div class="card">
-			<a href="/details:<%= lastmytabresult[i].id_event %>" class="card-body">
-				<div class="row justify-content-between">
-					<div class="col-6">
+		<a href="/details:<%= lastmytabresult[i].id_event %>" class="card-body">
+				<div class="row">
+					<div class="col-9 align-self-center">
 						<h5 class="card-title"> <%= lastmytabresult[i].topic %> </h5>
+						
+					</div>
+					<div class="col-2 ">					
 						<p class="card-text"><i class="fas fa-user-graduate"></i>  <%= lastmytabresult[i].Name %> </p>
 						<p class="card-text"><i class="fas fa-map-marker-alt"></i>  <%= lastmytabresult[i].city %></p>
 						<p class="card-text"><i class="fas fa-table"></i> <%= lastmytabresult[i].date %></p>
 						<p class="card-text"><i class="fas fa-coins"></i> <%= lastmytabresult[i].price %> zł </p>
 					</div>
-					<div class="row align-items-center">
-					<div class="col-auto ">					
-						<ul><a href="/info:<%= lastmytabresult[i].id_event %>" class="btn btn-primary " >Szczegóły</a></ul>
 					</div>
-					</div>
-				</div>
-			</a>		
+				
+			</a>
+				
 		</div>  
         <% }; %>       
    </tbody>

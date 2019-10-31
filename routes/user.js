@@ -55,7 +55,7 @@ router.use(express.static("../public"));
 
 /*         *
  * CLIENT  *
- */        *
+ */        
 
 //home
 router.get('/', (req, res) =>  {
@@ -72,12 +72,12 @@ router.get('/loginPage', (req, res) =>  {
 
 router.post('/login', (req, res) => {
     loginAuth(req, res, '')
-})
+});
 
 // rejestracja
 router.get('/registerPage', (req, res) => {
-	res.render('pages/register', {req: req.session.user, email:false, password: false});
-})
+    res.render('pages/register', { req: req.session.user, email: false, password: false });
+});
 
 router.post('/register', (req, res) =>  {
     console.log(req.body.email);
@@ -207,7 +207,7 @@ router.get('/work', (req, res) => {
 //logowanie
 router.post('/login-worker', (req, res) => {
     loginAuthWork(req, res, '')
-})
+});
 
 //lista aktualnych szkolen
 router.get('/conferences', (req, res) => {
@@ -255,10 +255,25 @@ router.get('/showuser::id', (req, res) => {
 });
 
 //wyswietlenie informacji o instytucji
-router.get('/showcomapny::id', (req, res) => {
+router.get('/showcompany::id', (req, res) => {
    showcompany(req, res, '');
 });
 
+//wyswietlanie informacji o zgloszeniu
+router.get('/showapplication::id', (req, res) => {
+    showapplication(req, res, '');
+});
+
+//usuniecie pracownika z firmy
+router.get('/removecompany::id', (req, res) => {
+    let user = req.params.id;
+    connection.query('UPDATE user SET id_company = NULL WHERE id_User = ?', [user], (error, result, fields) => { });
+});
+
+//dodanie pracownika do firmy
+router.get('/adduser::id', (req, res) => {
+
+});
 
  /*
  * FUNKCJE
@@ -378,6 +393,9 @@ function mylist(req, res, url) {
 
     connection.query('SELECT MIN(application.id_application),application.id_application, event.id_event, event.topic, trainer.Name, event.city, event.date, event.price,  application.rabat FROM trainer INNER JOIN event ON trainer.id_trainer = event.id_trainer INNER JOIN application ON event.id_event = application.id_event WHERE application.id_User= ? OR application.id_zgl = ? GROUP BY event.id_event ', [req.session.user, req.session.user], function (error, result, fields) {
         var currentdate = mydate('date');
+        var parts = currentdate.split('-');
+        var mydates = new Date(parts[0], parts[1], parts[1]);
+        console.log(mydates);
         console.log(currentdate);
         console.log(result);
         console.log("sessionnid");
@@ -390,10 +408,11 @@ function mylist(req, res, url) {
             for (let i = 0; i < result.length; i++) {
 
                 console.log(result[i].date);
-                result[i].date = changedate(result[i].date);
+                              // currentdate = changedate(currentdate);
                 console.log(result[i].date);
-                if (result[i].date > currentdate) {
 
+                if (result[i].date > mydates) {
+                    result[i].date = changedate(result[i].date);
 
                     result[i].price = result[i].price - result[i].rabat;
                     res.locals.mytabresult[j++] = result[i];
@@ -766,7 +785,7 @@ function eventdetails(req, res) {
     let event = req.params.id;
     console.log("applicatiom:" + event);
 
-    connection.query('SELECT user.id_user, user.imie, user.nazwisko, user.stanowisko, company.name, application.id_application, application.rabat FROM application INNER JOIN user ON application.id_User = user.id_user INNER JOIN company ON user.id_company = company.id_company WHERE application.id_event = ? ', [event], (error, results, fields) => {
+    connection.query('SELECT user.id_user, user.imie, user.nazwisko, user.stanowisko,company.id_company, company.name, application.id_application, application.rabat FROM application INNER JOIN user ON application.id_User = user.id_user INNER JOIN company ON user.id_company = company.id_company WHERE application.id_event = ? ', [event], (error, results, fields) => {
 
         res.locals.detailstab = results;
         console.log("results", results);
@@ -879,12 +898,33 @@ function showuser(req, res) {
 //GET informacje o instytucji/firmie
 function showcompany(req, res) {
     let company = req.params.id;
-    connection.query('SELECT * FROM user INNER JOIN company ON user.id_company = company.id_company WHERE id_company = ?', [comapny], function (error, result, fields) {
+    connection.query('SELECT * FROM user INNER JOIN company ON user.id_company = company.id_company WHERE company.id_company = ?', [company], function (error, result, fields) {
         res.locals.account = result;
         res.render('pages/work/manager/company.ejs', { req: req.session.user, account: res.locals.account, update: false, admin: true });
     });
 }
 
+//GET informacje o zgloszeniu
+function showapplication(req, res) {
+    let application = req.params.id;
+    console.log("application:" + application);
+
+    connection.query('SELECT user.id_company, application.id_event FROM user INNER JOIN application ON user.id_User = application.id_User WHERE application.id_application = ?', [application], (error, company, fields) => {
+        console.log("company", company);
+        connection.query('SELECT user.id_User, user.imie, user.nazwisko, user.stanowisko, application.id_application, application.date FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [company[0].id_event, company[0].id_company], (error, results, fields) => {
+            results[0].date = changedate(results[0].date);
+            res.locals.detailstab = results;
+            console.log("results", results);
+            connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [company[0].id_event], function (error, event, fields) {
+                event[0].date = changedate(event[0].date);
+                res.locals.eventtab = event
+                res.render('pages/work/manager/application.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab, admin:true });
+            });
+
+        });
+
+    });
+}
 
 function num(id_event){
     return new Promise((resolve, reject) => {
