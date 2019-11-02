@@ -32,29 +32,53 @@
 			
 			</div>
 			<div class="col-2 align-self-center">
+			<% if(eventtab[0].state==1){ %>
 			<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#odwolanie">
-													Odwołaj szkolenie
-												</button>
-												<div class="modal fade" id="odwolanie" tabindex="-1" role="dialog" aria-labelledby="odwolanieTitle" aria-hidden="true">
-												 <div class="modal-dialog modal-dialog-centered" role="document">
-												  <div class="modal-content">
-												   <div class="modal-header">
-													   <h5 class="modal-title" id="odwolanieTitle">Odwołaj szkolenie</h5>
-													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-														 <span aria-hidden="true">&times;</span>
-													 </button>
-													 </div>
-												  <div class="modal-body">
-													  Sure? 
-												  </div>
-												   <div class="modal-footer">
-												  <a href="/daleteevent:<%= eventtab[0].id_event %>" class="btn btn-danger">Odwołaj szkolenie</a>
-														 </div>
-													</div>
-												 </div>
-												</div>
-											
+			Odwołaj szkolenie
+			</button>
+			<div class="modal fade" id="odwolanie" tabindex="-1" role="dialog" aria-labelledby="odwolanieTitle" aria-hidden="true">
+				 <div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="odwolanieTitle">Odwołaj szkolenie</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								Sure? 
+							</div>
+							<div class="modal-footer">
+								<a href="/deleteevent:<%= eventtab[0].id_event %>" class="btn btn-danger">Odwołaj szkolenie</a>
+							</div>
+						</div>
+				</div>
+			</div>
+			<% } %>								
 			
+			<% if(eventtab[0].state==2){ %>
+			<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#przywracanie">
+			Przywróć szkolenie
+			</button>
+			<div class="modal fade" id="przywracanie" tabindex="-1" role="dialog" aria-labelledby="przywracanieTitle" aria-hidden="true">
+				 <div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="przywracanieTitle">Przywracanie szkolenia</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								Sure? 
+							</div>
+							<div class="modal-footer">
+								<a href="/reevent:<%= eventtab[0].id_event %>" class="btn btn-danger"> Przywróć szkolenie</a>
+							</div>
+						</div>
+				</div>
+			</div>
+			<% } %>	
 
 			</div>
 			</div>
@@ -75,6 +99,7 @@
                                         <table class="table table-bordered table-responsive-md table-striped text-center">
                                           <thead>
                                             <tr>
+											  <th class= "text-center"> Lp. </th> 
                                               <th class="text-center">Imię</th>
                                               <th class="text-center">Nazwisko</th>
                                               <th class="text-center">Instytucja</th>
@@ -82,10 +107,13 @@
 											   <th class="text-center"> </th>
                                             </tr>
                                           </thead>
-                                                                                
+                                                                             
 											<% for(let i = 0; i < detailstab.length; i++) { %>
                                             
                                             <tr>
+											<td> 
+											<a href="/showapplication:<%= detailstab[i].id_application %>" ><%= i+1 %>.</a>
+											</td>
                                             <td>
                                             <a href="/showapplication:<%= detailstab[i].id_application %>" ><%= detailstab[i].imie %></a>
                                             </td>
@@ -94,39 +122,55 @@
                                             </td>
                                               <td>
                                             <a href="/showcompany:<%= detailstab[i].id_company %>" > <%= detailstab[i].name %> </a>
+											 <a href="/showcompany:<%= detailstab[i].id_company %>" ><%= detailstab[i].name2 %> </a>
                                             </td>
+
                                             <td>
-												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#rabat">
+                                                
+												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#rabat-<%= detailstab[i].id_application %>">
 													<%= detailstab[i].rabat %>
 												</button>
-												<div class="modal fade" id="rabat" tabindex="-1" role="dialog" aria-labelledby="rabatTitle" aria-hidden="true">
+												<div class="modal fade" id="rabat-<%= detailstab[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 												 <div class="modal-dialog modal-dialog-centered" role="document">
 												  <div class="modal-content">
 												   <div class="modal-header">
-													   <h5 class="modal-title" id="rabatTitle">Nadaj rabat</h5>
+													   <h5 class="modal-title" id="exampleModalLongTitle">Nadaj rabat</h5>
 													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 														 <span aria-hidden="true">&times;</span>
 													 </button>
 													 </div>
 												  <div class="modal-body">
-													  Sure? 
+													  <form method="POST" action="/addrabat:<%= detailstab[i].id_application %> ">
+															<div class="form-group row">
+																<input type="hidden"  class="form-control" name= "application" value="<%= detailstab[i].id_application %>" > 
+																<label for="topic" class="col-sm-8 col-form-label">Wprowadź wartość rabatu:</label>
+																<div class="col-sm-2 align-self-center">
+																	<input type="text" class="form-control" id="rabat" name="rabat" value="<%= detailstab[i].rabat %>" >
+																</div>
+															</div>
+															 <button type="submit" class="btn btn-info ">Nadaj rabat </button>
+													 
+													 </form>
 												  </div>
 												   <div class="modal-footer">
-												   <a href="/deleteapp:<%= detailstab[i].id_application %>" class="btn btn-danger">Potwierdź</a>
+												   <a href="/addrabat:<%= detailstab[i].id_application %>" class="btn btn-info">Nadaj</a>
 														 </div>
 													</div>
 												 </div>
 												</div>
-                                                </td>
+                                            </td>
+
+
 												<td>
-												<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rezygnacja">
-													Usuń
+                                                
+												<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rezygnacja-<%= detailstab[i].id_application %>">
+													Zrezygnuj
 												</button>
-												<div class="modal fade" id="rezygnacja" tabindex="-1" role="dialog" aria-labelledby="rezygnacjaTitle" aria-hidden="true">
+												<div class="modal fade" id="rezygnacja-<%= detailstab[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 												 <div class="modal-dialog modal-dialog-centered" role="document">
 												  <div class="modal-content">
 												   <div class="modal-header">
-													   <h5 class="modal-title" id="rezygnacjaTitle">Rezygnacja</h5>
+													   <h5 class="modal-title" id="exampleModalLongTitle">Rezygnacja</h5>
 													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 														 <span aria-hidden="true">&times;</span>
 													 </button>
@@ -135,22 +179,26 @@
 													  Sure? 
 												  </div>
 												   <div class="modal-footer">
-												   <a href="/deleteapp:<%= detailstab[i].id_application %>" class="btn btn-danger">Usuń</a>
+												   <a href="/deleteapp:<%= detailstab[i].id_application %>" class="btn btn-danger">Zrezygnuj</a>
 														 </div>
 													</div>
 												 </div>
 												</div>
-											
                                             </td>
                                             </tr>
                                            <% } %>
-                                         
+                                          
                                         </table>
                                       </div>
                                       
 									</div>
 									
                       </div>
+		<div class= "row">
+		<div class="col-12 text-center">
+		<a href="/finish:<%= eventtab[0].id_event %>" class="btn btn-primary ">Pakuj szkolenie</a>
+		</div>
+		</div>
                   
 		
 		<!-- /.card -->

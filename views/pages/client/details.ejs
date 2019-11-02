@@ -104,6 +104,7 @@
                         <div class="card-header text-center">
                          Dokumenty:
                         </div>
+
                             <div class="card-body">
 								<div class="form-group row  ">
     <label for="program" class="col-sm-3 col-form-label text-center">Program szkolenia:</label>
@@ -111,6 +112,14 @@
       <a href="/info/download:<%= eventtab[0].id_event %>" class="btn btn-primary">Pobierz program szkolenia</a>
     </div>
   </div>
+
+  <div class="form-group row  ">
+    <label for="program" class="col-sm-3 col-form-label text-center">Generuj zgłoszenie na szkolenie:</label>
+    <div class="col-sm-9">
+      <a href="/zgloszenie:<%= eventtab[0].id_event %>" class="btn btn-primary">Generuj</a>
+    </div>
+  </div>
+
   	<div class="form-group row text-center">
     <label for="zgloszenie" class="col-sm-3 col-form-label">Załącz zgłoszenie:</label>
     <div class="col-sm-9">

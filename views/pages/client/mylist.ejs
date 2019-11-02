@@ -43,9 +43,14 @@
 		<div class="card">
 			<a href="/details:<%= mytabresult[i].id_event %>" class="card-body">
 				<div class="row">
-					<div class="col-9 align-self-center">
+					<div class="col-8 align-self-center">
 						<h5 class="card-title"> <%= mytabresult[i].topic %> </h5>
 						
+					</div>
+					<div class="col-2 align-self-center">
+					<% if(mytabresult[i].state == 2) { %>
+						<span class="badge badge-danger"> SZKOLENIE ODWOŁANE</span> 
+					<% } %>
 					</div>
 					<div class="col-2 ">					
 						<p class="card-text"><i class="fas fa-user-graduate"></i>  <%= mytabresult[i].Name %> </p>
@@ -71,8 +76,8 @@
 		<h4> </h4>
 		<div class="card">
 		<a href="/details:<%= lastmytabresult[i].id_event %>" class="card-body">
-				<div class="row">
-					<div class="col-9 align-self-center">
+				<div class="row justify-content-between">
+					<div class="col-8 align-self-center">
 						<h5 class="card-title"> <%= lastmytabresult[i].topic %> </h5>
 						
 					</div>

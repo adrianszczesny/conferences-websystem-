@@ -13,7 +13,14 @@
 <% include ../../../partials/header-manager %>
   <div class="container">
   <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
-  <t class="text-center"> SZKOLENIA</t>
+  <t class="text-center">
+  <% if(last == true){ %>
+	ARCHIWALNE SZKOLENIA
+  <% } else {  %>
+  AKTUALNE SZKOLENIA
+  <% } %>
+  
+  </t>
 	<tbody>
 		<% if(tabresult.length == 0){ %>
 		<h4><br> Brak nadchodzących szkoleń. </h4>
@@ -38,6 +45,9 @@
 							
 							<p class="card-text"><%= tabresult[i].name %> <%= tabresult[i].last_name %></p>
 							<p class="card-text"> ilosc osob: <%= tabresult[i].NoC %></p>
+							<% if(tabresult[i].state==2){ %>
+							<span class="badge badge-danger">ODWOŁANE</span> 
+							<% } %>
 							
 					</div>
 				</div>	

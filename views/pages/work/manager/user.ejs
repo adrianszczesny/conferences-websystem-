@@ -49,22 +49,27 @@
    <div class="form-group row">
     <label for="stanowisko" class="col-sm-2 col-form-label">Stanowisko:</label>
     <div class="col-sm-10 align-self-center ">
-      <input type="text" class="form-control" id="stanowisko" name="stanowisko" value="<%= account[0].stanowisko %>" placeholder="Podaj swoje stanowisko">
+      <input type="text" class="form-control" id="stanowisko" name="stanowisko" value="<%= account[0].stanowisko %>" placeholder="Podaj stanowisko">
     </div>
   </div>
   <div class="form-group row">
     <label for="numer" class="col-sm-2 col-form-label">Numer telefonu:</label>
     <div class="col-sm-10 align-self-center">
-      <input type="text" class="form-control" id="numer" name="numer" value="<%= account[0].numer %>" placeholder="Podaj swój numer telefonu">
+      <input type="text" class="form-control" id="numer" name="numer" value="<%= account[0].numer %>" placeholder="Podaj numer telefonu">
     </div>
   </div>
   <div class="form-group row">
-    <label for="numer" class="col-sm-2 col-form-label">Nazwa firmy:</label>
+    <label for="company" class="col-sm-2 col-form-label">Nazwa firmy:</label>
     <div class="col-sm-10 align-self-center">
-      <a href="/showcomapny:<%= account[0].id_company %>" > <%= account[0].name %>-<%= account[0].name2 %></a>
-    </div>
+		<select class="selectpicker" data-live-search="true" id="company" name="company" data-width="100%">
+			<option value="<%= account[0].id_company %>" selected> <%= account[0].name %>-<%= account[0].name2 %></option>
+		<% for(var i = 0; i < company.length; i++) { %>
+			<option data-tokens="<%= company[i].name %>" value="<%= company[i].id_comapny %>" > <%= company[i].name %> - <%= company[i].name2 %></option>
+		<% } %>
+		</select>
+		</div>
+		</div>
   </div>
-   </div>
     </div>
    <h4> </h4>
  
