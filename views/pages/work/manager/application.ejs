@@ -140,7 +140,45 @@
                                       </div>
                                       
 									</div>
-									
+						
+						    </div>
+                  <div class="card card-outline-secondary my-4">
+                        <div class="card-header text-center">
+                         Dokumenty:
+                        </div>
+
+                            <div class="card-body">
+								
+  
+
+  <div class="form-group row  ">
+    <label for="program" class="col-sm-3 col-form-label text-center ">Generuj zgłoszenie na szkolenie:</label>
+    <div class="col-sm-9 align-self-center">
+      <a href="/zgloszenie:<%= detailstab[0].id_application %>" class="btn btn-primary ">Generuj</a>
+    </div>
+  </div>
+  <hr />
+  	<div class="form-group row text-center">
+    <label for="zgloszenie" class="col-sm-3 col-form-label align-self-center">Załącz zgłoszenie:
+	<% if(detailstab[0].zgloszenie != null ){ %>
+	<span class="badge badge-success">Dodane</span>
+	<% } %>
+	</label>
+    <div class="col-sm-4 ">
+	 <form method="POST" action="/addzgloszenie:<%= detailstab[0].id_application %>" enctype="multipart/form-data" >
+      <input type="file" class="form-control-file" id="zgloszenie" name="zgloszenie" ></input><br>
+	 <button type="submit" class="btn btn-info pull-left ">
+                        Załącz skan zgłoszenia
+                    </button>
+	  </form>
+    </div>
+	<div class="col-sm-3 align-self-center">
+	<% if(detailstab[0].zgloszenie != null ){ %>
+	<a href="/showzgloszenie:<%= detailstab[0].id_application %>" class="btn btn-info ">Podgląd zgłoszenia</a>
+	<% } %>
+	
+	</div>
+  </div>
                       </div>
                   
 		

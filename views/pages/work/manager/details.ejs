@@ -94,7 +94,7 @@
                         </div>
                             <div class="card-body">
                                 <div id="table" class="table-editable ">
-                                        <span class="table-add float-right mb-3 mr-2"><a href="/buy:<%= eventtab[0].id_event %>" class="text-success">
+                                        <span class="table-add float-right mb-3 mr-2"><a href="/addnewuser?event=<%= eventtab[0].id_event %>" class="text-success">
                                         <i class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
                                         <table class="table table-bordered table-responsive-md table-striped text-center">
                                           <thead>
@@ -103,7 +103,7 @@
                                               <th class="text-center">Imię</th>
                                               <th class="text-center">Nazwisko</th>
                                               <th class="text-center">Instytucja</th>
-                                              <th class="text-center">Rabat</th>
+                                              <th class="text-center">Zgłoszenie</th>
 											   <th class="text-center"> </th>
                                             </tr>
                                           </thead>
@@ -127,44 +127,18 @@
 
                                             <td>
                                                 
-												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#rabat-<%= detailstab[i].id_application %>">
-													<%= detailstab[i].rabat %>
-												</button>
-												<div class="modal fade" id="rabat-<%= detailstab[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-												 <div class="modal-dialog modal-dialog-centered" role="document">
-												  <div class="modal-content">
-												   <div class="modal-header">
-													   <h5 class="modal-title" id="exampleModalLongTitle">Nadaj rabat</h5>
-													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-														 <span aria-hidden="true">&times;</span>
-													 </button>
-													 </div>
-												  <div class="modal-body">
-													  <form method="POST" action="/addrabat:<%= detailstab[i].id_application %> ">
-															<div class="form-group row">
-																<input type="hidden"  class="form-control" name= "application" value="<%= detailstab[i].id_application %>" > 
-																<label for="topic" class="col-sm-8 col-form-label">Wprowadź wartość rabatu:</label>
-																<div class="col-sm-2 align-self-center">
-																	<input type="text" class="form-control" id="rabat" name="rabat" value="<%= detailstab[i].rabat %>" >
-																</div>
-															</div>
-															 <button type="submit" class="btn btn-info ">Nadaj rabat </button>
-													 
-													 </form>
-												  </div>
-												   <div class="modal-footer">
-												   <a href="/addrabat:<%= detailstab[i].id_application %>" class="btn btn-info">Nadaj</a>
-														 </div>
-													</div>
-												 </div>
-												</div>
+												<% if(detailstab[i].zgloszenie != null ){ %>
+												<span class="badge badge-success"><i class="fas fa-check" style = " color:white"></i></span>
+												<% } else { %>
+												<span class="badge badge-danger"><i class="fas fa-minus" style = " color:white"></i></span>
+												<% } %>
                                             </td>
 
 
 												<td>
                                                 
 												<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rezygnacja-<%= detailstab[i].id_application %>">
-													Zrezygnuj
+													Rezygnacja
 												</button>
 												<div class="modal fade" id="rezygnacja-<%= detailstab[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 												 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -179,7 +153,7 @@
 													  Sure? 
 												  </div>
 												   <div class="modal-footer">
-												   <a href="/deleteapp:<%= detailstab[i].id_application %>" class="btn btn-danger">Zrezygnuj</a>
+												   <a href="/deleteapp:<%= detailstab[i].id_application %>" class="btn btn-danger">Usuń</a>
 														 </div>
 													</div>
 												 </div>

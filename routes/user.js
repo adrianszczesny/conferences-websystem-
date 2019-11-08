@@ -8,7 +8,12 @@ var mydate = require('current-date');
 var fileUpload = require('express-fileupload');
 var multer = require('multer');
 var fs = require('fs');
-var pdf = require('dynamic-html-pdf');
+
+var puppeteer = require('puppeteer');
+var ejs = require('ejs');
+var path = require('path');
+
+
 
 
 
@@ -26,7 +31,7 @@ var pdf = require('dynamic-html-pdf');
 
     router.use(cookieParser());
 
-var storage = multer.diskStorage({
+var storage_program = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './programs');
     },
@@ -35,8 +40,18 @@ var storage = multer.diskStorage({
     }
 });
 
-var upload = multer({ storage: storage });
+var program = multer({ storage: storage_program });
 
+var storage_zgloszenie = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './zgloszenie');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+
+var file_zgloszenie = multer({ storage: storage_zgloszenie });
 // Inicjalizacja bazy danych 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -139,8 +154,10 @@ router.get('/list', (req, res) =>  {
 router.get('/info/download::id', (req, res) => {
     console.log(req.params.id)
     connection.query('SELECT program FROM event WHERE id_event= ?', [req.params.id], (error, result, fields) => {
+
         console.log(result[0].program);
-        res.download(result[0].program);
+        console.log(path.join(__dirname, '/..', result[0].program));
+        res.download(path.join(__dirname, '/..', result[0].program));
     });
 });
 
@@ -189,6 +206,19 @@ router.get('/zgloszenie::id', (req, res) => {
     zgloszenie(req, res, '');
 });
 
+router.post('/addzgloszenie::id', file_zgloszenie.single('zgloszenie'), (req, res) => {
+    addzgloszenie(req, res, '');
+});
+
+router.get('/showprogram::id', (req, res) => {
+    showprogram(req, res, '');
+});
+
+
+router.get('/addnewuser', (req, res) => {
+    addnewuser(req, res, '');
+});
+
 /*
  * MANAGER
  */
@@ -230,7 +260,7 @@ router.get('/newevent', (req, res) => {
 });
 
 //dodanie nowego szkolenia
-router.post('/newevent', upload.single('program'), (req, res) => {
+router.post('/newevent', program.single('program'), (req, res) => {
     addnewevent(req, res, '');
 });
 
@@ -245,7 +275,7 @@ router.get('/editevents::id', (req, res) => {
 });
 
 //wprowadzenie zmian w szkoleniu
-router.post('/editevent::id', upload.single('program'), (req, res) => {
+router.post('/editevent::id', program.single('program'), (req, res) => {
     posteditevent(req, res, '');
 });
 
@@ -290,6 +320,10 @@ router.get('/showapplication::id', (req, res) => {
     showapplication(req, res, '');
 });
 
+router.get('/showzgloszenie::id', (req, res) => {
+    showzgloszenie(req, res, '');
+});
+
 //usuniecie pracownika z firmy
 router.get('/removecompany::id', (req, res) => {
     let user = req.params.id;
@@ -300,6 +334,10 @@ router.get('/removecompany::id', (req, res) => {
 router.get('/adduser::id', (req, res) => {
     let company = req.params.id;
 
+});
+
+router.post('/addnewcompany', (req, res) => {
+    addnewcomapny(req, res, '');
 });
 
 
@@ -512,8 +550,8 @@ function buy(req, res, url) {
     let date = mydate('full');
     let zw = null;
     let rabat = 0;
-
-    if (req.body.check[1] != undefined) {
+    console.log(req.body.check[0][1]);
+    if (req.body.check[0][1] == 1) {
         zw = 1;
         console.log("zw" + zw);
     }
@@ -569,7 +607,8 @@ function buy(req, res, url) {
         });
 
 
-        szukanie.then(([dodano, company, us, imie, nazwisko, stanowisko]) => {
+        szukanie
+            .then(([dodano, company, us, imie, nazwisko, stanowisko]) => {
             console.log("dodano");
             console.log(dodano);
             console.log("company");
@@ -583,6 +622,7 @@ function buy(req, res, url) {
                         console.log(req.session.user);
                         console.log("Dodano starego");
                         console.log(req.body.nazwisko[i]);
+
                     });
                 });
             }
@@ -598,40 +638,31 @@ function buy(req, res, url) {
                         });
                     });
                 });
-            }
+                }
+          
         });
 
 
     }
-
     mylist(req, res);
 }
 
 //GET rezygnacja ze szkolenia 
 function deleteapp(req, res) {
     let application = req.params.id;
-    connection.query('SELECT id_event FROM application WHERE application.id_application = ?', [application], (error, event, fields) => {
-        let even = event[0].id_event;
-        connection.query(' DELETE FROM application WHERE id_application = ?', [application], (error, event, fields) => {
-            connection.query('UPDATE event SET NoC=NoC-1 WHERE id_event = ?', [even], (error, event, fields) => {
-              /*  connection.query('SELECT user.id_company FROM user WHERE user.id_User = ?', [req.session.user], (error, company, fields) => {
-                    console.log("company", company);
-                    connection.query('SELECT user.imie, user.nazwisko, user.stanowisko, application.id_application FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [even, company[0].id_company], (error, results, fields) => {
-
-                        res.locals.detailstab = results;
-                        console.log("results", results);
-                        connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [even], function (error, event, fields) {
-                            event[0].date = changedate(event[0].date);
-                            res.locals.eventtab = event
-                            res.render('pages/client/application.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab });
-
-                        });
-
-                    });
-                });*/
-                showapplication(req, res, '');
+    connection.query('SELECT application.id_event, user.id_company FROM application INNER JOIN user ON application.id_User = user.id_User WHERE application.id_application = ?', [application], (error, even, fields) => {
+        
+        connection.query('SELECT application.id_application FROM application INNER JOIN user ON application.id_User = user.id_User WHERE user.id_company = ? AND application.id_event=?', [even[0].id_company, even[0].id_event], (error, resul, fields)=> {
+            connection.query(' DELETE FROM application WHERE id_application = ?', [application], (error, event, fields) => {
+                connection.query('UPDATE event SET NoC=NoC-1 WHERE id_event = ?', [even[0].id_event], (error, event, fields) => {
+                    if (resul.length > 1) {
+                        res.redirect('back');
+                    } else {
+                        mylist(req, res, '');
+                    }
+                    
+                });
             });
-
         });
     });
 
@@ -639,92 +670,105 @@ function deleteapp(req, res) {
 
 //GET szczegoly zamowienia szkolenia
 function details(req, res) {
-    let event = req.params.id;
-    console.log("applicatiom:" + event);
+    let application = req.params.id;
+    console.log("applicatiom:" + application);
+    connection.query('SELECT id_event FROM application WHERE id_application = ?', [application], (error, even, fields) => {
+        connection.query('SELECT user.id_company FROM user WHERE user.id_User = ?', [req.session.user], (error, company, fields) => {
+            console.log("company", company);
+            connection.query('SELECT user.imie, user.nazwisko, user.stanowisko, application.id_application,application.zgloszenie FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [even[0].id_event, company[0].id_company], (error, results, fields) => {
+                
+                res.locals.detailstab = results;
+                console.log("results", results);
+                connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [even[0].id_event], function (error, event, fields) {
+                    event[0].date = changedate(event[0].date);
+                    res.locals.eventtab = event
+                    res.render('pages/client/details.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab });
+                });
 
-    connection.query('SELECT user.id_company FROM user WHERE user.id_User = ?', [req.session.user], (error, company, fields) => {
-        console.log("company", company);
-        connection.query('SELECT user.imie, user.nazwisko, user.stanowisko, application.id_application FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [event, company[0].id_company], (error, results, fields) => {
-
-            res.locals.detailstab = results;
-            console.log("results", results);
-            connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [event], function (error, event, fields) {
-                event[0].date = changedate(event[0].date);
-                res.locals.eventtab = event
-                res.render('pages/client/details.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab });
             });
 
         });
-
     });
 }
 
 //GET generowanie zgloszenia
 function zgloszenie(req, res) {
-    let event = req.params.id;
-    console.log("applicatiom:" + event);
+    let application = req.params.id;
+    console.log("applicatiom:" + application);
+    connection.query('SELECT id_event FROM application WHERE id_application = ?', [application], (error, even, fields) => {
+        connection.query('SELECT * FROM user WHERE user.id_User = ?', [req.session.user], (error, company, fields) => {
+            console.log("company", company);
+            connection.query('SELECT * FROM company WHERE company.id_company = ?', [company[0].id_company], (error, compan, fields) => {
+                res.locals.company = compan;
+                connection.query('SELECT user.imie, user.nazwisko, user.stanowisko, application.rabat, application.zw FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [even[0].id_event, company[0].id_company], (error, results, fields) => {
 
-    connection.query('SELECT user.id_company FROM user WHERE user.id_User = ?', [req.session.user], (error, company, fields) => {
-        console.log("company", company);
-        connection.query('SELECT user.imie, user.nazwisko, user.stanowisko FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [event, company[0].id_company], (error, results, fields) => {
+                    res.locals.detailstab = results;
+                    console.log("results", results);
+                    connection.query('SELECT event.topic, event.city, event.date, event.hotel, event.price FROM event WHERE event.id_event= ? ', [even[0].id_event], function (error, event, fields) {
+                        event[0].date = changedate(event[0].date);
+                        res.locals.eventtab = event;
+                        console.log("event", event);
+                        async function dopdf(ile) {
+                            try {
+                            console.log("weszlo");
+                            let zgl;
+                            if (ile < 6) {
+                                zgl = await ejs.renderFile(path.join(__dirname, '../views/pages/', "zgloszenie.ejs"), { events: res.locals.eventtab, result: res.locals.detailstab, company: res.locals.company });
+                            }
+                            else {
+                                zgl = await ejs.renderFile(path.join(__dirname, '../views/pages/', "zgloszenie2.ejs"), { events: res.locals.eventtab, result: res.locals.detailstab, company: res.locals.company });
+                            }
+                            const browser = await puppeteer.launch();
+                            const page = await browser.newPage();
+                            await page.setContent(zgl);
+                            await page.emulateMedia('screen');
+                            await page.pdf({
+                                path: './zgl.pdf',
+                                format: 'A4',
+                                border: '10mm',
+                                printBackground: true
+                            });
+                            console.log("zrobione");
+                            await browser.close();
+                            await res.download('./zgl.pdf');
+                            details(req, res);
 
-            res.locals.detailstab = results;
-            console.log("results", results);
-            connection.query('SELECT event.topic, event.city, event.date, event.hotel, event.price FROM event WHERE event.id_event= ? ', [event], function (error, event, fields) {
-                event[0].date = changedate(event[0].date);
-                res.locals.eventtab = event;
-                var html = fs.readFileSync('views/pages/zgloszenie.html', 'utf8');
-                var options = {
-                    format: "A4",
-                    orientation: "portrait",
-                    border: "10mm"
-                };
-                var events = [
-                    {
-                        topic: event[0].topic,
-                        date: event[0].date,
-                        city: event[0].city,
-                        hotel: event[0].hotel,
-                        price: event[0].price
-
-                    }];
-
-                var users = [];
-                for (let i = 0; i < results.length; i++) {
-                    users.push({
-                        imie: results[i].imie,
-                        nazwisko: results[i].nazwisko,
-                        stanowisko: results[i].stanowisko
-                    });
-                }
-                console.log(users);
-                console.log(events);
-
-                var document = {
-                    type: 'file',     // 'file' or 'buffer'
-                    template: html,
-                    context: {
-                        users: users,
-                        event: events
-                    },
-                    path: "./output.pdf"
-                };
-
-                pdf.create(document, options)
-                    .then(res => {
-                        console.log(res)
-                    })
-                    .catch(error => {
-                        console.error(error)
+                            }
+                            catch{
+                            console.log("blad");
+                            }
+                        };
+                        let d = results.length;
+                        dopdf(d);
                     });
 
-                console.log(html);
+
+
+
+                });
             });
-
         });
 
     });
 }
+
+
+function addzgloszenie(req, res) {
+    let application = req.params.id;
+    let zgloszenie = '/zgloszenie/' + req.file.filename;
+    connection.query('SELECT application.id_event, user.id_company FROM application INNER JOIN user ON application.id_User = user.id_User WHERE application.id_application = ?', [application], (error, even, fields) => {
+
+        connection.query('SELECT application.id_application FROM application INNER JOIN user ON application.id_User = user.id_User WHERE user.id_company = ? AND application.id_event=?', [even[0].id_company, even[0].id_event], (error, resul, fields) => {
+            for (let i = 0; i < resul.length; i++) {
+                let app = resul[i].id_application;
+                connection.query('UPDATE application SET zgloszenie = ? WHERE id_application= ?', [zgloszenie, app], (error, result, fields) => { });
+            }
+                res.redirect('back');
+        });
+    });
+}
+
+
 
  /*
  * MANAGER
@@ -814,7 +858,7 @@ function eventdetails(req, res) {
     let event = req.params.id;
     console.log("applicatiom:" + event);
 
-    connection.query('SELECT user.id_user, user.imie, user.nazwisko, user.stanowisko, company.id_company, company.name, company.name2, application.id_application, application.rabat, application.id_zgl FROM application INNER JOIN user ON application.id_User = user.id_user LEFT JOIN company ON user.id_company = company.id_company WHERE application.id_event = ? ', [event], (error, results, fields) => {
+    connection.query('SELECT user.id_user, user.imie, user.nazwisko, user.stanowisko, company.id_company, company.name, company.name2, application.id_application, application.rabat, application.id_zgl, application.zgloszenie FROM application INNER JOIN user ON application.id_User = user.id_user LEFT JOIN company ON user.id_company = company.id_company WHERE application.id_event = ? ', [event], (error, results, fields) => {
        
             res.locals.detailstab = results;
             console.log("results", results);
@@ -915,6 +959,73 @@ function addnewevent(req, res) {
     conferences(req, res, '');
 }
 
+function addnewuser(req, res) {
+    let even;
+    let comp;
+    console.log(req.query.event);
+    console.log(req.query.company);
+    var szukam_event = new Promise(function (resolve, reject) {
+        if (req.query.event) {
+            even = req.query.event;
+            connection.query('SELECT topic, id_event, date FROM event WHERE id_event=? ', [even], function (error, event, fields) {
+                event[0].date = changedate(event[0].date);
+                res.locals.event = event;
+                resolve(event);
+            });
+        }
+        else {
+            connection.query('SELECT topic, id_event, date FROM event ', [], function (error, event, fields) {
+                console.log(event);
+                for (let i = 0; i < event.length; i++) {
+                    event[i].date = changedate(event[i].date);
+                }
+                res.locals.event = event;
+                resolve(event);
+            });
+
+        }
+
+    });
+    var szukam_company = new Promise((resolve, reject) => {
+        if (req.query.company) {
+            comp = req.query.company;
+            connection.query('SELECT id_company, name, name2 FROM company WHERE id_company = ? ', [comp], function (error, company, fields) {
+                res.locals.company = company;
+                resolve(company);
+            });
+        }
+        else {
+            connection.query('SELECT id_company,name, name2 FROM company GROUP BY id_company DESC ', [], function (error, company, fields) {
+                console.log(company);
+                res.locals.company = company;
+                resolve(company);
+            });
+        }
+    });
+    
+
+    Promise.all([szukam_event, szukam_company]).then((values) => {
+        console.log("values");
+        console.log(values[0]);
+        console.log(values[1].length);
+        //console.log(res.locals.company);
+       // console.log(res.locals.event);
+        res.render('pages/work/manager/addnewuser', { req: req.session.user, event: values[0], company: values[1] });
+    });
+}
+
+function postaddnewuser(req, res) {
+
+}
+
+
+function addnewcomapny(req, res) {
+    connection.query('INSERT INTO company (NIP, name, adres, name2, adres2, emailfv) VALUES (?, ?, ?, ?, ?, ?) ', [req.body.NIP, req.body.nazwa, req.body.adres, req.body.nazwa2, req.body.adres2, req.body.emailfv], function (error, results, fields) {
+        res.redirect('back');
+    });
+}
+
+
 //GET informacje o uzytkowaniku 
 function showuser(req, res) {
     let user = req.params.id;
@@ -946,14 +1057,14 @@ function showapplication(req, res) {
             console.log("company", company);
         connection.query('SELECT user.imie, user.nazwisko, user.id_User, company.id_company, company.name,company.name2 FROM user INNER JOIN company ON user.id_company = company.id_company WHERE id_User= ?', [company[0].id_zgl], (error, zgl, fields) => {
                 res.locals.zgl = zgl;
-                 connection.query('SELECT user.id_User, user.imie, user.nazwisko, user.stanowisko, application.id_application, application.date, application.rabat FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [company[0].id_event, company[0].id_company], (error, results, fields) => {
+                 connection.query('SELECT user.id_User, user.imie, user.nazwisko, user.stanowisko, application.id_application, application.date, application.rabat, application.zgloszenie FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [company[0].id_event, company[0].id_company], (error, results, fields) => {
                     results[0].date = changedate(results[0].date);
                      res.locals.detailstab = results;
                      console.log("results", results);
                      connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [company[0].id_event], function (error, event, fields) {
                              event[0].date = changedate(event[0].date);
                             res.locals.eventtab = event
-                             res.render('pages/work/manager/application.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab, zgl: res.locals.zgl, admin:true });
+                         res.render('pages/work/manager/application.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab, zgl: res.locals.zgl,   admin:true });
 
                      });
                  });
@@ -961,6 +1072,39 @@ function showapplication(req, res) {
 
     });
 }
+
+function showzgloszenie(req, res) {
+
+    
+    console.log(req.params.id)
+    connection.query('SELECT zgloszenie FROM application WHERE id_application = ?', [req.params.id], (error, result, fields) => {
+        let fil = path.join(__dirname, '/..', result[0].zgloszenie);
+        fs.readFile(fil, function (err, data) {
+            res.contentType("text/plain");
+            res.send(data);
+        });
+       /* console.log(result[0].program);
+        console.log(path.join(__dirname, '/..', result[0].program));
+        res.download(path.join(__dirname, '/..', result[0].program));*/
+    });
+}
+
+function showprogram(req, res) {
+
+
+    console.log(req.params.id)
+    connection.query('SELECT program FROM event WHERE id_event = ?', [req.params.id], (error, result, fields) => {
+        let fil = path.join(__dirname, '/..', result[0].program);
+        fs.readFile(fil, function (err, data) {
+            res.contentType("application/pdf");
+            res.send(data);
+        });
+        /* console.log(result[0].program);
+         console.log(path.join(__dirname, '/..', result[0].program));
+         res.download(path.join(__dirname, '/..', result[0].program));*/
+    });
+}
+
 
 function num(id_event){
     return new Promise((resolve, reject) => {

@@ -1,0 +1,246 @@
+﻿<!DOCTYPE html>
+
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ 
+   
+<meta charset="UTF-8" >
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.12/dist/css/bootstrap-select.min.css">
+
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+      <link rel="stylesheet" href="/assets/css/jquery.bxslider.css">
+        <link rel="stylesheet" href="/assets/css/style.css">
+        <link href="/fontawesome/css/all.css" rel="stylesheet">
+
+
+<style>
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic,500italic,700italic);
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    color:  #000066;
+    line-height: 1;
+	margin: 32px;
+   
+}
+h1, .h1, h2, .h2, h3, .h3 {
+    margin-top: 20px;
+    margin-bottom: 25px;
+    align-content:center;
+}
+h5{
+	font-size: 15px;
+	color: #000066;
+	}
+p{
+	font-size: 12px;
+	color:black;
+	}
+i{
+	font-size: 12px;
+	color:#000066;
+	
+	}
+table,th {
+	font-size: 13px;
+	color: #000066;
+	border: 1px solid #000066;
+}
+td{
+	font-size: 13px;
+	color:black;
+	
+}
+.data {
+  width: auto;
+  border: 1px solid #ccccb3;
+  padding: 5px;
+  margin: 0px;
+}
+.podpis{
+  width: auto;
+  border-top: 1px solid #000066;
+  padding: 5px;
+  margin-left: 500px;
+  margin-top:80px
+}
+.break {
+	margin: 40px;
+	}
+.warunki{
+	page-break-before:always;
+	margin-top:50px;
+}
+.zw{
+
+	}
+
+</style> 
+
+
+
+
+</head>
+<body>
+        <img class="pull-left" src="http://konsult.edu.pl/wp-content/themes/konsult/img/logo.jpeg" alt="Konsult &#8211; Centrum szkolenia i doradztwa">
+        <h3 class="text-center">Zgłoszenie na szkolenie</h3>
+     
+        <div class="row">
+            <div class="col-3"> 
+                <h5> Temat:</h5>
+                <h5> Data i miejsce: </h5>
+            </div>
+            <div class="col-9">
+                <h5> <%= events[0].topic %> </h5>
+                <h5> <%= events[0].date %> , <%= events[0].city %> , <%= events[0].hotel %></h5>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-2">
+                <h5>Uczestnicy:</h5>
+            </div>
+            <div class="col-10">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+							<th>Lp.</th>
+                            <th>Imię </th>
+                            <th>Nazwisko</th>
+                            <th>Stanowisko</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let i=0; i < result.length; i++){ %>
+                        <tr>
+							<th><%= i+1 %>.</th>
+                            <td><%= result[i].imie %></td>
+                            <td><%= result[i].nazwisko %></td>
+                            <td><%= result[i].stanowisko %></td>
+                        </tr>
+                       <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+		<div class="row">
+            <div class="col-2">
+                <h5>Dane do faktury:</h5>
+            </div>
+            <div class="col-10">
+			
+			<% if(company[0].name2 != ''){ %>
+			<table class="table table-bordered">
+				<thead>
+                        <tr>
+							<th>Nabywca:</th>
+                            <th>Odbiorca: </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+							<td> <p> <%= company[0].name %> </p>
+			<p> <%= company[0].adres %> </p>
+			<p> NIP: <%= company[0].NIP %> </p> 
+			<p> E-mail: <%= company[0].emailfv %> </td>
+                            <td> <p> <%= company[0].name2 %> </p>
+			<p> <%= company[0].adres2 %> </p> </td>
+                        
+                        </tr>
+                     
+                    </tbody>
+                </table>
+		<% } else{ %>
+		<div class= "data">
+			<h5 style="text-align: center;"> Nabywca: </h5>
+			<hr />
+			<p> <%= company[0].name %> </p>
+			<p> <%= company[0].adres %> </p>
+			<p> NIP: <%= company[0].NIP %> </p>
+		    </div>
+			<% } %>
+			</div>
+		</div>
+		
+		
+		<div class="warunki">
+		
+		 <div class="row">
+            <div class="col-2"> 
+                <h5> Warunki uczestnictwa:</h5>
+            </div>
+            <div class="col-10">
+                <i>1. Kartę zgłoszeniową należy załączyć online w szczegółach szkolenia, bądź przesłać mailem (konsult@konsult.edu.pl) lub faksem (71 735 80 68). </i><br>
+                <i>2. Płatności w terminie <b>7 dni od daty szkolenia </b>na rachunek mBank SA nr <b> 08 1140 2004 0000 3602 7741 6045</b>.</i><br>
+                <i>3. O rezygnacji z uczestnictwa z powodu nieprzewidzianych okoliczności prosimy poinformować przed rozpoczęciem szkolenia. <b>W przypadku braku otrzymania ww. informacji zastrzegamy sobie prawo obciążenia całkowitą kwotą za szkolenie</b>.</i><br>
+                <i>4. Zwolnienie z VAT przysługuje jedynie po podpisaniu oświadczenia przez osobę upoważnioną 
+					 i przekazaniu oryginału na szkoleniu lub odesłaniu oryginału pocztą.</i><br>
+               
+            </div>
+        </div>
+		</div>
+		<hr />
+		<% if(result.length <= 10 && result.length > 5 ){ %>
+
+		
+		
+		<% } %>
+		 <div class="row">
+            <div class="col-2"> 
+                <h5> Oświadczenia:</h5>
+            </div>
+            <div class="col-10">
+                 <i>5. Akceptuję warunki szkolenia i należność w kwocie <b> <%= events[0].price - result[0].rabat %> zł + VAT x <%= result.length %> os.</b> zobowiązuję się wpłacić w terminie 7 dni od daty szkolenia.</i><br>
+				 <i>6. Wyrażam zgodę na przechowywanie i przetwarzanie moich danych osobowych dla potrzeb procesu rejestracji zgłoszenia oraz w celach marketingowych dla firmy KONSULT zgodnie z ustawą z dnia 29.08.1997 r. o ochronie danych osobowych oraz z ustawą z dnia 18.07.2002 r. o świadczeniu usług drogą elektroniczną. </i><br>
+		   </div>
+        </div>
+		<div class="podpis">
+		<i style=" text-align: center"> Kierownik jednostki</i>
+		<i > (pieczęć i podpis) </i>
+		</div>
+		<% if(result[0].zw !=null){ %>
+		
+			<div class="zw">
+			<hr />
+		 <div class="row">
+            <div class="col-2"> 
+                <h5> Zwolnienie&nbsp;z&nbsp;VAT</h5>
+            </div>
+            <div class="col-10">
+                <i>Oświadczam, iż środki wydatkowane na ww. szkolenie pochodzą w co najmniej 70% ze środków publicznych a niniejsze oświadczenie ma na celu możliwość zastosowania stawki zwolnionej z VAT zgodnie z przepisami ustawy o podatku od towarów i usług.  </i>
+                
+            </div>
+        </div>
+		<div class="podpis">
+		<i > Kierownik jednostki</i>
+		<i > (pieczęć i podpis) </i>
+		</div>
+		</div>
+		<% } %>
+	
+   
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+    <!-- Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified Bootstrap JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/node_modules/bootstrap/js/dist/util.js"></script>
+
+    <script type="text/javascript" src="/assets/javascript/user.js"></script>
+
+</body>
+</html>

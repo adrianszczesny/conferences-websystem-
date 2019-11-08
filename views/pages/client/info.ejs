@@ -66,7 +66,16 @@
                          Program szkolenia: 
                         </div>
                             <div class="card-body text-center" >
-							 <a href="/info/download:<%= tabresult[0].id_event %>" class="btn btn-primary">Pobierz program szkolenia</a>
+							 <div class="form-group row  ">
+    
+    <div class="col-sm-6">
+      <a href="/showprogram:<%= tabresult[0].id_event %>" class="btn btn-primary">Otwórz</a>
+    </div>
+	<div class="col-sm-6">
+      <a href="/info/download:<%= tabresult[0].id_event %>" class="btn btn-primary">Pobierz </a>
+    </div>
+  </div>
+  <br />
 							</div>
 							</div>
 		<div class="col-md-12 text-center"> 

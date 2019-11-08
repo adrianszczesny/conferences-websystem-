@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Zapisywanie</title>
+    <% include ../../../partials/head %>
+
+</head>
+<body>
+
+    <% include ../../../partials/header %>
+    <form method="POST" action="/buy">
+        <div class="container">
+            <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
+            <t class="text-center">NOWY KLIENT</t>
+            <h4> </h4>
+            <tbody>
+                <div class="card">                    
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="event" class="col-sm-2 col-form-label" >Temat:</label>
+                            <div class="col-sm-10 align-self-center">
+                                <%if(event.length == 1){ %>
+                                <input type="text" readonly class="form-control" id="event" name="event" value="( <%= event[0].id_event %> ) <%= event[0].date %> - <%= event[0].topic %>"  placeholder="<%= event[0].topic %>" > 
+                                <%} else { %>
+	                            <select class="form-control" id="event" name="event">
+                                    <option selected>Wybierz szkolenie...</option>
+	                                <% for(var i = 0; i < event.length; i++) { %>
+	                                <option value="<%= event[i].id_event %>" > <%= event[i].topic %> </option>
+	                                <% } } %>
+                                </select>
+	                        </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="event" class="col-sm-2 col-form-label" >Instytucja:</label>
+                            <div class="col-sm-10 align-self-center">
+                                <%if(company.length == 1){ %>
+                                <input type="text" readonly class="form-control" id="company" name="company" value="<%= company[0].id_company %> " placeholder="<%= company[0].name %> -  <%= company[0].name2 %> " > 
+                                <%} else { %>
+	                            <select class="selectpicker" data-live-search="true" id="company" name="company">
+                                    <option selected>Wybierz instytucje...</option>
+	                                <% for(var i = 0; i < company.length; i++) { %>
+	                                <option value="<%= company[i].id_company %>" > <%= company[i].name %> - <%= company[i].name2 %></option>
+	                                <% }  %>
+                                </select>
+                               <% }  %>
+                               <button type="button" class="btn btn-info" data-toggle="modal" data-target="#newcompany">
+													Dodaj nową firmę
+												</button>
+							</div>
+                        </div>	
+						<hr>
+
+                        <div class="form-group row">
+                        <label for="event" class="col-sm-2 col-form-label align-self-center" > Uczestnicy: 
+                           
+                        </label>
+
+                        <div class="col-sm-10 align-self-center">
+                        <div id="table" class="table-editable">
+                            <span class="table-add float-right mb-3 mr-2">
+                                <a href="#!" class="text-success">
+                                    <i class="fas fa-plus fa-2x" aria-hidden="true"></i>
+                                </a>
+                            </span>
+                            <table class="table table-bordered table-responsive-md table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Imię</th>
+                                        <th class="text-center">Nazwisko</th>
+                                        <th class="text-center">stanowisko</th>
+                                        <th class="text-center">Usuń</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control" id="imie" name="imie"  placeholder="Podaj imię ">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" id="nazwisko" name="nazwisko"  placeholder="Podaj nazwisko ">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" id="stanowisko" name="stanowisko" placeholder="Podaj stanowisko ">
+                                        </td>
+                                        <td>
+                                            <span class="table-remove">
+                                                <button type="button"
+                                                        class="btn btn-danger btn-rounded btn-sm my-0">
+                                                    Usuń
+                                                </button>
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+</div>
+</div>
+
+
+<hr>
+<div class="col-md-12 text-center">
+                    <button type="submit" class="btn btn-info ">
+                        Dodaj
+                    </button>
+                </div>
+</div>
+</div>
+
+
+                
+    </form>
+    </div>
+    </tbody>
+    </div>
+    <% include ../../../partials/footer %>
+
+	<!-- Modal do dodawanie nowej firmy  -->
+	<div class="modal fade " id="newcompany" tabindex="-1" role="dialog" aria-labelledby="newcompanyTitle" aria-hidden="true">
+												 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+												  <div class="modal-content">
+												   <div class="modal-header">
+													   <h5 class="modal-title" id="exampleModalLongTitle">Nowa instytucja</h5>
+													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														 <span aria-hidden="true">&times;</span>
+													 </button>
+													 </div>
+                                                    <form method="POST" action="/addnewcompany">
+												  <div class="modal-body">
+												  <h5 class="text-center">Nabywca:</h5>
+													<div class="form-group row">
+		<label for="nip" class="col-sm-2 col-form-label">NIP:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="nip" name="NIP"  placeholder="Podaj NIP(bez myślników)">
+		</div>
+	</div>
+ 
+	<div class="form-group row">
+		<label for="nazwa" class="col-sm-2 col-form-label">Nazwa:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="nazwa" name="nazwa"  placeholder="Podaj nazwe firmy/instytucji">
+		</div>
+	</div>
+  
+	<div class="form-group row">
+		<label for="adres" class="col-sm-2 col-form-label">Adres:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="adres" name="adres"  placeholder="Podaj adres siedziby">
+		</div>
+	</div>
+
+	<div class="form-group row">
+    <label for="Email" class="col-sm-2 col-form-label">e-faktura:</label>
+    <div class="col-sm-10 align-self-center">
+      <input type="text" class="form-control" id="emailfv" name="emailfv"  placeholder="Podaj email do przesłania faktury">
+    </div>
+  </div>
+  <h5 class="text-center">Odbiorca(opcjonalnie):</h5>
+  <div class="form-group row">
+		<label for="nazwa" class="col-sm-2 col-form-label">Nazwa:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="nazwa2" name="nazwa2"  placeholder="Podaj nazwe firmy/instytucji">
+		</div>
+	</div>
+
+	<div class="form-group row">
+		<label for="adres" class="col-sm-2 col-form-label">Adres:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="adres2" name="adres2"  placeholder="Podaj adres siedziby">
+		</div>
+	</div>
+													
+
+												  </div>
+												   <div class="modal-footer">
+   
+                                                <button type="submit" class="btn btn-info ">
+                                                     Dodaj
+                                                </button>
+														 </div>
+                                                     </form>
+													</div>
+                                                  
+												 </div>
+												</div>
+	                        </div>
+                        </div>
+    <script>
+
+        const $tableID = $('#table');
+        const $BTN = $('#export-btn');
+        const $EXPORT = $('#export');
+
+
+        const newTr = `
+              <tr class="hide">
+              <td>
+              <input type="text" class="form-control" id="imie" name="imie" placeholder="Podaj imię ">
+              </td>
+               <td>
+              <input type="text" class="form-control" id="nazwisko" name="nazwisko"  placeholder="Podaj nazwisko ">
+              </td>
+                <td>
+              <input type="text" class="form-control" id="stanowisko" name="stanowisko" placeholder="Podaj stanowisko">
+              </td>
+                <td>
+                <span class="table-remove"><button type="button"
+                      class="btn btn-danger btn-rounded btn-sm my-0">Usuń</button></span>
+                </td>
+              </tr>`;
+
+        $('.table-add').on('click', 'i', () => {
+            $('tbody').append(newTr);
+        });
+
+        $tableID.on('click', '.table-remove', function () {
+            $(this).parents('tr').detach();
+        });
+
+
+
+
+    </script>
+
+</body>
+
+</html>
