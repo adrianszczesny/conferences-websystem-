@@ -300,8 +300,16 @@ router.post('/addrabat::id', (req, res) => {
     let app = req.body.application;
     console.log(rabat);
     console.log(app);
-    connection.query('UPDATE application SET rabat = ? WHERE id_application = ?', [rabat, app], (error, result, fields) => {
-        showapplication(req, res, '');
+    connection.query('SELECT id_application FROM application WHERE id_application = ?', [app], (error, list, fields) =>{
+            
+        for (let i = 0; i < list.length; i++) {
+            connection.query('UPDATE application SET rabat = ? WHERE id_application = ?', [rabat, list[i].id_application], (error, result, fields) => { });
+            if (i >= list.length -1 ) {
+                res.redirect('/showapplication:' + app);
+            }
+        }
+   
+   
     });
 });
 
@@ -338,6 +346,10 @@ router.get('/adduser::id', (req, res) => {
 
 router.post('/addnewcompany', (req, res) => {
     addnewcomapny(req, res, '');
+});
+
+router.post('/addnewuser',(req,res)=> {
+    postaddnewuser(req, res, '');
 });
 
 
@@ -652,11 +664,14 @@ function deleteapp(req, res) {
     let application = req.params.id;
     connection.query('SELECT application.id_event, user.id_company FROM application INNER JOIN user ON application.id_User = user.id_User WHERE application.id_application = ?', [application], (error, even, fields) => {
         
-        connection.query('SELECT application.id_application FROM application INNER JOIN user ON application.id_User = user.id_User WHERE user.id_company = ? AND application.id_event=?', [even[0].id_company, even[0].id_event], (error, resul, fields)=> {
-            connection.query(' DELETE FROM application WHERE id_application = ?', [application], (error, event, fields) => {
+        
+            
+        connection.query(' DELETE FROM application WHERE id_application = ?', [application], (error, event, fields) => {
+            connection.query('SELECT application.id_application FROM application INNER JOIN user ON application.id_User = user.id_User WHERE user.id_company = ? AND application.id_event=?', [even[0].id_company, even[0].id_event], (error, resul, fields) => {
                 connection.query('UPDATE event SET NoC=NoC-1 WHERE id_event = ?', [even[0].id_event], (error, event, fields) => {
                     if (resul.length > 1) {
-                        res.redirect('back');
+
+                        res.redirect('/showapplication:'+resul[0].id_application);
                     } else {
                         mylist(req, res, '');
                     }
@@ -694,13 +709,21 @@ function details(req, res) {
 //GET generowanie zgloszenia
 function zgloszenie(req, res) {
     let application = req.params.id;
+    let companies;
     console.log("applicatiom:" + application);
     connection.query('SELECT id_event FROM application WHERE id_application = ?', [application], (error, even, fields) => {
         connection.query('SELECT * FROM user WHERE user.id_User = ?', [req.session.user], (error, company, fields) => {
-            console.log("company", company);
-            connection.query('SELECT * FROM company WHERE company.id_company = ?', [company[0].id_company], (error, compan, fields) => {
+            console.log("company" + req.query.company);
+            if (req.query.company) {
+                companies = req.query.company;
+            }
+            else {
+                companies = company[0].id_company;
+            }
+            console.log("companies  :" + companies);
+            connection.query('SELECT * FROM company WHERE company.id_company = ?', [companies], (error, compan, fields) => {
                 res.locals.company = compan;
-                connection.query('SELECT user.imie, user.nazwisko, user.stanowisko, application.rabat, application.zw FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [even[0].id_event, company[0].id_company], (error, results, fields) => {
+                connection.query('SELECT user.imie, user.nazwisko, user.stanowisko, application.rabat, application.zw FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [even[0].id_event, companies], (error, results, fields) => {
 
                     res.locals.detailstab = results;
                     console.log("results", results);
@@ -731,7 +754,6 @@ function zgloszenie(req, res) {
                             console.log("zrobione");
                             await browser.close();
                             await res.download('./zgl.pdf');
-                            details(req, res);
 
                             }
                             catch{
@@ -1010,12 +1032,131 @@ function addnewuser(req, res) {
         console.log(values[1].length);
         //console.log(res.locals.company);
        // console.log(res.locals.event);
-        res.render('pages/work/manager/addnewuser', { req: req.session.user, event: values[0], company: values[1] });
+        res.render('pages/work/manager/addnewuser', { req: req.session.user, event: values[0], company: values[1], admin:true });
     });
 }
 
 function postaddnewuser(req, res) {
+    let state = 1;
+    let date = mydate('full');
+    let zw = null;
+    let rabat = req.body.rabat;
+    let even = req.body.event;
+    console.log(req.body);
+    console.log(req.body.check[0][1]);
+    if (req.body.check[0][1] == 1) {
+        zw = 1;
+        console.log("zw" + zw);
+    }
+    console.log("ilosc osób:" + req.body.imie.length);
+    var num = req.body.imie.length;
+    if (req.body.imie.length > 1 && req.body.imie[0].length < 2) {
+        num = 1;
+        console.log("num" + num);
+    }
+    
+    for (let i = 0; i < num; i++) {
 
+        var szukanie = new Promise(function (resolve, reject) {
+
+            let compan = req.body.company;
+            console.log("compan = " + compan);
+                connection.query('SELECT * FROM user WHERE id_company = ?', [compan], function (error, result, fields) {
+                    console.log("resultion");
+                    console.log(result);
+
+                    if (result.length > 0) {
+                        for (let j = 0; j < result.length; j++) {
+                            console.log("imie z body:");
+                            console.log(req.body.imie[i]);
+                            console.log(" imie z bazy:");
+                            console.log(result[j].imie);
+                            if (req.body.imie[i].length > 1) {
+                                if (req.body.imie[i] == result[j].imie && req.body.nazwisko[i] == result[j].nazwisko) {
+                                    console.log(" nazwisko z body:");
+                                    console.log(req.body.nazwisko[i]);
+                                    console.log("nazwisko z bazy:");
+                                    console.log(result[j].nazwisko);
+                                    resolve([1, compan, result[j].id_User, null, null, null, i]);
+                                }
+                                else {
+                                    resolve([0, compan, null, req.body.imie[i], req.body.nazwisko[i], req.body.stanowisko[i],i]);
+                                }
+                            }
+                            else {
+                                if (req.body.imie == result[j].imie && req.body.nazwisko == result[j].nazwisko) {
+                                    console.log(" nazwisko z body asda:");
+                                    console.log(req.body.nazwisko);
+                                    console.log("nazwisko z bazya asd:");
+                                    console.log(result[j].nazwisko);
+                                    resolve([1, compan, result[j].id_User, null, null, null, i]);
+                                }
+                                else {
+                                    resolve([0, compan, null, req.body.imie, req.body.nazwisko, req.body.stanowisko, i]);
+                                }
+
+                            }
+                        }
+                    }
+                    else {
+                        if (req.body.imie[i].length > 1) {
+                            console.log("jest ok 1");
+                            resolve([0, compan, null, req.body.imie[i], req.body.nazwisko[i], req.body.stanowisko[i], i]);
+                        }
+                        else {
+                            console.log("jest ok 2");
+                            resolve([0, compan, null, req.body.imie, req.body.nazwisko, req.body.stanowisko, i]);
+                        }
+                    }
+
+                });
+           
+        });
+
+  
+        szukanie
+            .then(([dodano, company, us, imie, nazwisko, stanowisko,i]) => {
+                console.log("dodano");
+                console.log(dodano);
+                console.log("company");
+                console.log(company);
+                console.log("us");
+                console.log(stanowisko);
+                if (dodano == 1) {
+                    connection.query('INSERT INTO application (id_event, id_User, state, date, zw, rabat ) VALUES (?, ?, ?, ?, ?, ?)', [even, us,  state, date, zw, rabat], function (error, result, fields) {
+                        connection.query('UPDATE event SET NoC=NoC+1 WHERE id_event = ?', [even], (error, event, fields) => {
+                            console.log(even);
+                            console.log(req.session.user);
+                            console.log("Dodano starego");
+                            console.log(req.body.nazwisko[i]);
+                            if (i >= num - 1) {
+                                res.redirect('/eventdetails:' + even);
+                            }
+
+                        });
+                    });
+                }
+
+
+                if (dodano == 0) {
+                    connection.query('INSERT INTO user( imie, nazwisko, stanowisko, id_company) VALUES (?, ?, ?, ?)', [imie, nazwisko, stanowisko, company], function (error, results, fields) {
+                        connection.query('INSERT INTO application (id_event, id_User, state, date, zw, rabat) VALUES (?, ?, ?, ?, ?, ?)', [even, results.insertId, state, date, zw, rabat], function (error, resulty, fields) {
+                            connection.query('UPDATE event SET NoC=NoC+1 WHERE id_event = ?', [even], (error, event, fields) => {
+                                console.log("Dodano nowego ");
+                                console.log(req.body.nazwisko[i]);
+                                if (i >= num - 1) {
+                                    res.redirect('/eventdetails:' + even);
+                                }
+
+                            });
+                        });
+                    });
+                }
+
+            });
+    
+    }
+    
 }
 
 
@@ -1054,9 +1195,11 @@ function showapplication(req, res) {
 
 
     connection.query('SELECT user.id_company, application.id_event, application.id_zgl FROM user INNER JOIN application ON user.id_User = application.id_User WHERE application.id_application = ?', [application], (error, company, fields) => {
-            console.log("company", company);
+        console.log("company", company);
+        connection.query('SELECT company.id_company, company.name,company.name2 FROM  company  WHERE id_company= ?', [company[0].id_company], (error, com, fields) => {
+            res.locals.zgl = com;
         connection.query('SELECT user.imie, user.nazwisko, user.id_User, company.id_company, company.name,company.name2 FROM user INNER JOIN company ON user.id_company = company.id_company WHERE id_User= ?', [company[0].id_zgl], (error, zgl, fields) => {
-                res.locals.zgl = zgl;
+                res.locals.company = com;
                  connection.query('SELECT user.id_User, user.imie, user.nazwisko, user.stanowisko, application.id_application, application.date, application.rabat, application.zgloszenie FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [company[0].id_event, company[0].id_company], (error, results, fields) => {
                     results[0].date = changedate(results[0].date);
                      res.locals.detailstab = results;
@@ -1064,12 +1207,12 @@ function showapplication(req, res) {
                      connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [company[0].id_event], function (error, event, fields) {
                              event[0].date = changedate(event[0].date);
                             res.locals.eventtab = event
-                         res.render('pages/work/manager/application.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab, zgl: res.locals.zgl,   admin:true });
+                         res.render('pages/work/manager/application.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab, zgl: res.locals.zgl, company: res.locals.company,   admin:true });
 
                      });
                  });
             });
-
+        });
     });
 }
 

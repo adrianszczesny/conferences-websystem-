@@ -9,8 +9,8 @@
 </head>
 <body>
 
-    <% include ../../../partials/header %>
-    <form method="POST" action="/buy">
+    <% include ../../../partials/header-manager %>
+    <form method="POST" action="/addnewuser">
         <div class="container">
             <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
             <t class="text-center">NOWY KLIENT</t>
@@ -22,7 +22,9 @@
                             <label for="event" class="col-sm-2 col-form-label" >Temat:</label>
                             <div class="col-sm-10 align-self-center">
                                 <%if(event.length == 1){ %>
-                                <input type="text" readonly class="form-control" id="event" name="event" value="( <%= event[0].id_event %> ) <%= event[0].date %> - <%= event[0].topic %>"  placeholder="<%= event[0].topic %>" > 
+								<select class="form-control" id="event" name="event">	                                
+	                                <option value="<%= event[0].id_event %>" selected > <%= event[0].date %> -  <%= event[0].topic %> </option>
+                                </select>
                                 <%} else { %>
 	                            <select class="form-control" id="event" name="event">
                                     <option selected>Wybierz szkolenie...</option>
@@ -36,7 +38,9 @@
                             <label for="event" class="col-sm-2 col-form-label" >Instytucja:</label>
                             <div class="col-sm-10 align-self-center">
                                 <%if(company.length == 1){ %>
-                                <input type="text" readonly class="form-control" id="company" name="company" value="<%= company[0].id_company %> " placeholder="<%= company[0].name %> -  <%= company[0].name2 %> " > 
+                                <select class="selectpicker" data-live-search="true" id="company" name="company">	                               
+	                                <option value="<%= company[0].id_company %>" selected > <%= company[0].name %> - <%= company[0].name2 %></option>
+                                </select>
                                 <%} else { %>
 	                            <select class="selectpicker" data-live-search="true" id="company" name="company">
                                     <option selected>Wybierz instytucje...</option>
@@ -99,7 +103,23 @@
                         </div>
 </div>
 </div>
-
+<hr>
+ <div class="form-check">
+  <input type="hidden" name="check[0]" value="0" />
+	<input class="form-check-input" type="checkbox" name="check[0]" value="1" />
+  <label class="form-check-label" for="zw">
+   <b>Zwolnie z VAT</b><br>
+   
+  </label>
+</div>
+<hr>
+<div class="form-group row">
+<div class="col-sm-4"></div>
+		<label for="rabat" class="col-sm-2.5 col-form-label">  Wartość rabatu na osobę:</label>
+		<div class="col-sm-1">
+			<input type="text"  class="form-control-plaintext" style=" border:1px solid black;"  id="rabat" name="rabat" value="0" >
+		</div>
+	</div>
 
 <hr>
 <div class="col-md-12 text-center">

@@ -30,9 +30,12 @@
             <h5><b><i class="fas fa-map-marker-alt"></i> <%= eventtab[0].city %></b>, Hotel <%= eventtab[0].hotel %> </h5> 
             <h5> <b><i class="fas fa-table"></i> <%= eventtab[0].date %> r.</b> (godz. 9:00-15:00)</h5>
 			<h5> <i class="fas fa-coins"></i> <%= eventtab[0].price %> zł/os. netto </h5>
-			<h6> <i class="far fa-calendar-plus"></i> <%= detailstab[0].date %> <i class="fas fa-user"></i><a href="/showuser:<%= zgl[0].id_User %>" > <%= zgl[0].imie %> <%= zgl[0].nazwisko %></a>
-			<a href="/showcompany:<%= zgl[0].id_company %>" > ( <%= zgl[0].name %> - <%= zgl[0].name2 %> )</a></h6>
-
+			<h6> <i class="far fa-calendar-plus"></i> <%= detailstab[0].date %> 
+			<% if(zgl.lenght<1){ %>
+			<i class="fas fa-user"></i><a href="/showcompany:<%= company[0].id_company %>" >  <%= company[0].name %> - <%= company[0].name2 %> </a></h6>
+			<% }else{ %>
+			<i class="fas fa-user"></i><a href="/showuser:<%= zgl[0].id_User %>" > <%= zgl[0].imie %> <%= zgl[0].nazwisko %></a><a href="/showcompany:<%= zgl[0].id_company %>" > ( <%= zgl[0].name %> - <%= zgl[0].name2 %> )</a></h6>
+			<% } %>
             </div>
         </div>
         <!-- /.card -->
@@ -54,7 +57,6 @@
                                               <th class="text-center">Imię</th>
                                               <th class="text-center">Nazwisko</th>
                                               <th class="text-center">Stanowisko</th>
-											   <th class="text-center">Rabat</th>
                                               <th class="text-center">Usuń</th>
                                             </tr>
                                           </thead>
@@ -74,38 +76,7 @@
                                               <td>
                                              <a href="/showuser:<%= detailstab[i].id_User %>" ><%= detailstab[i].stanowisko %></a>
                                             </td>
-											 <td>
-                                                
-												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#rabat-<%= detailstab[i].id_application %>">
-													<%= detailstab[i].rabat %>
-												</button>
-												<div class="modal fade" id="rabat-<%= detailstab[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-												 <div class="modal-dialog modal-dialog-centered" role="document">
-												  <div class="modal-content">
-												   <div class="modal-header">
-													   <h5 class="modal-title" id="exampleModalLongTitle">Nadaj rabat</h5>
-													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-														 <span aria-hidden="true">&times;</span>
-													 </button>
-													 </div>
-												  <div class="modal-body">
-													  <form method="POST" action="/addrabat:<%= detailstab[i].id_application %> ">
-															<div class="form-group row">
-																<input type="hidden"  class="form-control" name= "application" value="<%= detailstab[i].id_application %>" > 
-																<label for="topic" class="col-sm-8 col-form-label">Wprowadź wartość rabatu:</label>
-																<div class="col-sm-2 align-self-center">
-																	<input type="text" class="form-control" id="rabat" name="rabat" value="<%= detailstab[i].rabat %>" >
-																</div>
-															</div>
-															 <button type="submit" class="btn btn-info ">Nadaj rabat </button>
-													 
-													 </form>
-												  </div>
-												
-													</div>
-												 </div>
-												</div>
-                                            </td>
+											
 																				
                                             <td>
                                                 
@@ -154,7 +125,7 @@
   <div class="form-group row  ">
     <label for="program" class="col-sm-3 col-form-label text-center ">Generuj zgłoszenie na szkolenie:</label>
     <div class="col-sm-9 align-self-center">
-      <a href="/zgloszenie:<%= detailstab[0].id_application %>" class="btn btn-primary ">Generuj</a>
+      <a href="/zgloszenie:<%= detailstab[0].id_application %>?company=<%= company[0].id_company %>" class="btn btn-primary ">Generuj</a>
     </div>
   </div>
   <hr />
@@ -179,6 +150,42 @@
 	
 	</div>
   </div>
+  <hr>
+  <div class="form-group row  ">
+    <label for="program" class="col-sm-3 col-form-label text-center ">Rabat</label>
+    <div class="col-sm-9 align-self-center">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#rabat-<%= detailstab[0].id_application %>">
+													<%= detailstab[0].rabat %> zł/os
+												</button>
+												<div class="modal fade" id="rabat-<%= detailstab[0].id_application %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												 <div class="modal-dialog modal-dialog-centered" role="document">
+												  <div class="modal-content">
+												   <div class="modal-header">
+													   <h5 class="modal-title" id="exampleModalLongTitle">Nadaj rabat</h5>
+													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														 <span aria-hidden="true">&times;</span>
+													 </button>
+													 </div>
+												  <div class="modal-body">
+													  <form method="POST" action="/addrabat:<%= detailstab[0].id_application %> ">
+															<div class="form-group row">
+																<input type="hidden"  class="form-control" name= "application" value="<%= detailstab[0].id_application %>" > 
+																<label for="topic" class="col-sm-8 col-form-label">Wprowadź wartość rabatu:</label>
+																<div class="col-sm-2 align-self-center">
+																	<input type="text" class="form-control" id="rabat" name="rabat" value="<%= detailstab[0].rabat %>" >
+																</div>
+															</div>
+															 <button type="submit" class="btn btn-info ">Nadaj rabat </button>
+													 
+													 </form>
+												  </div>
+												
+													</div>
+												 </div>
+												</div>
+    </div>
+  </div>
+
                       </div>
                   
 		
