@@ -1249,6 +1249,13 @@ function showprogram(req, res) {
 }
 
 
+function finish(req, res) {
+    let event = req.params.id;
+    connection.query('SELECT * FROM application INNER JOIN user ON application.id_User = user.id_User INNER JOIN company ON user.id_company = company.id_company WHERE application.id_event= ? GROUP BY user.nazwisko', [event], (error, result, fields){
+
+    });
+}
+
 function num(id_event){
     return new Promise((resolve, reject) => {
           connection.query('SELECT COUNT(id_application) AS ile FROM application WHERE id_event = ?', [id_event], (error, result, fields) => {
