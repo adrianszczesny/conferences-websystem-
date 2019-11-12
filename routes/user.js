@@ -352,6 +352,15 @@ router.post('/addnewuser',(req,res)=> {
     postaddnewuser(req, res, '');
 });
 
+router.get('/finish::id', (req, res) => {
+  finish(req, res, '');
+});
+
+router.get('/print::id', (req, res) => {
+   print(req, res, '');
+});
+
+
 
  /*
  * FUNKCJE
@@ -593,10 +602,10 @@ function buy(req, res, url) {
                                 console.log(req.body.nazwisko[i]);
                                 console.log("nazwisko z bazy:");
                                 console.log(result[j].nazwisko);
-                                resolve([1, company[0].id_company, result[j].id_User, null, null, null]);
+                                resolve([1, company[0].id_company, result[j].id_User, null, null, null,i]);
                             }
                             else {
-                                resolve([0, company[0].id_company, null, req.body.imie[i], req.body.nazwisko[i], req.body.stanowisko[i]]);
+                                resolve([0, company[0].id_company, null, req.body.imie[i], req.body.nazwisko[i], req.body.stanowisko[i],i]);
                             }
                         }
                         else {
@@ -605,10 +614,10 @@ function buy(req, res, url) {
                                 console.log(req.body.nazwisko);
                                 console.log("nazwisko z bazya asd:");
                                 console.log(result[j].nazwisko);
-                                resolve([1, company[0].id_company, result[j].id_User, null, null, null]);
+                                resolve([1, company[0].id_company, result[j].id_User, null, null, null,i]);
                             }
                             else {
-                                resolve([0, company[0].id_company, null, req.body.imie, req.body.nazwisko, req.body.stanowisko]);
+                                resolve([0, company[0].id_company, null, req.body.imie, req.body.nazwisko, req.body.stanowisko,i]);
                             }
 
                         }
@@ -620,43 +629,49 @@ function buy(req, res, url) {
 
 
         szukanie
-            .then(([dodano, company, us, imie, nazwisko, stanowisko]) => {
-            console.log("dodano");
-            console.log(dodano);
-            console.log("company");
-            console.log(company);
-            console.log("us");
-            console.log(stanowisko);
-            if (dodano == 1) {
-                connection.query('INSERT INTO application (id_event, id_User, id_zgl, state, date, zw, rabat ) VALUES (?, ?, ?, ?, ?, ?, ?)', [even, us, req.session.user, state, date, zw, rabat], function (error, result, fields) {
-                    connection.query('UPDATE event SET NoC=NoC+1 WHERE id_event = ?', [even], (error, event, fields) => {
-                        console.log(even);
-                        console.log(req.session.user);
-                        console.log("Dodano starego");
-                        console.log(req.body.nazwisko[i]);
+            .then(([dodano, company, us, imie, nazwisko, stanowisko, i]) => {
+                console.log("dodano");
+                console.log(dodano);
+                console.log("company");
+                console.log(company);
+                console.log("us");
+                console.log(stanowisko);
+                console.log(i);
 
-                    });
-                });
-            }
-
-
-            if (dodano == 0) {
-                connection.query('INSERT INTO user( imie, nazwisko, stanowisko, id_company) VALUES (?, ?, ?, ?)', [imie, nazwisko, stanowisko, company], function (error, results, fields) {
-                    connection.query('INSERT INTO application (id_event, id_User, id_zgl, state, date, zw, rabat) VALUES (?, ?, ?, ?, ?, ?, ?)', [even, results.insertId, req.session.user, state, date, zw, rabat], function (error, resulty, fields) {
+                if (dodano == 1) {
+                    connection.query('INSERT INTO application (id_event, id_User, id_zgl, state, date, zw, rabat ) VALUES (?, ?, ?, ?, ?, ?, ?)', [even, us, req.session.user, state, date, zw, rabat], function (error, result, fields) {
                         connection.query('UPDATE event SET NoC=NoC+1 WHERE id_event = ?', [even], (error, event, fields) => {
-                            console.log("Dodano nowego ");
+                            console.log(even);
+                            console.log(req.session.user);
+                            console.log("Dodano starego");
                             console.log(req.body.nazwisko[i]);
+                            return i;
 
                         });
                     });
-                });
                 }
-          
-        });
+
+
+                if (dodano == 0) {
+                    connection.query('INSERT INTO user( imie, nazwisko, stanowisko, id_company) VALUES (?, ?, ?, ?)', [imie, nazwisko, stanowisko, company], function (error, results, fields) {
+                        connection.query('INSERT INTO application (id_event, id_User, id_zgl, state, date, zw, rabat) VALUES (?, ?, ?, ?, ?, ?, ?)', [even, results.insertId, req.session.user, state, date, zw, rabat], function (error, resulty, fields) {
+                            connection.query('UPDATE event SET NoC=NoC+1 WHERE id_event = ?', [even], (error, event, fields) => {
+                                console.log("Dodano nowego ");
+                                console.log(req.body.nazwisko[i]);
+                                return i;
+
+                            });
+                        });
+                    });
+                }
+
+            }).then(() => {
+                mylist(req, res);
+            });
 
 
     }
-    mylist(req, res);
+   
 }
 
 //GET rezygnacja ze szkolenia 
@@ -733,31 +748,33 @@ function zgloszenie(req, res) {
                         console.log("event", event);
                         async function dopdf(ile) {
                             try {
-                            console.log("weszlo");
-                            let zgl;
-                            if (ile < 6) {
+                                console.log("weszlo");
+                                let zgl;
+                                if (ile < 6) {
                                 zgl = await ejs.renderFile(path.join(__dirname, '../views/pages/', "zgloszenie.ejs"), { events: res.locals.eventtab, result: res.locals.detailstab, company: res.locals.company });
-                            }
-                            else {
+                                }
+                                else {
                                 zgl = await ejs.renderFile(path.join(__dirname, '../views/pages/', "zgloszenie2.ejs"), { events: res.locals.eventtab, result: res.locals.detailstab, company: res.locals.company });
-                            }
-                            const browser = await puppeteer.launch();
-                            const page = await browser.newPage();
-                            await page.setContent(zgl);
-                            await page.emulateMedia('screen');
-                            await page.pdf({
-                                path: './zgl.pdf',
-                                format: 'A4',
-                                border: '10mm',
-                                printBackground: true
-                            });
-                            console.log("zrobione");
-                            await browser.close();
-                            await res.download('./zgl.pdf');
+                                }
+                                const browser = await puppeteer.launch();
+                                const page = await browser.newPage();
+                                await page.setContent(zgl);
+                                await page.emulateMedia('screen');
+                                await page.pdf({
+                                    path: './zgl.pdf',
+                                    format: 'A4',
+                                    border: '10mm',
+                                    printBackground: true
+                                });
+                                console.log("zrobione");
+                                await browser.close();
+                                await res.download('./zgl.pdf');
+                               
+                                
 
                             }
                             catch{
-                            console.log("blad");
+                                console.log("blad");
                             }
                         };
                         let d = results.length;
@@ -1251,16 +1268,74 @@ function showprogram(req, res) {
 
 function finish(req, res) {
     let event = req.params.id;
-    connection.query('SELECT * FROM application INNER JOIN user ON application.id_User = user.id_User INNER JOIN company ON user.id_company = company.id_company WHERE application.id_event= ? GROUP BY user.nazwisko', [event], (error, result, fields){
-
+    connection.query('SELECT * FROM application INNER JOIN user ON application.id_User = user.id_User INNER JOIN company ON user.id_company = company.id_company WHERE application.id_event= ? ORDER BY user.nazwisko', [event], (error, users, fields) => {
+        res.locals.users = users;
+        console.log(users);
+        res.render('pages/work/manager/finish', { req: req.session.user, users: res.locals.users, admin: true });
     });
 }
+
+function print(req, res) {
+    let event = req.params.id;
+    connection.query('SELECT * FROM application INNER JOIN user ON application.id_User = user.id_User INNER JOIN company ON user.id_company = company.id_company WHERE application.id_event= ? ORDER BY user.nazwisko', [event], (error, users, fields) => {
+        res.locals.result = users;
+        connection.query('SELECT event.topic, event.city, event.date FROM event WHERE event.id_event= ? ', [event], function (error, event, fields) {
+            event[0].date = changedate(event[0].date);
+            res.locals.eventtab = event;
+        async function dopdf(ile) {
+            try {
+                var tabil = [];
+                console.log("weszlo");
+                if (ile > 10) { tabil[0] = 10; }
+                else {tabil[0] = ile;}
+                if (ile > 30) { tabil[1] = 30; }
+                else { tabil[1] = ile; }
+                if (ile > 50) { tabil[2] = 50; }
+                else { tabil[2] = ile; }
+                if (ile > 70) { tabil[3] = 70; }
+                else { tabil[3] = ile; }
+
+                    lista = await ejs.renderFile(path.join(__dirname, '../views/pages/', "lista.ejs"), { events: res.locals.eventtab, result: res.locals.result, ile: tabil });
+               
+                const browser = await puppeteer.launch();
+                const page = await browser.newPage();
+                await page.setContent(lista);
+                await page.setContent(lista);
+                await page.emulateMedia('screen');
+                await page.pdf({
+                    path: './lista.pdf',
+                    format: 'A4',
+                    border: '10mm',
+                    printBackground: true,
+                    landscape: true
+                });
+                console.log("zrobione");
+                await browser.close();
+                await res.download('./lista.pdf');
+
+
+
+            }
+            catch{
+                console.log("blad");
+            }
+        };
+            let d = users.length;
+        dopdf(d);
+    });
+    });
+
+
+
+
+}
+
 
 function num(id_event){
     return new Promise((resolve, reject) => {
           connection.query('SELECT COUNT(id_application) AS ile FROM application WHERE id_event = ?', [id_event], (error, result, fields) => {
            console.log(result[0].ile);
-
+            
            resolve(result[0].ile);
         });
     });

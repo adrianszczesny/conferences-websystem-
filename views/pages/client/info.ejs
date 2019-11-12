@@ -15,7 +15,7 @@
 	<h4></h4>
         <div class="card ">
             <div class="card-header">
-            <h3 class="card-title" align="center"><%= tabresult[0].topic %></h3>
+            <h3 class="card-title" align="center" style=" text-transform: uppercase;"><%= tabresult[0].topic %></h3>
 			</div>
             <div class="card-body">
 			<h4><b><i class="fas fa-map-marker-alt"></i> <%= tabresult[0].city %></b>,<%= tabresult[0].hotel %> </h4> 
@@ -25,19 +25,19 @@
         <!-- /.card -->
 		<info>
         <div class="card card-outline-secondary my-4">
-          <div class="card-header">
-            Cel szkolenia:
-          </div>
+          
           <div class="card-body">
+		  <l><b> Cel szkolenia: </b></l>
+		  <hr>
             <p><%= tabresult[0].descriptions %></p>
           </div>
         </div>
 
 		<div class="card card-outline-secondary my-4">
-          <div class="card-header">
-            Prowadzący:
-          </div>
+       
           <div class="card-body">
+		   <l><b>Prowadzący:</b></l>
+		   <hr>
 		  <h5 class= "card-title" ><%= tabresult[0].Name %></h5>
 		
             <p><%= tabresult[0].description %><p>

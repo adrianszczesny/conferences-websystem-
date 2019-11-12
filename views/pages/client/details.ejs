@@ -122,7 +122,7 @@
     <label for="program" class="col-sm-3 col-form-label text-center">Generuj zgłoszenie na szkolenie:</label>
     <div class="col-sm-9 align-self-center">
 	<form method="GET" action="/zgloszenie:<%= detailstab[0].id_application %>" >
-	<button type="submit" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Pobieranie ">Generuj</button>
+	<button type="submit" class="btn btn-primary" id="load" onclick="myFunction()" >Generuj</button> <p id="demo"></p>
 	</form>
 
     </div>
@@ -164,6 +164,15 @@
 <% include ../../partials/error %>
 </main>
 <% include ../../partials/footer %>
+<script>
+function myFunction() {
+
+  document.getElementById("load").innerHTML =  "<i class='fa fa-circle-o-notch fa-spin' style='color:white;'></i> Pobieranie...";
+  setTimeout(function(){ 
+   document.getElementById("load").innerHTML =  "Generuj";
+  }, 6000);
+}
+</script>
 
 </body>
 

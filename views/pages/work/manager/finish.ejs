@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>
+        Moje szkolenia
+    </title>
+    <meta charset="UTF-8">
+    <% include ../../../partials/head %>
+
+</head>
+
+<body>
+    <% include ../../../partials/header-manager %>
+<div class="container">
+<div class="row">
+        <form id="msform">
+            <!-- progressbar -->
+            <ul id="progressbar">
+                <li  class="done">Faktury</li>
+                <li class="done">Certyfikaty</li>
+                <li class="active">Lista Obecności</li>
+            </ul>
+            <!-- fieldsets -->
+            <fieldset>
+                <h2 class="fs-title">Koniec</h2>
+                <h3 class="fs-subtitle">Jeszcze tylko lista obecnosci</h3>
+                 <div id="table" class="table-editable ">
+                         <table class="table table-bordered table-responsive-md table-striped text-center">
+                                          <thead>
+                                            <tr>
+											  <th class= "text-center"> Lp. </th> 
+                                              <th class="text-center">Imię</th>
+                                              <th class="text-center">Nazwisko</th>
+                                              <th class="text-center">Instytucja</th>
+                                            </tr>
+                                          </thead>
+                                                                             
+											<% for(let i = 0; i < users.length; i++) { %>
+                                            
+                                            <tr>
+											<td> 
+											<%= i+1 %>.
+											</td>
+                                            <td>
+                                            <%= users[i].imie %>
+                                            </td>
+                                             <td>
+                                           <%= users[i].nazwisko %>
+                                            </td>
+                                              <td>
+                                            <%= users[i].name %> - <%= users[i].name2 %> 
+                                            </td>
+                                            </tr>
+                                           <% } %>
+                                          
+                                        </table>
+                                      </div>
+                <a href="/print:<%= users[0].id_event %>" class="btn btn-info" onclick="myFunctionu()">Dla uczestników</a>     <a href="/print:<%= users[0].id_event %>" class="btn btn-info" onclick="myFunction()">Dla koordynatora</a>  <br><br>
+                <input type="button" name="next" class="next action-button" value="Koniec"/>
+            </fieldset>
+        </form>
+   
+</div>
+</div>
+
+
+
+
+        <script>
+var current_fs, next_fs, previous_fs; //fieldsets
+var left, opacity, scale; //fieldset properties which we will animate
+var animating; //flag to prevent quick multi-click glitches
+
+$(".next").click(function(){
+	if(animating) return false;
+	animating = true;
+	
+	current_fs = $(this).parent();
+	next_fs = $(this).parent().next();
+	
+	//activate next step on progressbar using the index of next_fs
+	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+	
+	//show the next fieldset
+	
+});
+
+$(".previous").click(function(){
+	if(animating) return false;
+	animating = true;
+	
+	current_fs = $(this).parent();
+	previous_fs = $(this).parent().prev();
+	
+	//de-activate current step on progressbar
+	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+	
+	//show the previous fieldset
+	//hide the current fieldset with style
+			//this comes from the custom easing plugin
+		
+	});
+});
+
+$(".submit").click(function(){
+	return false;
+})
+        </script>
+
+
+
+        <% include ../../../partials/footer %>
+<script>
+function myFunctionu() {
+
+  document.getElementById("load").innerHTML =  "<i class='fa fa-circle-o-notch fa-spin' style='color:white;'></i> Pobieranie...";
+  setTimeout(function(){ 
+   document.getElementById("load").innerHTML =  "Dla uczestników";
+  }, 6000);
+}
+function myFunction() {
+
+  document.getElementById("load").innerHTML =  "<i class='fa fa-circle-o-notch fa-spin' style='color:white;'></i> Pobieranie...";
+  setTimeout(function(){ 
+   document.getElementById("load").innerHTML =  "Dla koordyantora";
+  }, 6000);
+}
+</script>
+</body>
+</html>
