@@ -352,15 +352,29 @@ router.post('/addnewuser',(req,res)=> {
     postaddnewuser(req, res, '');
 });
 
-router.get('/finish::id', (req, res) => {
-  finish(req, res, '');
+router.get('/finishfv::id', (req, res) => {
+  finishfv(req, res, '');
 });
+
+
+router.get('/finishcert::id', (req, res) => {
+    finishcert(req, res, '');
+});
+
+router.get('/finish::id', (req, res) => {
+    finish(req, res, '');
+});
+
+
 
 router.get('/print::id', (req, res) => {
    print(req, res, '');
 });
 
 
+router.get('/printcertall::id', (req, res) => {
+    printcertall(req, res, '');
+});
 
  /*
  * FUNKCJE
@@ -1265,7 +1279,22 @@ function showprogram(req, res) {
     });
 }
 
-
+function finishfv(req, res) {
+    let event = req.params.id;
+    connection.query('SELECT * FROM application INNER JOIN user ON application.id_User = user.id_User INNER JOIN company ON user.id_company = company.id_company WHERE application.id_event= ? ORDER BY user.nazwisko', [event], (error, users, fields) => {
+        res.locals.users = users;
+        console.log(users);
+        res.render('pages/work/manager/finishfv', { req: req.session.user, users: res.locals.users, admin: true });
+    });
+}
+function finishcert(req, res) {
+    let event = req.params.id;
+    connection.query('SELECT * FROM application INNER JOIN user ON application.id_User = user.id_User INNER JOIN company ON user.id_company = company.id_company WHERE application.id_event= ? ORDER BY user.nazwisko', [event], (error, users, fields) => {
+        res.locals.users = users;
+        console.log(users);
+        res.render('pages/work/manager/finishcert', { req: req.session.user, users: res.locals.users, admin: true });
+    });
+}
 function finish(req, res) {
     let event = req.params.id;
     connection.query('SELECT * FROM application INNER JOIN user ON application.id_User = user.id_User INNER JOIN company ON user.id_company = company.id_company WHERE application.id_event= ? ORDER BY user.nazwisko', [event], (error, users, fields) => {
@@ -1323,6 +1352,50 @@ function print(req, res) {
             let d = users.length;
         dopdf(d);
     });
+    });
+
+
+
+
+}
+
+function printcertall(req, res) {
+    let event = req.params.id;
+    connection.query('SELECT user.imie, user.nazwisko FROM application INNER JOIN user ON application.id_User = user.id_User WHERE application.id_event= ? ORDER BY user.nazwisko', [event], (error, users, fields) => {
+        res.locals.result = users;
+        connection.query('SELECT event.topic, event.city, event.date, trainer.name FROM event INNER JOIN trainer ON event.id_trainer=trainer.id_trainer WHERE event.id_event= ? ', [event], function (error, event, fields) {
+            event[0].date = changedate(event[0].date);
+            res.locals.eventtab = event;
+            async function dopdf() {
+                try {
+                    var tabil = [];
+                    console.log("weszlo");
+                     certall = await ejs.renderFile(path.join(__dirname, '../views/pages/', "cert.ejs"), { events: res.locals.eventtab, result: res.locals.result });
+
+                    const browser = await puppeteer.launch();
+                    const page = await browser.newPage();
+                    await page.setContent(certall);
+                    await page.emulateMedia('screen');
+                    await page.pdf({
+                        path: './certall.pdf',
+                        format: 'A5',
+                        border: '10mm',
+                        printBackground: true,
+                        
+                    });
+                    console.log("zrobione");
+                    await browser.close();
+                    await res.download('./certall.pdf');
+
+
+
+                }
+                catch{
+                    console.log("blad");
+                }
+            };
+            dopdf();
+        });
     });
 
 

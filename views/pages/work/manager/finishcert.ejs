@@ -17,18 +17,47 @@
         <form id="msform">
             <!-- progressbar -->
             <ul id="progressbar">
-                <li  class="active">Faktury</li>
-                <li >Certyfikaty</li>
+                <li  class="done">Faktury</li>
+                <li class="active">Certyfikaty</li>
                 <li>Lista Obecności</li>
             </ul>
             <!-- fieldsets -->
-            <fieldset>
+           <fieldset>
                 <h2 class="fs-title">Certyfikaty</h2>
-                <h3 class="fs-subtitle">Tell us something more about you</h3>
-                <input type="text" name="fname" placeholder="First Name"/>
-                <input type="text" name="lname" placeholder="Last Name"/>
-                <input type="text" name="phone" placeholder="Phone"/>
-                <input type="button" name="next" class="next action-button" value="Dalej"/>
+                <h3 class="fs-subtitle">Wygeneruj i wydrukuj certyfikaty</h3>
+				<a href="/printcertall:<%= users[0].id_event %>"> <input type="button" name="next" class="next action-button" style=" width: 450px;" value="Generuj wszystkie"/> </a>
+                 <div id="table" class="table-editable ">
+                         <table class="table table-bordered table-responsive-md table-striped text-center">
+                                          <thead>
+                                            <tr>
+											  <th class= "text-center"> Lp. </th> 
+                                              <th class="text-center">Imię</th>
+                                              <th class="text-center">Nazwisko</th>
+                                              <th class="text-center">Certyfikat</th>
+                                            </tr>
+                                          </thead>
+                                                                             
+											<% for(let i = 0; i < users.length; i++) { %>
+                                            
+                                            <tr>
+											<td> 
+											<%= i+1 %>.
+											</td>
+                                            <td>
+                                            <%= users[i].imie %>
+                                            </td>
+                                             <td>
+                                           <%= users[i].nazwisko %>
+                                            </td>
+                                              <td>
+                                           <a href="/print:<%= users[0].id_event %>" class="btn btn-info " style="background-color:darkblue;">Generuj</a>
+                                            </td>
+                                            </tr>
+                                           <% } %>
+                                          
+                                        </table>
+                                      </div>
+                <a href="/finishfv:<%= users[0].id_event %>"> <input type="button" name="next" class="next action-button" value="Powrót"/> </a><a href="/finish:<%= users[0].id_event %>"> <input type="button" name="next" class="next action-button" value="Dalej"/> </a>
             </fieldset>
         </form>
    

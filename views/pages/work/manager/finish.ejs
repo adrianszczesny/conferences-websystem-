@@ -23,7 +23,7 @@
             </ul>
             <!-- fieldsets -->
             <fieldset>
-                <h2 class="fs-title">Koniec</h2>
+                <h2 class="fs-title">prawie Koniec</h2>
                 <h3 class="fs-subtitle">Jeszcze tylko lista obecnosci</h3>
                  <div id="table" class="table-editable ">
                          <table class="table table-bordered table-responsive-md table-striped text-center">
@@ -57,7 +57,7 @@
                                         </table>
                                       </div>
                 <a href="/print:<%= users[0].id_event %>" class="btn btn-info" onclick="myFunctionu()">Dla uczestników</a>     <a href="/print:<%= users[0].id_event %>" class="btn btn-info" onclick="myFunction()">Dla koordynatora</a>  <br><br>
-                <input type="button" name="next" class="next action-button" value="Koniec"/>
+                <a href="/finishcert:<%= users[0].id_event %>"> <input type="button" name="next" class="next action-button" value="Powrót"/> </a><input type="button" name="next" class="next action-button" value="Koniec"/>
             </fieldset>
         </form>
    
