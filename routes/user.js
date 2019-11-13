@@ -109,7 +109,7 @@ router.get('/', (req, res) =>  {
 
 //logowanie
 router.get('/loginPage', (req, res) =>  {
-    res.render("pages/login", { req: req.session.user, error: false, mail: false, password: false });
+    res.render("pages/login", { req: req.session.user, error: false, mail: false, password: false, reset:false });
 });
 
 router.post('/login', (req, res) => {
@@ -146,7 +146,7 @@ router.post('/register', (req, res) =>  {
 
                     // unikatowy login
                     if (error) res.render('pages/register', { req: req.session.user, error: true });
-                    else res.render('pages/login', { req: req.session.user,error: false, email: false, password: false });
+                    else res.render('pages/login', { req: req.session.user, error: false, email: false, password: false, reset: false });
                 });
             });
 
@@ -199,6 +199,7 @@ router.post('/reset', (req, res) => {
                     console.log(error);
                 } else {
                     console.log('Email wysłany: ' + info.response);
+                    res.render('pages/login', { req: req.session.user, error: false, email: false, password: false, reset:true });
                 }
             });
 
@@ -471,7 +472,7 @@ function loginAuthQuery(req, res, url) {
         console.log(result);
 
         if (result.length == 0 || error) {
-            res.render('pages/login', { req: req.session.user, error: true, email: true, password: null });
+            res.render('pages/login', { req: req.session.user, error: true, email: true, password: null, reset: false });
         }
         else {
 
@@ -491,7 +492,7 @@ function loginAuthQuery(req, res, url) {
                 }
                 else {
                     console.log("bad");
-                    res.render('pages/login', { req: req.session.user, error: true, password: true, email: null });
+                    res.render('pages/login', { req: req.session.user, error: true, password: true, email: null, reset: false });
                 }
             });
         }
