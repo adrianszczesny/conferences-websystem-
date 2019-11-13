@@ -437,6 +437,10 @@ router.get('/print::id', (req, res) => {
    print(req, res, '');
 });
 
+router.get('/printk::id', (req, res) => {
+    printk(req, res, '');
+});
+
 
 router.get('/printcertall::id', (req, res) => {
     printcertall(req, res, '');
@@ -1437,6 +1441,59 @@ function print(req, res) {
                 console.log("zrobione");
                 await browser.close();
                 await res.download('./lista.pdf');
+
+
+
+            }
+            catch{
+                console.log("blad");
+            }
+        };
+            let d = users.length;
+        dopdf(d);
+    });
+    });
+
+
+
+
+}function printk(req, res) {
+    let event = req.params.id;
+    connection.query('SELECT * FROM application INNER JOIN user ON application.id_User = user.id_User INNER JOIN company ON user.id_company = company.id_company WHERE application.id_event= ? ORDER BY user.nazwisko', [event], (error, users, fields) => {
+        res.locals.result = users;
+        connection.query('SELECT event.topic, event.city, event.date FROM event WHERE event.id_event= ? ', [event], function (error, event, fields) {
+            event[0].date = changedate(event[0].date);
+            res.locals.eventtab = event;
+        async function dopdf(ile) {
+            try {
+                var tabil = [];
+                console.log("weszlo");
+                if (ile > 20) { tabil[0] = 20; }
+                else {tabil[0] = ile;}
+                if (ile > 40) { tabil[1] = 40; }
+                else { tabil[1] = ile; }
+                if (ile > 60) { tabil[2] = 60; }
+                else { tabil[2] = ile; }
+                if (ile > 80) { tabil[3] = 80; }
+                else { tabil[3] = ile; }
+
+                    lista = await ejs.renderFile(path.join(__dirname, '../views/pages/', "listak.ejs"), { events: res.locals.eventtab, result: res.locals.result, ile: tabil });
+               
+                const browser = await puppeteer.launch();
+                const page = await browser.newPage();
+                await page.setContent(lista);
+                await page.setContent(lista);
+                await page.emulateMedia('screen');
+                await page.pdf({
+                    path: './listak.pdf',
+                    format: 'A4',
+                    border: '10mm',
+                    printBackground: true,
+                    landscape: true
+                });
+                console.log("zrobione");
+                await browser.close();
+                await res.download('./listak.pdf');
 
 
 
