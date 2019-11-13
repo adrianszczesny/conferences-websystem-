@@ -36,10 +36,29 @@ h6.trademarks, span.trademarks {
 p {
     font-size: 13px;
     align-content:center;
+    
 }
 textarea {
     max-width: 100%;
 }
+
+
+#but  {
+    width: 200px;
+    background: #000066;
+    font-weight: bold;
+    font-size:15px;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+    #but:hover, #but:focus {
+        box-shadow: 0 0 0 2px white, 0 0 0 3px #000066;
+    }
 input[type="text"], select, textarea, input[type="email"] {
     -webkit-border-radius: 0 !important;
     -moz-border-radius: 0;
@@ -273,16 +292,19 @@ article {
     position: relative;
 }
 
-.slider p {
-    line-height: 37px;
-    color: #606060;
-    font-size: 30px;
-    position: absolute;
-    align:center;
-    top: 65px;
-    left: 720px;
-    width: 50%;
-}
+    .slider p {
+        line-height: 37px;
+        font-size: 30px;
+        position: absolute;
+        align: center;
+        top: 65px;
+        left: 710px;
+        width: 50%;
+        text-transform: uppercase;
+        color: #606060;
+        letter-spacing: 5px;
+        font-weight: bold;
+    }
     .slider e {
         line-height: 37px;
         color: #606060;
@@ -886,7 +908,7 @@ info p {
 
     /*buttons*/
     #msform .action-button {
-        width: 100px;
+        width: 200px;
         background: #000066;
         font-weight: bold;
         color: white;

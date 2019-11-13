@@ -25,10 +25,10 @@
             <fieldset>
                 <h2 class="fs-title">Faktury</h2>
                 <h3 class="fs-subtitle">Upewnij się,że wszystkie dane są zgodne</h3>
-				<a href="/finishfv:<%= users[0].id_event %>"> <input type="button" name="next" class="next action-button" style=" width: 450px;" value="Generuj wszystkie"/> </a>
-                 <div id="table" class="table-editable ">
+				<a href="/finishfv:<%= company[0][6] %>"> <input type="button" name="next" class="next action-button" style=" width: 450px;" value="Generuj wszystkie"/> </a>
+                 <div id="table" class="table-editable " style="margin-top: 25px;">
                          <table class="table table-bordered table-responsive-md table-striped text-center">
-                                          <thead>
+                                         <thead>
                                             <tr>
 											  <th class= "text-center"> Lp. </th> 
                                               <th class="text-center">Instytucja</th>
@@ -37,27 +37,28 @@
                                             </tr>
                                           </thead>
                                                                              
-											<% for(let i = 0; i < users.length; i++) { %>
+											<% for(let i = 0; i <  company.length; i++) { %>
                                             
                                             <tr>
 											<td> 
 											<%= i+1 %>.
 											</td>
                                             <td>
-                                            <%= users[i].imie %>
-                                            </td>
+                                            <%= company[i][0] %> - <%= company[i][1] %>
+											</td>
                                              <td>
-                                           <%= users[i].nazwisko %>
+                                           <%= company[i][2] %>
                                             </td>
                                               <td>
-                                           <a href="/print:<%= users[0].id_event %>" class="btn btn-info " style="background-color:darkblue;">Generuj</a>
+                                          <%= company[i][3] %> * <%= company[i][2] %> - <%= company[i][4] %> = <%= company[i][5] %>
                                             </td>
                                             </tr>
                                            <% } %>
                                           
+                                          
                                         </table>
                                       </div>
-                <a href="/finishcert:<%= users[0].id_event %>"> <input type="button" name="next" class="next action-button" value="Dalej"/> </a>
+                <a href="/finishcert:<%= company[0][6] %>"> <input type="button" name="next" class="next action-button" value="Dalej"/> </a>
             </fieldset>
         </form>
    

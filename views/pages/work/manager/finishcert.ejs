@@ -26,9 +26,11 @@
                 <h2 class="fs-title">Certyfikaty</h2>
                 <h3 class="fs-subtitle">Wygeneruj i wydrukuj certyfikaty</h3>
 				<a href="/printcertall:<%= users[0].id_event %>"> <input type="button" name="next" class="next action-button" style=" width: 450px;" value="Generuj wszystkie"/> </a>
-                 <div id="table" class="table-editable ">
-                         <table class="table table-bordered table-responsive-md table-striped text-center">
-                                          <thead>
+                 <div id="table" class="table-editable "  style="margin-top: 25px;">
+                         <table class="table table-bordered table-responsive-md table-striped text-center" >
+                                         <col width="20">
+										 <thead>
+											
                                             <tr>
 											  <th class= "text-center"> Lp. </th> 
                                               <th class="text-center">Imię</th>
@@ -50,14 +52,15 @@
                                            <%= users[i].nazwisko %>
                                             </td>
                                               <td>
-                                           <a href="/print:<%= users[0].id_event %>" class="btn btn-info " style="background-color:darkblue;">Generuj</a>
+                                           <a href="/printcert:<%= users[0].id_event %>?user=<%= users[i].id_User %>" class="btn btn-info " style="background-color:#000066; border-radius: 25px; font-size:12px;">Ponów</a>
                                             </td>
                                             </tr>
                                            <% } %>
                                           
                                         </table>
                                       </div>
-                <a href="/finishfv:<%= users[0].id_event %>"> <input type="button" name="next" class="next action-button" value="Powrót"/> </a><a href="/finish:<%= users[0].id_event %>"> <input type="button" name="next" class="next action-button" value="Dalej"/> </a>
+                <a href="/finishfv:<%= users[0].id_event %>"> <input type="button" name="next" class="next action-button"  style="  border-radius: 25px 0px 0px  25px; width: 200px;" value="Powrót"/> </a>
+				<a href="/finish:<%= users[0].id_event %>"> <input type="button" name="next" class="next action-button"  style="  border-radius: 0px 25px  25px 0px; width: 200px;" value="Dalej"/> </a>
             </fieldset>
         </form>
    

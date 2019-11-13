@@ -12,7 +12,7 @@ var fs = require('fs');
 var puppeteer = require('puppeteer');
 var ejs = require('ejs');
 var path = require('path');
-
+var nodemailer = require('nodemailer');
 
 
 
@@ -52,6 +52,33 @@ var storage_zgloszenie = multer.diskStorage({
 });
 
 var file_zgloszenie = multer({ storage: storage_zgloszenie });
+
+
+
+
+
+var transporter = nodemailer.createTransport({
+    host: 'poczta.o2.pl',
+    secure: false,
+    port: 587,
+    ssl: false,
+    ignoreTLS: false,
+    requireTLS: true,
+    auth: {
+        user: '###########',
+        pass: '###########'
+    },
+    tls: {
+        secureProtocol: "TLSv1_2_method",
+        rejectUnauthorized: false
+    }
+});
+
+
+
+
+
+
 // Inicjalizacja bazy danych 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -145,6 +172,42 @@ router.post('/logout', (req, res) =>  {
     res.render('pages/home.ejs', { req: req.session.user, logout: true });
 		
 });
+
+router.get('/reset', (req, res) => {
+    res.render('pages/reset.ejs', { req: req.session.user, error: false });
+});
+
+router.post('/reset', (req, res) => {
+    connection.query('SELECT * FROM user WHERE email= ?', [req.body.email], (error, result, fields) => {
+        console.log(req.body.email);
+        console.log(result);
+        if (result.length < 1) {
+            res.render('pages/reset.ejs', { req: req.session.user, error: true });
+        }
+        else {
+
+            let jak = "jakis tekst blablablabla";
+            var mailOptions = {
+                from: '###############',
+                to: '###############',
+                subject: 'Resetowanie hasla',
+                text: 'Twoje nowe haslo to : !' + jak 
+            };
+
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email wysłany: ' + info.response);
+                }
+            });
+
+        }
+    })
+
+});
+
+
 
 //lista aktualnych szkolen
 router.get('/list', (req, res) =>  {
@@ -298,9 +361,11 @@ router.get('/reevent::id', (req, res) => {
 router.post('/addrabat::id', (req, res) => {
     let rabat = req.body.rabat;
     let app = req.body.application;
+    let company = req.body.company;
+    let event = req.body.event;
     console.log(rabat);
     console.log(app);
-    connection.query('SELECT id_application FROM application WHERE id_application = ?', [app], (error, list, fields) =>{
+    connection.query('SELECT application.id_application FROM application INNER JOIN user ON application.id_User = user.id_User INNER JOIN company ON user.id_company = company.id_company  WHERE company.id_company = ? AND application.id_event = ?', [company,event], (error, list, fields) =>{
             
         for (let i = 0; i < list.length; i++) {
             connection.query('UPDATE application SET rabat = ? WHERE id_application = ?', [rabat, list[i].id_application], (error, result, fields) => { });
@@ -374,6 +439,10 @@ router.get('/print::id', (req, res) => {
 
 router.get('/printcertall::id', (req, res) => {
     printcertall(req, res, '');
+});
+
+router.get('/printcert::id', (req, res) => {
+    printcert(req, res, '');
 });
 
  /*
@@ -1281,10 +1350,36 @@ function showprogram(req, res) {
 
 function finishfv(req, res) {
     let event = req.params.id;
-    connection.query('SELECT * FROM application INNER JOIN user ON application.id_User = user.id_User INNER JOIN company ON user.id_company = company.id_company WHERE application.id_event= ? ORDER BY user.nazwisko', [event], (error, users, fields) => {
-        res.locals.users = users;
-        console.log(users);
-        res.render('pages/work/manager/finishfv', { req: req.session.user, users: res.locals.users, admin: true });
+    connection.query('SELECT company.id_company, company.name, company.name2 FROM application INNER JOIN user ON application.id_User = user.id_User INNER JOIN company ON user.id_company = company.id_company WHERE application.id_event= ? GROUP BY company.id_company ', [event], (error, company, fields) => {
+        connection.query('SELECT price FROM event WHERE id_event =? ', [event], (error, price, fields) => {
+
+        
+        let com = [];
+        for (let i =0 ; i < company.length; i++) {
+            connection.query('SELECT application.id_event, company.name, company.name2, COUNT(application.id_application) AS ile ,SUM(application.rabat) AS rabat FROM application INNER JOIN user ON application.id_User = user.id_User INNER JOIN company ON user.id_company = company.id_company WHERE application.id_event= ? AND company.id_company=? ', [event, company[i].id_company], (error, result, fields) => {
+                console.log(result);
+                com[i] = new Array();
+                com[i][0] = company[i].name;
+                com[i][1] = company[i].name2;
+                com[i][2] = result[0].ile;
+                com[i][3] = price[0].price;
+                com[i][4] = result[0].rabat;
+                com[i][5] = price[0].price * result[0].ile - result[0].rabat;
+                com[i][6] = result[0].id_event;
+
+                console.log(com[i][3]);
+               // com[i][2] = result.['COUNT(application.id_application)'];
+
+                if (i == company.length - 1) {
+                    console.log(com);
+                    res.render('pages/work/manager/finishfv', { req: req.session.user, company: com, admin: true });
+
+                }
+            });
+            
+        
+        }
+        });
     });
 }
 function finishcert(req, res) {
@@ -1368,7 +1463,6 @@ function printcertall(req, res) {
             res.locals.eventtab = event;
             async function dopdf() {
                 try {
-                    var tabil = [];
                     console.log("weszlo");
                      certall = await ejs.renderFile(path.join(__dirname, '../views/pages/', "cert.ejs"), { events: res.locals.eventtab, result: res.locals.result });
 
@@ -1386,6 +1480,51 @@ function printcertall(req, res) {
                     console.log("zrobione");
                     await browser.close();
                     await res.download('./certall.pdf');
+
+
+
+                }
+                catch{
+                    console.log("blad");
+                }
+            };
+            dopdf();
+        });
+    });
+
+
+
+
+}
+
+function printcert(req, res) {
+    let event = req.params.id;
+    let user = req.query.user;
+    console.log(user);
+    connection.query('SELECT imie, nazwisko FROM user WHERE id_User= ?', [user], (error, users, fields) => {
+        res.locals.result = users;
+        connection.query('SELECT event.topic, event.city, event.date, trainer.name FROM event INNER JOIN trainer ON event.id_trainer=trainer.id_trainer WHERE event.id_event= ? ', [event], function (error, event, fields) {
+            event[0].date = changedate(event[0].date);
+            res.locals.eventtab = event;
+            async function dopdf() {
+                try {
+                    console.log("weszlo");
+                    certall = await ejs.renderFile(path.join(__dirname, '../views/pages/', "cert.ejs"), { events: res.locals.eventtab, result: res.locals.result });
+
+                    const browser = await puppeteer.launch();
+                    const page = await browser.newPage();
+                    await page.setContent(certall);
+                    await page.emulateMedia('screen');
+                    await page.pdf({
+                        path: './cert.pdf',
+                        format: 'A5',
+                        border: '10mm',
+                        printBackground: true,
+
+                    });
+                    console.log("zrobione");
+                    await browser.close();
+                    await res.download('./cert.pdf');
 
 
 

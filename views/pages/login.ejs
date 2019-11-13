@@ -16,7 +16,7 @@
         <div class="alert alert-danger role="alert">Nieprawidłowy email</div>
         <% } %>
         <% if(error == true && password == true){ %>
-        <div class="alert alert-danger role="alert">Niepoprawne hasło</div>
+        <div class="alert alert-danger role="alert">Niepoprawne hasło, nie pamiętasz ?    <a class="btn btn-danger" href="/reset">Zresetuj hasło</a></div>
         <% } %>
 
         <div class="slider">
@@ -50,12 +50,23 @@
         </div>
 		 <div class="container main-page">
             <div class="row main-page-title">
+			<% if(error == true){ %>
 				<div class="col-md-9 col-lg-8 col-sm-12">
                     <h2 class="text-center"><B>Nie pamiętasz hasła?</B></h2>
                 </div>
                 <div class="col-md-3 col-lg-4 col-sm-12">
-                    <a class="btn btn-default" href="/loginPage">Zresetuj hasło</a>
+                    <a class="btn btn-default" href="/reset">Zresetuj hasło</a>
                 </div>
+				<% } else{ %>
+				<div class="col-md-9 col-lg-8 col-sm-12">
+                    <h2 class="text-center"><B>Nie masz konta? </B></h2>
+                </div>
+                <div class="col-md-3 col-lg-4 col-sm-12">
+                    <a class="btn btn-default" href="/registerPage">Zarejestruj się</a>
+                </div>
+				<% } %>
+
+
 				
             </div>
 		</div>

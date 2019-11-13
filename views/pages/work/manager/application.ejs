@@ -170,6 +170,9 @@
 													  <form method="POST" action="/addrabat:<%= detailstab[0].id_application %> ">
 															<div class="form-group row">
 																<input type="hidden"  class="form-control" name= "application" value="<%= detailstab[0].id_application %>" > 
+																<input type="hidden"  class="form-control" name= "company" value="<%= company[0].id_company %>" > 
+																<input type="hidden"  class="form-control" name= "event" value="<%=eventtab[0].id_event %>" > 
+
 																<label for="topic" class="col-sm-8 col-form-label">Wprowadź wartość rabatu:</label>
 																<div class="col-sm-2 align-self-center">
 																	<input type="text" class="form-control" id="rabat" name="rabat" value="<%= detailstab[0].rabat %>" >

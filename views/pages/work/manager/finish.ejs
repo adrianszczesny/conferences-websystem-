@@ -25,7 +25,9 @@
             <fieldset>
                 <h2 class="fs-title">prawie Koniec</h2>
                 <h3 class="fs-subtitle">Jeszcze tylko lista obecnosci</h3>
-                 <div id="table" class="table-editable ">
+				<a href="/print:<%= users[0].id_event %>"> <input type="button" name="next" class="next action-button"  style="  border-radius: 25px 0px 0px  25px; width: 300px;" value="Dla uczestników"/> </a>
+				<a href="/print:<%= users[0].id_event %>"><input type="button" name="next" class="next action-button"  style="  border-radius: 0px 25px  25px 0px; width: 300px;" value="Dla koordynatora"/><a>
+                 <div id="table" class="table-editable " style="margin-top: 25px;">
                          <table class="table table-bordered table-responsive-md table-striped text-center">
                                           <thead>
                                             <tr>
@@ -56,8 +58,8 @@
                                           
                                         </table>
                                       </div>
-                <a href="/print:<%= users[0].id_event %>" class="btn btn-info" onclick="myFunctionu()">Dla uczestników</a>     <a href="/print:<%= users[0].id_event %>" class="btn btn-info" onclick="myFunction()">Dla koordynatora</a>  <br><br>
-                <a href="/finishcert:<%= users[0].id_event %>"> <input type="button" name="next" class="next action-button" value="Powrót"/> </a><input type="button" name="next" class="next action-button" value="Koniec"/>
+                <a href="/finishcert:<%= users[0].id_event %>"> <input type="button" name="next" class="next action-button"  style="  border-radius: 25px 0px 0px  25px; width: 200px;"  value="Powrót"/> </a>
+				<a href="/conferences"><input type="button" name="next" class="next action-button"  style="  border-radius: 0px 25px  25px 0px; width: 200px;" value="Koniec"/><a>
             </fieldset>
         </form>
    
