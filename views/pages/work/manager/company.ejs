@@ -14,25 +14,19 @@
     <main>
 	
 <div class= "container">
- <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
-  <t class="text-center"> DANE FIRMY</t>
-  <h4> </h4>
+
 
   <tbody>
   <form method="POST" action="/update">
  
  
- <div class="card">
-	 <div class="card-header">
-		<h4 class="text-center">Dane do faktury</h4>
-  </div>
-  </div>
   <div class="card">
-  <div class="card-header">
-		<h5 class="text-center">Nabywca:</h5>
-  </div>
- 
+
   <div class="card-body">
+  <h3 id="title" align="center"> Dane firmy</h3>
+<hr>
+<h3 id="title" align="center" style="margin-bottom:30px;"> Dane do faktury</h3>
+
     <div class="form-group row">
 		<label for="nip" class="col-sm-2 col-form-label">NIP:</label>
 		<div class="col-sm-10 align-self-center">
@@ -60,19 +54,9 @@
       <input type="text" class="form-control" id="email2" name="email2" value="<%= account[0].emailfv %>"  placeholder="Podaj email do przesłania faktury">
     </div>
   </div>
- 
-  </div>
-</div>
+ <hr>
+<h3 id="title" align="center"> odbiorca</h3>
 
-
-
-<div class="card">
-	<div class="card-header">
-		<h5 class="text-center">Odbiorca:</h5>
-	</div>
-
- <h4> </h4>
- <div class="card-body">
 	<div class="form-group row">
 		<label for="nazwa" class="col-sm-2 col-form-label">Nazwa firmy/instytucji:</label>
 		<div class="col-sm-10 align-self-center">
@@ -90,12 +74,11 @@
 </div>
  <br><br>
  <div class="card">
-                        <div class="card-header text-center">
-                         Pracownicy:
-                        </div>
+                       
                             <div class="card-body">
+							<h3 id="title" align="center"> Pracownicy</h3>
                                 <div id="table" class="table-editable">
-                                        <span class="table-add float-right mb-3 mr-2"><a href="/adduser:<%= account[0].id_company %>" class="text-success">
+                                        <span class="table-add float-right mb-3 mr-2"><a href="/addnewuser?company=<%= account[0].id_company %>" class="text-success">
                                         <i class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
                                         <table class="table table-bordered table-responsive-md table-striped text-center">
                                           <thead>
@@ -154,7 +137,7 @@
                       </div>
                   
    <div class="col-md-12 text-center"> 
-                    <button type="submit" class="btn btn-info ">
+                    <button type="submit" id="but" style="margin-top:50px;">
                         Zapisz dane
                     </button>
                 </div>

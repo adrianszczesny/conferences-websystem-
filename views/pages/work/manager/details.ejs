@@ -16,26 +16,25 @@
 	
 	<tbody>
         <div class="card mt-4">
-		<div class="card-header text-center">
-                         <h3 class="card-title" align="center"> <%= eventtab[0].topic %></h3>
-                        </div>
             <div class="card-body">
-            <div class="row ">
-					<div class="col-8 align-self-center">
-            <h5><i class="fas fa-user-graduate"></i>  <%= eventtab[0].Name %></h5>
-            <h5><b><i class="fas fa-map-marker-alt"></i> <%= eventtab[0].city %></b>, Hotel <%= eventtab[0].hotel %> </h5> 
-            <h5> <b><i class="fas fa-table"></i> <%= eventtab[0].date %> r.</b> (godz. 9:00-15:00)</h5>
-			<h5> <i class="fas fa-coins"> <%= eventtab[0].price %> zł/os. netto</i></h5>
-			</div>
-			<div class="col-2 align-self-center">
-            <a href="/editevents:<%= eventtab[0].id_event %>" class="btn btn-success">Edytuj szkolenie</a>
+				<h3 id="title" align="center"> <%= eventtab[0].topic %></h3>
+				<div class="row ">
+					<div class="col-7 align-self-center">
+						<h6><i class="fas fa-user-graduate"></i>  <%= eventtab[0].Name %></h5>
+						<h6><b><i class="fas fa-map-marker-alt"></i> <%= eventtab[0].city %></b>, Hotel <%= eventtab[0].hotel %> </h5> 
+						<h6> <b><i class="fas fa-table"></i> <%= eventtab[0].date %> r.</b> (godz. 9:00-15:00)</h5>
+						<h6> <i class="fas fa-coins"> <%= eventtab[0].price %> zł/os. netto</i></h5>
+					</div>
+					<div class="col-5 align-self-center">
+						<a  href="/editevents:<%= eventtab[0].id_event %>" > <input id="but" type="button" name="next"  style="border-radius: 25px 0px 0px  25px; width: 200px;" value="Edytuj szkolenie" /> </a>
+						<% if(eventtab[0].state==1){ %>
+						<input type="button" id="but" name="next" data-toggle="modal" data-target="#odwolanie" class="next action-button"  style="background:#990000; border-radius: 0px 25px  25px 0px; width: 200px;" value="Odwołaj szkolenie"/><a>
+						<% } %>	  
+						<% if(eventtab[0].state==2){ %>
+						<input type="button" id="but" name="next" data-toggle="modal" data-target="#przywracanie" class="next action-button"  style=" background:green; border-radius: 0px 25px  25px 0px; width: 200px;" value="Przywróć szkolenie"/><a>
+						<% } %>				
+					</div>
 			
-			</div>
-			<div class="col-2 align-self-center">
-			<% if(eventtab[0].state==1){ %>
-			<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#odwolanie">
-			Odwołaj szkolenie
-			</button>
 			<div class="modal fade" id="odwolanie" tabindex="-1" role="dialog" aria-labelledby="odwolanieTitle" aria-hidden="true">
 				 <div class="modal-dialog modal-dialog-centered" role="document">
 						<div class="modal-content">
@@ -54,12 +53,7 @@
 						</div>
 				</div>
 			</div>
-			<% } %>								
-			
-			<% if(eventtab[0].state==2){ %>
-			<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#przywracanie">
-			Przywróć szkolenie
-			</button>
+				
 			<div class="modal fade" id="przywracanie" tabindex="-1" role="dialog" aria-labelledby="przywracanieTitle" aria-hidden="true">
 				 <div class="modal-dialog modal-dialog-centered" role="document">
 						<div class="modal-content">
@@ -78,24 +72,23 @@
 						</div>
 				</div>
 			</div>
-			<% } %>	
+			
 
 			</div>
 			</div>
             </div>
-        </div>
+        
         <!-- /.card -->
 
 
             <!-- uczestnicy -->
                 <div class="card card-outline-secondary my-4">
-                        <div class="card-header text-center">
-                         Uczestnicy:
-                        </div>
+                        
                             <div class="card-body">
+							<h3 id="title" align="center"> Uczestnicy:</h3>
                                 <div id="table" class="table-editable ">
-                                        <span class="table-add float-right mb-3 mr-2"><a href="/addnewuser?event=<%= eventtab[0].id_event %>" class="text-success">
-                                        <i class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
+                                        <span class="table-add float-right mb-3 mr-2" ><a href="/addnewuser?event=<%= eventtab[0].id_event %>" class="text-success">
+                                        <i class="fas fa-plus fa-2x" aria-hidden="true" style="color:  #000066;"></i></a></span>
                                         <table class="table table-bordered table-responsive-md table-striped text-center">
                                           <thead>
                                             <tr>
@@ -170,7 +163,7 @@
                       </div>
 		<div class= "row">
 		<div class="col-12 text-center">
-		<a href="/finishfv:<%= eventtab[0].id_event %>" class="btn btn-primary ">Pakuj szkolenie</a>
+		<a href="/finishfv:<%= eventtab[0].id_event %>">  <input type="button" id="but" class="next action-button" style=" width: 450px;" value="Pakuj szkolenie"/></a>
 		</div>
 		</div>
                   

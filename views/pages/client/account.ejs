@@ -12,27 +12,19 @@
     <% include ../../partials/header %>
 
     <main>
+	<div class="container" style="margin-top:30px;">
 	 <% if(update == true ){ %>
 	 <h2> </h2>
         <div class="alert alert-danger role="alert">Uzupełnij dane zanim zapiszesz się na szkolenie </div>
-		<h4> </h4>
-		<div class= "container">
- <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
-  <t class="text-center">MOJE DANE</t>
-  <h4> </h4>
         <% } %>
 
-	 <% if(update == false) { %>
-<div class= "container">
- <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
-  <t class="text-center">MOJE DANE</t>
-  <h4> </h4>
-  <% } %>
+
 
   <tbody>
   <form method="POST" action="/update">
   <div class="card">
   <div class="card-body">
+  <h3 id="title" align="center" style="font-size:25px; margin-bottom:70x;">Moje dane</h3>
   <div class="form-group row">
     <label for="Email" class="col-sm-2 col-form-label">Email:</label>
     <div class="col-sm-10 align-self-center">
@@ -69,22 +61,9 @@
       <input type="text" class="form-control" id="numer" name="numer" value="<%= account[0].numer %>" placeholder="Podaj swój numer telefonu">
     </div>
   </div>
-   </div>
-    </div>
-   <h4> </h4>
- 
- 
- <div class="card">
-	 <div class="card-header">
-		<h4 class="text-center">Dane do faktury</h4>
-  </div>
-  </div>
-  <div class="card">
-  <div class="card-header">
-		<h5 class="text-center">Nabywca:</h5>
-  </div>
- 
-  <div class="card-body">
+
+  <h3 id="title" align="center" style=" margin-top: 50px; margin-bottom:50x;">Dane do faktury</h3>
+
     <div class="form-group row">
 		<label for="nip" class="col-sm-2 col-form-label">NIP:</label>
 		<div class="col-sm-10 align-self-center">
@@ -113,18 +92,7 @@
     </div>
   </div>
  
-  </div>
-</div>
-
-
-
-<div class="card">
-	<div class="card-header">
-		<h5 class="text-center">Odbiorca(opcjonalnie):</h5>
-	</div>
-
- <h4> </h4>
- <div class="card-body">
+<h3 id="title" align="center" style="margin-top: 50px; margin-bottom:50x;">Odbiorca(opcjonalnie)</h3>
 	<div class="form-group row">
 		<label for="nazwa" class="col-sm-2 col-form-label">Nazwa firmy/instytucji:</label>
 		<div class="col-sm-10 align-self-center">
@@ -139,13 +107,14 @@
 		</div>
 	</div>
 </div>
-</div>
- <br><br>
-   <div class="col-md-12 text-center"> 
-                    <button type="submit" class="btn btn-info ">
+  <div class="col-md-12 text-center"> 
+                    <button type="submit" id="but" ">
                         Zapisz dane
                     </button>
                 </div>
+				<br>
+</div>
+ 
 </form>
 </div>
 </tbody>

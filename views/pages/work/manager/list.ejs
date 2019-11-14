@@ -11,14 +11,19 @@
 <body>
 
 <% include ../../../partials/header-manager %>
-  <div class="container">
-  <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
-  <t class="text-center">
-  <% if(last == true){ %>
+  <div class="container" >
+
+
+<div class="card" style="background:  #000066; margin-top:30px; ">
+<h3 id="title" align="center" style="color:white; font-size:25px; margin-bottom:20px;">  <% if(last == true){ %>
 	ARCHIWALNE SZKOLENIA
   <% } else {  %>
   AKTUALNE SZKOLENIA
-  <% } %>
+  <% } %> </h3>
+ </div>
+ 
+
+
   
   </t>
 	<tbody>
@@ -31,7 +36,7 @@
 			<a href="/eventdetails:<%= tabresult[i].id_event %>" class="card-body">
 				<div class="row ">
 					<div class="col-7 align-self-center">
-						<h5 class="card-title"> <%= tabresult[i].topic %> </h5>
+						<h5 class="card-title" style="color: #000066;"> <%= tabresult[i].topic %> </h5>
 						
 					</div>
 

@@ -211,11 +211,13 @@ router.post('/reset', (req, res) => {
 
 
 //lista aktualnych szkolen
-router.get('/list', (req, res) =>  {
+router.get('/list', (req, res) => {
+    isLog(req,res);
     list(req, res, '');
 });
 
 router.get('/info/download::id', (req, res) => {
+    isLog(req,res);
     console.log(req.params.id)
     connection.query('SELECT program FROM event WHERE id_event= ?', [req.params.id], (error, result, fields) => {
 
@@ -226,60 +228,72 @@ router.get('/info/download::id', (req, res) => {
 });
 
 // lista szkolen, na ktore user jest zapisany
-router.get('/mylist', (req, res) =>  {
+router.get('/mylist', (req, res) => {
+    isLog(req,res);
     mylist(req, res, '');
 });
 
 //formularz zgloszeniowy
 router.get('/buy::id', (req, res) => {
+    isLog(req, res);
     console.log(req.params.user);
     prebuy(req, res, '');
 });
 
 //informacje o szkoleniu
 router.get('/info::id', (req, res) => {
+    isLog(req, res);
     info(req, res, '');
 });
 
 // dane uzytkowanika 
 router.get('/account', (req, res) => {
+    isLog(req, res);
     account(req, res, '');
 });
 
 // aktualizacja danych uzytkownika
 router.post('/update', (req, res) => {
+    isLog(req, res);
     update(req, res, '');  
 });
 
 //zapisanie sie na szkolenie
 router.post('/buy::id', (req, res) => {
+    isLog(req, res);
     buy(req, res, '');
 });
 
 //szczegoly zamowienia
 router.get('/details::id', (req, res) => {
+    isLog(req, res);
     details(req, res, '');
 });
 
 //usuwanie uczestnika z zamowienia
 router.get('/deleteapp::id', (req, res) => {
+    isLog(req, res);
     deleteapp(req, res, '');
 });
 
 router.get('/zgloszenie::id', (req, res) => {
+    isLog(req, res);
     zgloszenie(req, res, '');
 });
 
 router.post('/addzgloszenie::id', file_zgloszenie.single('zgloszenie'), (req, res) => {
+    isLog(req, res);
     addzgloszenie(req, res, '');
 });
 
 router.get('/showprogram::id', (req, res) => {
+    isLog(req, res);
     showprogram(req, res, '');
 });
 
 
 router.get('/addnewuser', (req, res) => {
+    isLog(req, res);
     addnewuser(req, res, '');
 });
 
@@ -492,7 +506,7 @@ function loginAuthQuery(req, res, url) {
                     console.log("3");
                     console.log(req.session.id);
                     console.log("4");
-                    res.render('pages/home', { req: req.session.user, logout: false });
+                    res.redirect('/');
                 }
                 else {
                     console.log("bad");
@@ -665,7 +679,7 @@ function buy(req, res, url) {
         console.log("zw" + zw);
     }
     console.log("ilosc osób:" + req.body.imie.length);
-    let num = req.body.imie.length;
+    var num = req.body.imie.length;
     if (req.body.imie.length > 1 && req.body.imie[0].length < 2) {
         num = 1;
         console.log("num" + num);
@@ -733,7 +747,10 @@ function buy(req, res, url) {
                             console.log(req.session.user);
                             console.log("Dodano starego");
                             console.log(req.body.nazwisko[i]);
-                            return i;
+                            console.log("wypl2 " + dodano + company + us + imie + nazwisko + stanowisko + i)
+                            if (i >= num-1) {
+                                res.redirect('/details:' + result.insertId + '?done=true');
+                            }
 
                         });
                     });
@@ -746,15 +763,17 @@ function buy(req, res, url) {
                             connection.query('UPDATE event SET NoC=NoC+1 WHERE id_event = ?', [even], (error, event, fields) => {
                                 console.log("Dodano nowego ");
                                 console.log(req.body.nazwisko[i]);
-                                return i;
+                                console.log("wypl " + dodano + company + us + imie + nazwisko + stanowisko + i )
+                                if (i >= num-1) {
+                                    res.redirect('/details:' + resulty.insertId +'?done=true');
+                                }
+
 
                             });
                         });
                     });
                 }
 
-            }).then(() => {
-                mylist(req, res);
             });
 
 
@@ -789,6 +808,13 @@ function deleteapp(req, res) {
 //GET szczegoly zamowienia szkolenia
 function details(req, res) {
     let application = req.params.id;
+    let done = false;
+    console.log(req.query.done);
+    if (req.query.done == 'true') {
+        done = true;
+    }
+    console.log("done" + done);
+
     console.log("applicatiom:" + application);
     connection.query('SELECT id_event FROM application WHERE id_application = ?', [application], (error, even, fields) => {
         connection.query('SELECT user.id_company FROM user WHERE user.id_User = ?', [req.session.user], (error, company, fields) => {
@@ -800,7 +826,7 @@ function details(req, res) {
                 connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [even[0].id_event], function (error, event, fields) {
                     event[0].date = changedate(event[0].date);
                     res.locals.eventtab = event
-                    res.render('pages/client/details.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab });
+                    res.render('pages/client/details.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab, done: done });
                 });
 
             });
@@ -935,10 +961,10 @@ function loginAuthQueryWork(req, res, url) {
                     console.log(req.session.id);
                     console.log("4");
                     if (result[0].manager == 1) {
-                        conferences(req, res, '');
+                        res.redirect('/conferences');
                     }
                     else {
-                        a
+                       
 
                     }
                 }
@@ -1417,12 +1443,14 @@ function print(req, res) {
                 console.log("weszlo");
                 if (ile > 10) { tabil[0] = 10; }
                 else {tabil[0] = ile;}
-                if (ile > 30) { tabil[1] = 30; }
+                if (ile > 25) { tabil[1] = 25; }
                 else { tabil[1] = ile; }
-                if (ile > 50) { tabil[2] = 50; }
+                if (ile > 40) { tabil[2] = 40; }
                 else { tabil[2] = ile; }
-                if (ile > 70) { tabil[3] = 70; }
+                if (ile > 55) { tabil[3] = 55; }
                 else { tabil[3] = ile; }
+                if (ile > 70) { tabil[4] = 70; }
+                else { tabil[4] = ile; }
 
                     lista = await ejs.renderFile(path.join(__dirname, '../views/pages/', "lista.ejs"), { events: res.locals.eventtab, result: res.locals.result, ile: tabil });
                
@@ -1600,6 +1628,11 @@ function printcert(req, res) {
 
 }
 
+function isLog(req,res) {
+    if (req.session.user == undefined || req.session.user == null) {
+        res.redirect('/loginPage');
+    }
+}
 
 function num(id_event){
     return new Promise((resolve, reject) => {

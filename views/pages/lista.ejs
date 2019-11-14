@@ -73,6 +73,8 @@ td{
 .next{
 	page-break-before:always;
 	margin-top:50px;
+	margin-left:-20px;
+	margin-right:80px;
 }
 .table{
 margin-left:50px;
@@ -153,7 +155,7 @@ margin-right:50px;
                     </tbody>
                 </table>
         </div>
-		<% } if(ile[2]>30){ %>
+		<% } if(ile[2]>25){ %>
 		<div class="next">
                 <table class="table table-bordered text-center">
 				<col width="20">
@@ -171,7 +173,7 @@ margin-right:50px;
                         </tr>
                     </thead>
                     <tbody>
-					 <% for(var i =30; i < ile[2]; i++){ %>
+					 <% for(var i =25; i < ile[2]; i++){ %>
                         <tr>
 							<th><%= i+1 %>.</th>
 							<td><%= result[i].nazwisko %></td>
@@ -183,7 +185,7 @@ margin-right:50px;
                     </tbody>
                 </table>
         </div>
-		<% } if(ile[3]>50){ %>
+		<% } if(ile[3]>40){ %>
 				<div class="next">
                 <table class="table table-bordered text-center">
 				<col width="20">
@@ -201,7 +203,37 @@ margin-right:50px;
                         </tr>
                     </thead>
                     <tbody>
-					 <% for(var i=50; i < ile[3]; i++){ %>
+					 <% for(var i=40; i < ile[3]; i++){ %>
+                        <tr>
+							<th><%= i+1 %>.</th>
+							<td><%= result[i].nazwisko %></td>
+                            <td><%= result[i].imie %></td>
+							<td><%= result[i].name%> - <%= result[i].name2%></td>
+							<td>               </td>
+                        </tr>
+                       <% } %>
+                    </tbody>
+                </table>
+        </div>	
+		<% } if(ile[4]>55){ %>
+				<div class="next">
+                <table class="table table-bordered text-center">
+				<col width="20">
+				<col width=auto>
+				<col width=auto>
+				<col width=auto>
+				<col width="300">
+                    <thead>
+                        <tr>
+							<th>Lp.</th>
+                            <th>Nazwisko</th>
+                            <th>Imię </th>
+							<th>Instytucja</th>
+							<th>Podpis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+					 <% for(var i=55; i < ile[4]; i++){ %>
                         <tr>
 							<th><%= i+1 %>.</th>
 							<td><%= result[i].nazwisko %></td>

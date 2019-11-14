@@ -13,36 +13,29 @@
 <tlo>
     <!-- Główna-->
 	<div class="container">
-	
 	<tbody>
+	<% if(done == true){ %>
+	<div class="alert alert-success" role="alert">Zostałeś zapisany na szkolenie. Poniżej znajdują się szczegóły. W każdej chwili możesz wrócić tutaj i dodać potwierdzenie szkolenia </div>
+	<% } %>
+
+	
 
         <div class="card mt-4">
-		<div class="card-header text-center">
-                         <h3 class="card-title" align="center"> <%= eventtab[0].topic %></h3>
-                        </div>
-            <div class="card-body">
+	        <div class="card-body">
+			<h3 id="title" align="center" style="font-size:25px;"> <%= eventtab[0].topic %></h3>
             <div class="row">
 			<div class="col-8">
-            <h5><i class="fas fa-user-graduate"></i>  <%= eventtab[0].Name %></h5>
-            <h5><b><i class="fas fa-map-marker-alt"></i> <%= eventtab[0].city %></b>, Hotel <%= eventtab[0].hotel %> </h5> 
-            <h5> <b><i class="fas fa-table"></i> <%= eventtab[0].date %> r.</b> (godz. 9:00-15:00)</h5>
-			<h5> <i class="fas fa-coins"> <%= eventtab[0].price %> zł/os. netto</i></h5>
+            <h6><i class="fas fa-user-graduate"></i>  <%= eventtab[0].Name %></h6>
+            <h6><b><i class="fas fa-map-marker-alt"></i> <%= eventtab[0].city %></b>, Hotel <%= eventtab[0].hotel %> </h6> 
+            <h6> <b><i class="fas fa-table"></i> <%= eventtab[0].date %> r.</b> (godz. 9:00-15:00)</h6>
+			<h6> <i class="fas fa-coins"> <%= eventtab[0].price %> zł/os. netto</i></h6>
 			</div>
 			<div class="col-4 align-self-center">
-            <a href="/info:<%= eventtab[0].id_event %>" class="btn btn-success">Zobacz więcej informacji o szkoleniu</a>
+            <a href="/info:<%= eventtab[0].id_event %>"><input type="button" id="but"  style=" width: 300px;" value="Informacje o szkoleniu"/> </a>
 			</div>
 			</div>
-            </div>
-        </div>
-        <!-- /.card -->
-
-
-            <!-- uczestnicy -->
-                <div class="card card-outline-secondary my-4">
-                        <div class="card-header text-center">
-                         Uczestnicy:
-                        </div>
-                            <div class="card-body">
+        
+               <hr> <h3 id="title" align="center"> Uczestnicy</h3>
                                 <div id="table" class="table-editable">
                                         <span class="table-add float-right mb-3 mr-2"><a href="/buy:<%= eventtab[0].id_event %>" class="text-success">
                                         <i class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
@@ -97,57 +90,69 @@
                                          
                                         </table>
                                       </div>
-                                      
-									</div>
-									
-                      </div>
-                  <div class="card card-outline-secondary my-4">
-                        <div class="card-header text-center">
-                         Dokumenty:
-                        </div>
+                                      <br>
 
-                            <div class="card-body">
-								<div class="form-group row  ">
-    <label for="program" class="col-sm-3 col-form-label text-center">Program szkolenia:</label>
-    <div class="col-sm-1">
-      <a href="/showprogram:<%= eventtab[0].id_event %>" class="btn btn-primary">Otwórz</a>
+
+ <hr><h3 id="title" align="center"> Dokumenty</h3><br>
+	<div class="form-group row">
+		<label for="program" class="col-sm-3 col-form-label text-center">Program szkolenia:</label>
+		<div class="col-sm-9">
+		    <a href="/showprogram:<%= eventtab[0].id_event %>" ><input type="button" id="but" style="  border-radius: 25px 0px 0px  25px; width: 200px;" value="Otwórz"/> </a>
+			<a href="/info/download:<%= eventtab[0].id_event %>"><input type="button" id="but"  style="  border-radius: 0px 25px  25px 0px; width: 200px;" value="Pobierz"/></a>
+		</div>
     </div>
-	<div class="col-sm-4">
-      <a href="/info/download:<%= eventtab[0].id_event %>" class="btn btn-primary">Pobierz </a>
+  <hr>
+
+  <div class="form-group row ">
+    <label for="program" class="col-sm-3 col-form-label text-center ">Generuj zgłoszenie na szkolenie:</label>
+    <div class="col-sm-5 align-self-center">
+      <a href="/zgloszenie:<%= detailstab[0].id_application %>" onclick="myFunction()"> <input type="button" id="but" class="next action-button" style=" width: 200px;" value="Generuj"/></a>
     </div>
   </div>
   <hr />
-
-  <div class="form-group row  ">
-    <label for="program" class="col-sm-3 col-form-label text-center">Generuj zgłoszenie na szkolenie:</label>
-    <div class="col-sm-9 align-self-center">
-	<form method="GET" action="/zgloszenie:<%= detailstab[0].id_application %>" >
-	<button type="submit" class="btn btn-primary" id="load" onclick="myFunction()" >Generuj</button> <p id="demo"></p>
-	</form>
-
-    </div>
-  </div>
-   <hr />
   	<div class="form-group row text-center">
     <label for="zgloszenie" class="col-sm-3 col-form-label align-self-center">Załącz zgłoszenie:
 	<% if(detailstab[0].zgloszenie != null ){ %>
 	<span class="badge badge-success">Dodane</span>
 	<% } %>
 	</label>
-    <div class="col-sm-4 ">
-	 <form method="POST" action="/addzgloszenie:<%= detailstab[0].id_application %>" enctype="multipart/form-data" >
-      <input type="file" class="form-control-file" id="zgloszenie" name="zgloszenie" ></input><br>
-	 <button type="submit" class="btn btn-info pull-left ">
-                        Załącz skan zgłoszenia
-                    </button>
-	  </form>
-    </div>
-	<div class="col-sm-3 align-self-center">
+    <div class="col-sm-5 ">
+	 <button type="button" id="but" style="border-radius: 25px 0px 0px  25px; width: 200px;" data-toggle="modal" data-target="#zgloszenie-<%= detailstab[0].id_application %>" >
+													Dodaj
+												</button>
+
+
 	<% if(detailstab[0].zgloszenie != null ){ %>
-	<a href="/showzgloszenie:<%= detailstab[0].id_application %>" class="btn btn-info ">Podgląd zgłoszenia</a>
+	<a href="/showzgloszenie:<%= detailstab[0].id_application %>"><input type="button" id="but" class="next action-button" style="  border-radius: 0px 25px  25px 0px; width: 200px;" value="Podgląd"/></a>
 	<% } %>
 	
 	</div>
+  </div>
+
+	<div class="modal fade" id="zgloszenie-<%= detailstab[0].id_application %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												 <div class="modal-dialog modal-dialog-centered" role="document">
+												  <div class="modal-content">
+												   <div class="modal-header">
+													   <h5 class="modal-title" id="exampleModalLongTitle">Załącz zgłoszenie</h5>
+													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														 <span aria-hidden="true">&times;</span>
+													 </button>
+													</div>
+												  <div class="modal-body">
+													 <form method="POST" action="/addzgloszenie:<%= detailstab[0].id_application %>" enctype="multipart/form-data" >
+													<input type="file" class="form-control-file" id="zgloszenie" name="zgloszenie" ></input><br>
+													<button type="submit" id="but">
+													 Załącz skan zgłoszenia
+													</button>
+													</form>
+												  </div>
+												
+													</div>
+												 </div>
+												</div>
+    </div>
+  </div>
+	
   </div>
 							
 							</div>

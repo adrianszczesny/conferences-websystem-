@@ -13,26 +13,17 @@
 <% let j = 1; %>
 <form  method="POST" action="/buy:<%= tabresult[0].id_event %>">
 <div class="container">
-  <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
-  <t class="text-center">ZGŁOSZENIE NA SZKOLENIE</t>
-  <h4> </h4>
 <tbody>
   <div class="card"> 
-  <div class="card-header">
-	 <h4 class="text-center">  <%= tabresult[0].topic %> </h4>
-	 </div>
-	 <div class="card-body">
+ 	 <div class="card-body">
+	 <h3 id="title" align="center" style="font-size:25px;"> zgłoszenie na szkolenie</h3><hr>
+	 <h3 id="title" align="center" > <%= tabresult[0].topic %> </h3>
 		<h6 class="card-title"><i class="fas fa-table"></i>  <%=tabresult[0].date %> </h6>
 		
 		<h6 class="card-title"> <i class="fas fa-map-marker-alt"></i> <%=tabresult[0].city %>, Hotel <%=tabresult[0].hotel %></h6>
-	</div>
-  </div>
-   <h4> </h4>
-  <div class="card">
-   <div class="card-header">
-  <h5 class="text-center">Uczestnicy</h5>
-  </div>
-  <div class="card-body">
+	<hr>
+  <h3 id="title" align="center" > Uczestnicy </h3>
+
     <div id="table" class="table-editable">
       <span class="table-add float-right mb-3 mr-2"><a href="#!" class="text-success">
 	  <i class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
@@ -65,19 +56,14 @@
         </tbody>
       </table>
     </div>
-  </div>
-</div>
-  <h4> </h4>
- <div class="card">
-	 <div class="card-header">
-  <h5 class="text-center">Dane do faktury</h5>
- </div>
+	<br>
+	<hr>
+<h3 id="title" align="center" > Dane do faktury </h3>
  <% if(odb == true) { %>
-  <div class="card-header">
-		<h5 class="text-center">Nabywca:</h5>
-  </div>
+		<hr><h3 id="title" align="center" > Nabywca </h3>
+
    <%  } %>
-  <div class="card-body">
+
     <div class="form-group row">
 		<label for="nip" class="col-sm-2 col-form-label">NIP:</label>
 		<div class="col-sm-10">
@@ -106,18 +92,14 @@
     </div>
   </div>
  
-  </div>
-</div>
+
 
   <h4> </h4>
  <% if(odb == true) { %>
-<div class="card">
-	<div class="card-header">
-		<h5 class="text-center">Odbiorca:</h5>
-	</div>
 
- <h4> </h4>
- <div class="card-body">
+		<hr><h3 id="title" align="center" > Odbiorca </h3>
+
+
 	<div class="form-group row">
 		<label for="nazwa" class="col-sm-2 col-form-label">Nazwa firmy/instytucji:</label>
 		<div class="col-sm-10">
@@ -131,16 +113,11 @@
 			<input type="text" readonly class="form-control-plaintext" id="adres2" name="adres2" value="<%= account[0].adres2 %>" placeholder="Podaj adres siedziby">
 		</div>
 	</div>
-</div>
-</div>
+
  <%  } %>
  <h4> </h4>
 
-  <div class="card">
-	 <div class="card-header">
-  <h5 class="text-center">Warunki uczestnictwa</h5>
- </div>
- <div class="card-body">
+ <hr><h3 id="title" align="center" > Warunki uczestnictwa </h3>
  <ul>
  <li>Kartę zgłoszeniową należy przesłać za pomocą systemu w kolejnym kroku, mailem (konsult@konsult.edu.pl) <br>lub faksem (71 735 80 68).</li>
  <h3></h3>
@@ -152,12 +129,11 @@
  i przekazaniu oryginału na szkoleniu lub odesłaniu oryginału pocztą.</li>
  </ul>
 
- </div>
- </div>
 
 
 
-  <h2></h2>
+  <hr><h3 id="title" align="center" > Zgody </h3>
+ 
  <div class="form-group">
     <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="invalidCheck3" required>
@@ -168,9 +144,9 @@
         You must agree before submitting.
       </div>
     </div>
-  </div>
+  
 
-   <div class="form-group">
+   <br>
     <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="invalidCheck3" required>
       <label class="form-check-label" for="invalidCheck3">
@@ -181,24 +157,25 @@
       </div>
     </div>
   </div>
-  <h2></h2>
+   <hr><h3 id="title" align="center" > Zwolnienie z VAT </h3>
   <div class="form-check">
   <input type="hidden" name="check[0]" value="0" />
 	<input class="form-check-input" type="checkbox" name="check[0]" value="1" />
   <label class="form-check-label" for="zw">
-   <b>Zwolnie z VAT</b><br>
    <b> Oświadczam, iż środki wydatkowane na ww. szkolenie pochodzą w co najmniej 70% ze środków publicznych a niniejsze oświadczenie ma na celu możliwość zastosowania stawki zwolnionej z VAT zgodnie z przepisami ustawy o podatku od towarów i usług.
    </b>
   </label>
 </div>
 
-<h2></h2>
+
 
    <div class="col-md-12 text-center"> 
-                    <button type="submit" class="btn btn-info ">
+                    <button type="submit" id="but" style="width:300px; margin-top:70px;">
                         Zapisz się
                     </button>
                 </div>
+				 </div>
+ </div>
 </form>
 </div>
 </tbody>

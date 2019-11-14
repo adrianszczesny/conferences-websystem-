@@ -11,13 +11,12 @@
 
     <% include ../../../partials/header-manager %>
     <form method="POST" action="/addnewuser">
-        <div class="container">
-            <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
-            <t class="text-center">NOWY KLIENT</t>
-            <h4> </h4>
+        <div class="container" style="margin-top:30px;">
+           
             <tbody>
                 <div class="card">                    
                     <div class="card-body">
+					<h3 id="title" align="center" style="margin-bottom:30px;"> Nowy klient</h3>
                         <div class="form-group row">
                             <label for="event" class="col-sm-2 col-form-label" >Temat:</label>
                             <div class="col-sm-10 align-self-center">
@@ -49,7 +48,7 @@
 	                                <% }  %>
                                 </select>
                                <% }  %>
-                               <button type="button" class="btn btn-info" data-toggle="modal" data-target="#newcompany">
+                               <button type="button" id="but" data-toggle="modal" data-target="#newcompany">
 													Dodaj nową firmę
 												</button>
 							</div>
@@ -123,7 +122,7 @@
 
 <hr>
 <div class="col-md-12 text-center">
-                    <button type="submit" class="btn btn-info ">
+                    <button type="submit" id="but">
                         Dodaj
                     </button>
                 </div>

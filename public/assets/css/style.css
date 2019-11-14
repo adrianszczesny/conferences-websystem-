@@ -257,6 +257,7 @@ article {
     margin: 25px 0 0 0;
 }
 
+
 .container a,
 .container a:hover{
     text-decoration:none;
@@ -940,7 +941,7 @@ info p {
         }
 
 /*headings*/
-.fs-title {
+#title {
     font-size: 18px;
     text-transform: uppercase;
     color:#000066;
