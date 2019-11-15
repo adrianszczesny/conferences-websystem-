@@ -13,6 +13,7 @@ var puppeteer = require('puppeteer');
 var ejs = require('ejs');
 var path = require('path');
 var nodemailer = require('nodemailer');
+var generatePassword = require('password-generator');
 
 
 
@@ -65,8 +66,8 @@ var transporter = nodemailer.createTransport({
     ignoreTLS: false,
     requireTLS: true,
     auth: {
-        user: '###########',
-        pass: '###########'
+        user: 'adriano4.1996@o2.pl',
+        pass: '##########'
     },
     tls: {
         secureProtocol: "TLSv1_2_method",
@@ -103,7 +104,8 @@ router.use(express.static("../public"));
 router.get('/', (req, res) =>  {
 	addRouteInfo(req);
     console.log(req.session.routerInfo);
-    console.log("id:" + req.session.user );
+    console.log("id:" + req.session.user);
+    req.session.returnTo = '/';
     res.render("pages/home", { req: req.session.user, logout: false});
 });
 
@@ -296,6 +298,12 @@ router.get('/addnewuser', (req, res) => {
     isLog(req, res);
     addnewuser(req, res, '');
 });
+
+router.post('/powiadom', (req, res) => {
+    isLog(req, res);
+    powiadom(req, res, '');
+});
+
 
 /*
  * MANAGER
@@ -506,7 +514,8 @@ function loginAuthQuery(req, res, url) {
                     console.log("3");
                     console.log(req.session.id);
                     console.log("4");
-                    res.redirect('/');
+                    console.log(req.session.returnTo);
+                    res.redirect(req.session.returnTo || '/');
                 }
                 else {
                     console.log("bad");
@@ -557,9 +566,20 @@ function update(req, res) {
 //GET lista aktualnych szkolen
 function list(req, res, url) {
     var currentdate = mydate('date');
-    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.state=1 AND event.date > ? ORDER BY event.date ASC ', [currentdate], function (error, result, fields) {
+    var city;
+    if (req.query.city) {
+        city = 'SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.state=1 AND event.date > ? AND event.city= "' + req.query.city + '" ORDER BY event.date ASC ';
+        console.log(city);
+    } else {
+        city = 'SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.state=1 AND event.date > ? ORDER BY event.date ASC ';
+        console.log(city);
+    }
+    
 
-        let tabresult = [];
+    connection.query(city, [currentdate], function (error, result, fields) {
+        connection.query('SELECT city FROM event WHERE state=1 GROUP BY city', [], (error, city, fields) => {
+            res.locals.city = city;
+       
         for (let i = 0; i < result.length; i++) {
             console.log("data x2");
             console.log(result[i].date);
@@ -573,7 +593,8 @@ function list(req, res, url) {
         }
 
         res.locals.tabresult = result;
-        res.render('pages/client/list', { req: req.session.id, tabresult: res.locals.tabresult });
+        res.render('pages/client/list', { req: req.session.id, tabresult: res.locals.tabresult, city: res.locals.city });
+        });
     });
 }
 
@@ -807,6 +828,7 @@ function deleteapp(req, res) {
 
 //GET szczegoly zamowienia szkolenia
 function details(req, res) {
+    isLog(req, res);
     let application = req.params.id;
     let done = false;
     console.log(req.query.done);
@@ -819,7 +841,7 @@ function details(req, res) {
     connection.query('SELECT id_event FROM application WHERE id_application = ?', [application], (error, even, fields) => {
         connection.query('SELECT user.id_company FROM user WHERE user.id_User = ?', [req.session.user], (error, company, fields) => {
             console.log("company", company);
-            connection.query('SELECT user.imie, user.nazwisko, user.stanowisko, application.id_application,application.zgloszenie FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [even[0].id_event, company[0].id_company], (error, results, fields) => {
+            connection.query('SELECT user.id_User, user.imie, user.nazwisko, user.email, user.stanowisko, user.id_company, application.id_application,application.zgloszenie FROM application INNER JOIN user ON application.id_User = user.id_user WHERE application.id_event = ? AND user.id_company = ?', [even[0].id_event, company[0].id_company], (error, results, fields) => {
                 
                 res.locals.detailstab = results;
                 console.log("results", results);
@@ -919,6 +941,47 @@ function addzgloszenie(req, res) {
                 res.redirect('back');
         });
     });
+}
+
+function powiadom(req, res) {
+    let user = req.body.user;
+    let email = req.body.email;
+    let app = req.body.application;
+    let password = generatePassword();
+    if (email == '' || password == '') {
+        res.redirect('back');
+    }
+    else {
+        
+                bcrypt.hash(password, 10, function (err, p_hash) {
+                console.log(p_hash);
+                let haslo = p_hash;
+                    connection.query('UPDATE user SET email=? ,password=? WHERE id_User = ? ', [email, haslo, user], function (error, results, fields) {
+                    let jak = "jakis tekst blablablabla";
+                    var mailOptions = {
+                        from: 'adriano4.1996@o2.pl',
+                        to: email,
+                        subject: 'Potwierdzenie szkolenia',
+                        text: 'Zostałeś zapisany na szkolenie. Aby móc sprawdzić szczegóły o szkoleniu kliknij w link: http://localhost:3000/details:' + app+ '   Zaloguj się używając danych: Login: ' + email + 'Hasło:  ' + password+  '  .Zaraz po zalogowaniu zmień hasło wchodząc w "MOJE DANE". '
+                    };
+
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('Email wysłany: ' + info.response);
+                            res.render('pages/login', { req: req.session.user, error: false, email: false, password: false, reset: true });
+                        }
+                    });
+
+                    res.redirect('back');
+                });
+            });
+
+        
+        
+    }
+
 }
 
 
@@ -1496,14 +1559,16 @@ function print(req, res) {
             try {
                 var tabil = [];
                 console.log("weszlo");
-                if (ile > 20) { tabil[0] = 20; }
+                if (ile > 15) { tabil[0] = 15; }
                 else {tabil[0] = ile;}
-                if (ile > 40) { tabil[1] = 40; }
+                if (ile > 30) { tabil[1] = 30; }
                 else { tabil[1] = ile; }
-                if (ile > 60) { tabil[2] = 60; }
+                if (ile > 45) { tabil[2] = 45; }
                 else { tabil[2] = ile; }
-                if (ile > 80) { tabil[3] = 80; }
+                if (ile > 60) { tabil[3] = 60; }
                 else { tabil[3] = ile; }
+                if (ile > 75) { tabil[3] =75; }
+                else { tabil[4] = ile; }
 
                     lista = await ejs.renderFile(path.join(__dirname, '../views/pages/', "listak.ejs"), { events: res.locals.eventtab, result: res.locals.result, ile: tabil });
                
@@ -1630,6 +1695,7 @@ function printcert(req, res) {
 
 function isLog(req,res) {
     if (req.session.user == undefined || req.session.user == null) {
+        req.session.returnTo = req.originalUrl;
         res.redirect('/loginPage');
     }
 }
@@ -1648,7 +1714,7 @@ function changedate(data) {
     let date = data;
     let year = date.getFullYear();
     let month = date.getMonth()+1;
-    let day = date.getDate();
+    let day = date.getDate() - 1;
     return day + '.' + month + '.' + year;
 }
 

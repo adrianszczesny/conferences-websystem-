@@ -11,7 +11,7 @@
 <% include ../../../partials/header-manager %>
 
 <tlo>
-    <!-- Główna-->
+   
 	<div class="container">
 	
 	<tbody>
@@ -28,10 +28,10 @@
 					<div class="col-5 align-self-center">
 						<a  href="/editevents:<%= eventtab[0].id_event %>" > <input id="but" type="button" name="next"  style="border-radius: 25px 0px 0px  25px; width: 200px;" value="Edytuj szkolenie" /> </a>
 						<% if(eventtab[0].state==1){ %>
-						<input type="button" id="but" name="next" data-toggle="modal" data-target="#odwolanie" class="next action-button"  style="background:#990000; border-radius: 0px 25px  25px 0px; width: 200px;" value="Odwołaj szkolenie"/><a>
+						<input type="button" id="but" name="next" data-toggle="modal" data-target="#odwolanie" class="next action-button"  style="background:#990000; border-radius: 0px 25px  25px 0px; width: 200px;" value="Odwołaj szkolenie"/></a>
 						<% } %>	  
 						<% if(eventtab[0].state==2){ %>
-						<input type="button" id="but" name="next" data-toggle="modal" data-target="#przywracanie" class="next action-button"  style=" background:green; border-radius: 0px 25px  25px 0px; width: 200px;" value="Przywróć szkolenie"/><a>
+						<input type="button" id="but" name="next" data-toggle="modal" data-target="#przywracanie" class="next action-button"  style=" background:green; border-radius: 0px 25px  25px 0px; width: 200px;" value="Przywróć szkolenie"/></a>
 						<% } %>				
 					</div>
 			

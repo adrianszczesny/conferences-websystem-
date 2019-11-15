@@ -30,7 +30,7 @@
 			<% if(zgl.lenght<1){ %>
 			<i class="fas fa-user"></i><a href="/showcompany:<%= company[0].id_company %>" >  <%= company[0].name %> - <%= company[0].name2 %> </a></h6>
 			<% }else{ %>
-			<i class="fas fa-user"></i><a href="/showuser:<%= zgl[0].id_User %>" > <%= zgl[0].imie %> <%= zgl[0].nazwisko %></a><a href="/showcompany:<%= zgl[0].id_company %>" > ( <%= zgl[0].name %> - <%= zgl[0].name2 %> )</a></h6>
+			<i class="fas fa-user"></i><a href="/showuser:<%= zgl[0].id_User %>"> <%= zgl[0].imie %> <%= zgl[0].nazwisko %> </a><a href="/showcompany:<%= zgl[0].id_company %>" > ( <%= zgl[0].name %> - <%= zgl[0].name2 %> )</a></h6>
 			<% } %>
             </div>
         </div>

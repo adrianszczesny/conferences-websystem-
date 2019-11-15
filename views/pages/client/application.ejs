@@ -12,7 +12,7 @@
 <% include ../../partials/header %>
 <% let j = 1; %>
 <form  method="POST" action="/buy:<%= tabresult[0].id_event %>">
-<div class="container">
+<div class="container" style="margin-top:20px;">
 <tbody>
   <div class="card"> 
  	 <div class="card-body">
@@ -117,7 +117,7 @@
  <%  } %>
  <h4> </h4>
 
- <hr><h3 id="title" align="center" > Warunki uczestnictwa </h3>
+ <br><hr><h3 id="title" align="center" > Warunki uczestnictwa </h3><hr>
  <ul>
  <li>Kartę zgłoszeniową należy przesłać za pomocą systemu w kolejnym kroku, mailem (konsult@konsult.edu.pl) <br>lub faksem (71 735 80 68).</li>
  <h3></h3>
@@ -132,7 +132,7 @@
 
 
 
-  <hr><h3 id="title" align="center" > Zgody </h3>
+  <br><hr><h3 id="title" align="center" > Zgody </h3><hr>
  
  <div class="form-group">
     <div class="form-check">
@@ -157,7 +157,7 @@
       </div>
     </div>
   </div>
-   <hr><h3 id="title" align="center" > Zwolnienie z VAT </h3>
+   <br><hr><h3 id="title" align="center" > Zwolnienie z VAT </h3><hr>
   <div class="form-check">
   <input type="hidden" name="check[0]" value="0" />
 	<input class="form-check-input" type="checkbox" name="check[0]" value="1" />

@@ -12,8 +12,17 @@
 
 <% include ../../partials/header %>
   <div class="container">
-  <img class="index-header" src="/assets/images/index-header.jpg" alt="header-image" />
-  <t class="text-center">AKTUALNE SZKOLENIA</t>
+  <div class="card" style=" margin-top:30px; ">
+  <div class="col-12 text-center">
+<h3 id="title" align="center" style="font-size:25px; margin-bottom:20px;"> Aktualne szkolenia </h3>
+<a href="/list"> <input type="button" id="butfilter"  value="Wszystkie"/></a>
+<% for(let i=0; i < city.length; i++){ %>
+<a href="/list?city=<%= city[i].city %>"> <input type="button" id="butfilter"  value="<%= city[i].city %>"/></a>
+<% } %>
+ </div>
+ <br>
+ </div>
+  
 	<tbody>
 		<% for(var i = 0; i < tabresult.length; i++) { %>
 		<h4> </h4>
@@ -21,7 +30,7 @@
 			<a href="/info:<%= tabresult[i].id_event %>" class="card-body">
 				<div class="row ">
 					<div class="col-9 align-self-center">
-						<h5 class="card-title"> <%= tabresult[i].topic %> </h5>
+						<h5 class="card-title" style="color: #000066;"> <%= tabresult[i].topic %> </h5>
 						
 					</div>
 

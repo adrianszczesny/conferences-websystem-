@@ -1,11 +1,10 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic,500italic,700italic);
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: montserrat;
     font-size: 18px;
     color: #999999;
     line-height: 1;
-   
 }
     body * {
         text-shadow: none !important;
@@ -14,11 +13,11 @@ body {
     }
 
 header {
-    font-family: 'Roboto', sans-serif;
+    font-family: montserrat;
     font-size: 18px;
     color: #999999;
     line-height: 1;
-    background-color:white;
+    background-color: white;
 }
 footer {
     background-color: white;
@@ -41,24 +40,66 @@ p {
 textarea {
     max-width: 100%;
 }
+.card-login{
+    width:100%;
+    position: absolute;
+    top:0px;
+ 
+}
 
 
-#but  {
+#but {
     width: 200px;
     background: #000066;
     font-weight: bold;
-    font-size:15px;
+    font-size: 15px;
     color: white;
     border: 0 none;
     border-radius: 25px;
     cursor: pointer;
     padding: 10px 5px;
     margin: 10px 5px;
+    font-family: montserrat;
+}
+
+#butfilter {
+    width: 100px;
+    background: #000066;
+    font-weight: bold;
+    font-size: 15px;
+    color: white;
+    border: 0  none;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 3px 2px;
 }
 
     #but:hover, #but:focus {
         box-shadow: 0 0 0 2px white, 0 0 0 3px #000066;
+    } 
+    #butfilter:hover, #butfilter:focus {
+        box-shadow: 0 0 0 2px white, 0 0 0 3px #000066;
     }
+
+
+
+table, th {
+    vertical-align:center;
+    color: #000066;
+    border: 1px solid #000066;
+    text-align:center;
+}
+
+td {
+    vertical-align: center;
+    color: black;
+    text-align: center;
+}
+a:hover {
+    background-color: #f5f5f5;
+}
+
+
 input[type="text"], select, textarea, input[type="email"] {
     -webkit-border-radius: 0 !important;
     -moz-border-radius: 0;
@@ -159,14 +200,14 @@ header #logo {
 .dropdown-menu > .active > a {
     background-color: #e7e7e7;
 }
-.navbar .nav > li.active > a,
-.navbar .nav > li.active:hover > a,
-.navbar .nav > li:hover > a,
-.navbar .nav > li > a:focus,
-.navbar .nav > li.active > a:focus {
+.navbar .nav > li.active > a > b,
+.navbar .nav > li.active:hover > a > b,
+.navbar .nav > li:hover > a > b,
+.navbar .nav > li > a:focus > b:focus,
+.navbar .nav > li.active > a:focus > b:focus {
     background-color: none;
     background-image: none;
-    color: #000;
+    color: black;
     filter: none;
 }
 .input-group-addon {
@@ -242,11 +283,7 @@ article {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
-    color: #fff;
-    border: 1px solid transparent;
-    background: #303437;
-}
+
 #logo {
     margin-top: 10px;
 }

@@ -13,14 +13,14 @@
 
 
 <div class="container">
-  <img class="index-header-my" src="/assets/images/index-header-my.jpg" alt="header-image" />
-  <t class="text-center">MOJE SZKOLENIA</t>
-  <h4> </h4>
+<div class="card" style="background:  #000066; margin-top:30px; ">
+<h3 id="title" align="center" style="color:white; font-size:25px; margin-bottom:20px;"> Moje szkolenie </h3>
+ </div>
 		
 <ul id="list-nav" class="nav nav-tabs nav-justified" role="tablist">
 	
 <li class="nav-item ">
-<a class="nav-link active" href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Nadchodzące</a>
+<a class="nav-link active" href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true" >Nadchodzące</a>
 </li>
 
 <li class="nav-item">
@@ -43,8 +43,8 @@
 		<div class="card">
 			<a href="/details:<%= mytabresult[i].id_application %>" class="card-body">
 				<div class="row">
-					<div class="col-8 align-self-center">
-						<h5 class="card-title"> <%= mytabresult[i].topic %> </h5>
+					<div class="col-6 align-self-center">
+						<h5 class="card-title" style="color: #000066;"> <%= mytabresult[i].topic %> </h5>
 						
 					</div>
 					<div class="col-2 align-self-center">
@@ -52,7 +52,7 @@
 						<span class="badge badge-danger"> SZKOLENIE ODWOŁANE</span> 
 					<% } %>
 					</div>
-					<div class="col-2 ">					
+					<div class="col-4 ">					
 						<p class="card-text"><i class="fas fa-user-graduate"></i>  <%= mytabresult[i].Name %> </p>
 						<p class="card-text"><i class="fas fa-map-marker-alt"></i>  <%= mytabresult[i].city %></p>
 						<p class="card-text"><i class="fas fa-table"></i> <%= mytabresult[i].date %></p>

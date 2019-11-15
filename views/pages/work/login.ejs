@@ -11,58 +11,54 @@
 <body>
     <% include ../../partials/header-manager %>
 
-    <main>
+	<div class="container" >
         <% if(error == true && email == true){ %>
         <div class="alert alert-danger role="alert">Nieprawidłowy email</div>
         <% } %>
         <% if(error == true && password == true){ %>
         <div class="alert alert-danger role="alert">Niepoprawne hasło</div>
         <% } %>
-
-        <div class="slider">
-            <img class="index-woman" src="/assets/images/index_woman.png" alt="" />
-            <img class="index-header" src="/assets/images/index-header.jpg" alt="header-image" />
-            <p> LOGOWANIE </p>
-            <form method="POST" action="/login-worker">
-                <e><br> E-Mail:</e>
-                <div class="form-group-email">
+	
+		<tbody>
+        <div class="card mt-4" style="width: 700px; left: 20%;" >
+            <div class="card-body">
+				
+				<div class="row align-items-center ">
+				<div class="col-6 text-center">
+				<img src="/assets/images/index_woman.png" alt="" style=" max-height: 80%; max-width: 80%;" />
+				</div>
+					<div class="col-6 text-center">
+					<h3 id="title" align="center"> Logowanie</h3>
+					<form method="POST" action="/login-worker">
+                <br>
+                
                     <label for="email">
-                        <input id="email" type="email" class="form-control" name="email" placeholder="Wpisz E-mail" required>
+                        <input id="email" type="email" class="form-control" name="email" placeholder="Wpisz E-mail" style="width:300px;" required>
                     </label>
-                </div>
+                
 
-                <j><br> Hasło:</j>
-                <div class="form-group-pass">
+                <br>
+               
                     <label for="password">
-                        <input id="password" type="password" class="form-control" name="password" placeholder="Wpisz Hasło" required data-eye>
+                        <input id="password" type="password" class="form-control" name="password" placeholder="Wpisz Hasło" style="width:300px;" required data-eye>
                     </label>
-               </div>
+              
 
 
 
-                <div class="form-group-button">
-                    <button type="submit" class="btn btn-info " >
+                <div class="form-group">
+                    <button type="submit" id="but" >
                         Zaloguj
                     </button>
                 </div>
 
             </form>
         </div>
-		 <div class="container main-page">
-            <div class="row main-page-title">
-				<div class="col-md-9 col-lg-8 col-sm-12">
-                    <h2 class="text-center"><B>Nie pamiętasz hasła?</B></h2>
-                </div>
-                <div class="col-md-3 col-lg-4 col-sm-12">
-                    <a class="btn btn-default" href="/login">Zresetuj hasło</a>
-                </div>
-				
-            </div>
-		</div>
-
-
-
-
+        </div>
+        </div>
+        </div>
+        </div>
+		 
 
 
         <% include ../../partials/error %>
