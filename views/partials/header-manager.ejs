@@ -1,6 +1,7 @@
 <header>
- <% if (req != undefined && req != null && admin == true) { %>
-  <div class="container">
+ <% if (req != undefined && req != null) { %>
+   <% if ( admin == true) { %>
+   <div class="container">
     <div class="navbar navbar-default">
       <div class="container">
         <h1><a href="/work"><img class="pull-left" src="/assets/images/logo.jpg" alt="Konsult &#8211; Centrum szkolenia i doradztwa"></a></h1>
@@ -16,13 +17,38 @@
           </li>
           <li id="nav-link" class="nav-link"><a href="/trainers" ><b>Wykładowcy</b></a></li>
           <li id="nav-link" class="nav-link"><a href="/employers" ><b>Pracownicy</b></a></li>
-					<li id="nav-link" class="nav-link"><a href="/clientbase" ><b>Baza klientów</b></a></li>
           <li id="nav-link" class="nav-link"><a href="/logoutPage" ><b>Wyloguj</b></a></li>
         </ul>
       </div>                   
     </div>
   </div>
-  <% } else { %>
+     <% } else { %>
+       <div class="container">
+       <div class="navbar navbar-default">
+         <div class="container">
+           <h1>
+             <a href="/myevent">
+               <img class="pull-left" src="/assets/images/logo.jpg" alt="Konsult &#8211; Centrum szkolenia i doradztwa">
+             </a>
+           </h1>
+           <ul class="nav justify-content-end">
+            
+             <li id="nav-link" class="nav-link">
+               <a href="/myevent" >
+                 <b>Moje szkolenia</b>
+               </a>
+             </li>
+            
+             <li id="nav-link" class="nav-link">
+               <a href="/logoutPage" >
+                 <b>Wyloguj</b>
+               </a>
+             </li>
+           </ul>
+         </div>
+       </div>
+     </div>
+  <% }} else { %>}
       <div class="container">
     <div class="navbar navbar-default">
       <div class="container">

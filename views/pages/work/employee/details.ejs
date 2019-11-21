@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+	 <title>
+       Szczegóły zamówienia   </title>
+	<meta charset="UTF-8">
+<% include ../../../partials/head %>
+
+</head>
+<body>
+<% include ../../../partials/header-manager %>
+
+<tlo>
+   
+	<div class="container">
+	
+	<tbody>
+        <div class="card mt-4">
+            <div class="card-body">
+				<h3 id="title" align="center"> <%= eventtab[0].topic %></h3>
+				<div class="row ">
+					<div class="col-7 align-self-center">
+						<h6><i class="fas fa-user-graduate"></i>  <%= eventtab[0].Name %></h5>
+						<h6><b><i class="fas fa-map-marker-alt"></i> <%= eventtab[0].city %></b>, Hotel <%= eventtab[0].hotel %> </h5> 
+						<h6> <b><i class="fas fa-table"></i> <%= eventtab[0].date %> r.</b> (godz. 9:00-15:00)</h5>
+						<h6> <i class="fas fa-coins"> <%= eventtab[0].price %> zł/os. netto</i></h5>
+					</div>
+					
+			
+			
+
+			</div>
+			</div>
+            </div>
+        
+        <!-- /.card -->
+
+
+            <!-- uczestnicy -->
+                <div class="card card-outline-secondary my-4">
+                        
+                            <div class="card-body">
+							<h3 id="title" align="center"> Uczestnicy:</h3>
+                                <div id="table" class="table-editable ">
+                                        <span class="table-add float-right mb-3 mr-2" ><a href="/addnewuser?event=<%= eventtab[0].id_event %>" class="text-success">
+                                        <i class="fas fa-plus fa-2x" aria-hidden="true" style="color:  #000066;"></i></a></span>
+                                        <table class="table table-bordered table-responsive-md table-striped text-center">
+                                          <thead>
+                                            <tr>
+											  <th class= "text-center"> Lp. </th> 
+                                              <th class="text-center">Imię</th>
+                                              <th class="text-center">Nazwisko</th>
+                                              <th class="text-center">Instytucja</th>
+                                              <th class="text-center">Zgłoszenie</th>
+											   <th class="text-center"> </th>
+                                            </tr>
+                                          </thead>
+                                                                             
+											<% for(let i = 0; i < detailstab.length; i++) { %>
+                                            
+                                            <tr>
+											<td> 
+											<a href="/showapplication:<%= detailstab[i].id_application %>" ><%= i+1 %>.</a>
+											</td>
+                                            <td>
+                                            <a href="/showapplication:<%= detailstab[i].id_application %>" ><%= detailstab[i].imie %></a>
+                                            </td>
+                                             <td>
+                                            <a href="/showapplication:<%= detailstab[i].id_application %>" ><%= detailstab[i].nazwisko %></a>
+                                            </td>
+                                              <td>
+                                            <a href="/showcompany:<%= detailstab[i].id_company %>" > <%= detailstab[i].name %> </a> - 
+											 <a href="/showcompany:<%= detailstab[i].id_company %>" ><%= detailstab[i].name2 %> </a>
+                                            </td>
+
+                                            <td>
+                                                
+												<% if(detailstab[i].zgloszenie != null ){ %>
+												<span class="badge badge-success"><i class="fas fa-check" style = " color:white"></i></span>
+												<% } else { %>
+												<span class="badge badge-danger"><i class="fas fa-minus" style = " color:white"></i></span>
+												<% } %>
+                                            </td>
+
+
+												<td>
+                                                
+												<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rezygnacja-<%= detailstab[i].id_application %>">
+													Rezygnacja
+												</button>
+												<div class="modal fade" id="rezygnacja-<%= detailstab[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												 <div class="modal-dialog modal-dialog-centered" role="document">
+												  <div class="modal-content">
+												   <div class="modal-header">
+													   <h5 class="modal-title" id="exampleModalLongTitle">Rezygnacja</h5>
+													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														 <span aria-hidden="true">&times;</span>
+													 </button>
+													 </div>
+												  <div class="modal-body">
+													  Sure? 
+												  </div>
+												   <div class="modal-footer">
+												   <a href="/deleteapp:<%= detailstab[i].id_application %>" class="btn btn-danger">Usuń</a>
+														 </div>
+													</div>
+												 </div>
+												</div>
+                                            </td>
+                                            </tr>
+                                           <% } %>
+                                          
+                                        </table>
+                                      </div>
+                                      
+									</div>
+									
+                      </div>
+	
+                  
+		
+		<!-- /.card -->
+
+		
+      </div>
+</tbody>	  
+  </tlo>     
+<% include ../../../partials/error %>
+</main>
+<% include ../../../partials/footer %>
+
+
+</body>
+</html> 

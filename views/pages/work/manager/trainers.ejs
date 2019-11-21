@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+	 <title>
+        Prowadzący    </title>
+	<meta charset="UTF-8">
+<% include ../../../partials/head %>
+
+</head>
+
+<body>
+
+<% include ../../../partials/header-manager %>
+  <div class="container" >
+
+
+<div class="card" style=" margin-top:30px; ">
+<h3 id="title" align="center" style=" font-size:25px; margin-bottom:20px;"> wykładowcy</h3>
+	<div class="row  align-self-center ">
+<button type="button " id="but" data-toggle="modal" style="width:500px;" data-target="#new">
+													Dodaj 
+							</button>
+
+</div>
+</div>
+ <div class="modal fade" id="new" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+												 <div class="modal-dialog modal-dialog-centered modal-lg" role="document"   >
+												  <div class="modal-content" >
+												   <div class="modal-header text-center">
+													   <h3 class= "col-10 modal-title text-center" id="title" align="center" style="font-size:20px; margin-bottom:20px;"> Nowy prowadzący </h3>
+													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														 <span aria-hidden="true">&times;</span>
+													 </button>
+													 </div>
+												  <div class="modal-body">
+												  <form method="POST" action="/newtrainer" >
+													  	 
+															<input type="text" class="form-control" name="name" placeholder="Imię i nazwisko" />
+														 <br>
+														 
+															<input type="text" rows="5"  class="form-control" name="description" placeholder="Informacje"/>
+														<br>
+												   <button type="submit" id="but">
+													 Dodaj
+													</button>
+													</form>
+												  
+												   </div>
+												</div>
+												 </div>
+												</div>
+
+
+  
+  </t>
+	<tbody>
+		<% if(trainer.length == 0){ %>
+		<h4><br> Brak prowadzących. </h4>
+		<%}else{
+	     for(var i = 0; i < trainer.length; i++) { %>
+		<h4> </h4>
+		<div class="card">
+			<div class="card-body">
+				<div class="row ">
+					<div class="col-9 align-self-center">
+						<h5 class="card-title" style="color: #000066;"> <%= trainer[i].Name %> </h5>
+						
+					</div>
+
+					<div class="col-3">					
+							<button type="button" id="but" data-toggle="modal" data-target="#edit-<%= trainer[i].id_trainer %>">
+													Edytuj
+							</button>
+												<div class="modal fade" id="edit-<%= trainer[i].id_trainer %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+												 <div class="modal-dialog modal-dialog-centered modal-lg" role="document"   >
+												  <div class="modal-content" >
+												   <div class="modal-header text-center">
+													   <h3 class= "col-10 modal-title text-center" id="title" align="center" style="font-size:20px; margin-bottom:20px;"> Edytuj prowadzącego </h3>
+													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														 <span aria-hidden="true">&times;</span>
+													 </button>
+													 </div>
+												  <div class="modal-body">
+												  <form method="POST" action="/edittrainer:<%= trainer[0].id_trainer %>" >
+													  	 
+															<input type="text" class="form-control" name="name" value="<%= trainer[i].Name %>"/>
+														 <br>
+														 
+															<input type="text" rows="5"  class="form-control" name="description" value="<%= trainer[i].description %>"/>
+														<br>
+												   <button type="submit" id="but">
+													 Zapisz zmiany
+													</button>
+													</form>
+												   </div>
+												</div>
+												 </div>
+												</div>
+												
+												
+				
+				</div>	
+				</div>	
+				</div>	
+			</div>  
+		
+        <% };} %>       
+   </tbody>
+ </div>
+
+	 <% include ../../../partials/footer %>		
+</body>
+</html>  

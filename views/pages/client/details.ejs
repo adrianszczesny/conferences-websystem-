@@ -41,54 +41,34 @@
                                         <i class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
                                         <table class="table table-bordered table-responsive-md table-striped text-center">
                                           <thead>
+										  
+											<col width=auto>
+											<col width=auto>
+											<col width=auto>
+											<col width="300">
                                             <tr>
                                               <th class="text-center">Imię</th>
                                               <th class="text-center">Nazwisko</th>
                                               <th class="text-center">Stanowisko</th>
-                                              <th class="text-center">Rezygnacja</th>
-                                              <th class="text-center">Powiadom</th>
+                                              <th class="text-center"></th>
                                             </tr>
                                           </thead>
                                                                                 
 											<% for(let i = 0; i < detailstab.length; i++) { %>
                                             
                                             <tr>
-                                            <td>
+                                            <td style="vertical-align: middle;">
                                             <%= detailstab[i].imie %>
                                             </td>
-                                             <td>
+                                             <td style="vertical-align: middle;">
                                             <%= detailstab[i].nazwisko %>
                                             </td>
-                                              <td>
+                                              <td style="vertical-align: middle;">
                                             <%= detailstab[i].stanowisko %>
                                             </td>
-                                            <td>
+											<td style="vertical-align: middle;">
                                                 
-												<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rezygnacja-<%= detailstab[i].id_application %>">
-													Zrezygnuj
-												</button>
-												<div class="modal fade" id="rezygnacja-<%= detailstab[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="rezygnacjaTitle" aria-hidden="true">
-												 <div class="modal-dialog modal-dialog-centered" role="document">
-												  <div class="modal-content">
-												   <div class="modal-header">
-													   <h5 class="modal-title" id="rezygnacjaTitle">Rezygnacja</h5>
-													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-														 <span aria-hidden="true">&times;</span>
-													 </button>
-													 </div>
-												  <div class="modal-body">
-													  Jesteś pewny/a , że chcesz zrezygnować z tego szkolenia? 
-												  </div>
-												   <div class="modal-footer">
-												   <a href="/deleteapp:<%= detailstab[i].id_application %>" class="btn btn-danger">Zrezygnuj</a>
-														 </div>
-													</div>
-												 </div>
-												</div>
-                                            </td>
-											<td>
-                                                
-												<button type="button" class="btn btn-info" data-toggle="modal" data-target="#powiadom-<%= detailstab[i].id_application %>">
+												<button type="button" id="but" data-toggle="modal" style="  border-radius: 25px 0px 0px 25px; width: 150px;" data-target="#powiadom-<%= detailstab[i].id_application %>">
 													Powiadom
 												</button>
 												<div class="modal fade" id="powiadom-<%= detailstab[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="powiadomTitle" aria-hidden="true">
@@ -112,6 +92,7 @@
 																<% } else { %>
 																Na podany przez uczestnika e-mail wyślemy link do potwierdzenia szkolenia.
 																<% } %>
+																<br>
 																	<input type="email" class="form-control" id="email" name="email" placeholder="Podaj e-mail" value="<%= detailstab[i].email %>" >
 																</div>
 															</div>
@@ -124,7 +105,31 @@
 													</div>
 												 </div>
 												</div>
+                                            
+                                                
+												<button type="button" class="btn btn-danger" data-toggle="modal" style="  border-radius: 0px 25px  25px 0px; width: 100px;"data-target="#rezygnacja-<%= detailstab[i].id_application %>">
+													Zrezygnuj
+												</button>
+												<div class="modal fade" id="rezygnacja-<%= detailstab[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="rezygnacjaTitle" aria-hidden="true">
+												 <div class="modal-dialog modal-dialog-centered" role="document">
+												  <div class="modal-content">
+												   <div class="modal-header">
+													   <h5 class="modal-title" id="rezygnacjaTitle">Rezygnacja</h5>
+													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														 <span aria-hidden="true">&times;</span>
+													 </button>
+													 </div>
+												  <div class="modal-body">
+													  Jesteś pewny/a , że chcesz zrezygnować z tego szkolenia? 
+												  </div>
+												   <div class="modal-footer">
+												   <a href="/deleteapp:<%= detailstab[i].id_application %>" class="btn btn-danger">Zrezygnuj</a>
+														 </div>
+													</div>
+												 </div>
+												</div>
                                             </td>
+											
 
                                             </tr>
                                            <% } %>

@@ -472,6 +472,59 @@ router.get('/printcert::id', (req, res) => {
     printcert(req, res, '');
 });
 
+router.get('/trainers', (req, res) => {
+    trainers(req, res, '');
+});
+
+
+router.post('/edittrainer::id', (req, res) => {
+    edittrainer(req, res, '');
+});
+
+
+router.post('/newtrainer', (req, res) => {
+    newtrainer(req, res, '');
+});
+router.get('/employers', (req, res) => {
+    employers(req, res, '');
+});
+
+
+router.post('/editemployer::id', (req, res) => {
+    editemployer(req, res, '');
+});
+
+
+router.post('/newemployer', (req, res) => {
+    newemployer(req, res, '');
+});
+
+
+ /*
+ * EMPLOYER
+ */
+
+router.get('/myevent', (req, res) => {
+    console.log(req.session.user);
+    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, event.NoC, event.state FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_employee = ? ORDER BY event.date ASC', [req.session.user], (error, event, fields) => {
+        for (let i = 0; i < event.length; i++) {
+            event[i].date = changedate(event[i].date);
+        }
+
+        res.locals.tabresult = event;
+        res.render('pages/work/employee/list', { req: req.session.id, tabresult: res.locals.tabresult, admin: false, last: false });
+
+    });
+
+});
+
+//informacje o szkoleniu
+router.get('/eventdetail::id', (req, res) => {
+    eventdetail(req, res, '');
+});
+
+
+
  /*
  * FUNKCJE
  */
@@ -869,7 +922,8 @@ function zgloszenie(req, res) {
                 companies = req.query.company;
             }
             else {
-                companies = company[0].id_company;
+                    companies = company[0].id_company;
+               
             }
             console.log("companies  :" + companies);
             connection.query('SELECT * FROM company WHERE company.id_company = ?', [companies], (error, compan, fields) => {
@@ -884,24 +938,31 @@ function zgloszenie(req, res) {
                         console.log("event", event);
                         async function dopdf(ile) {
                             try {
-                                console.log("weszlo");
+                                console.log("weszlo " + ile);
                                 let zgl;
+
                                 if (ile < 6) {
                                 zgl = await ejs.renderFile(path.join(__dirname, '../views/pages/', "zgloszenie.ejs"), { events: res.locals.eventtab, result: res.locals.detailstab, company: res.locals.company });
                                 }
                                 else {
                                 zgl = await ejs.renderFile(path.join(__dirname, '../views/pages/', "zgloszenie2.ejs"), { events: res.locals.eventtab, result: res.locals.detailstab, company: res.locals.company });
                                 }
+                                console.log(zgl);
                                 const browser = await puppeteer.launch();
+                                console.log("1");
                                 const page = await browser.newPage();
+                                console.log("2");
                                 await page.setContent(zgl);
+                                console.log("3");
                                 await page.emulateMedia('screen');
+                                console.log("4");
                                 await page.pdf({
                                     path: './zgl.pdf',
                                     format: 'A4',
                                     border: '10mm',
                                     printBackground: true
                                 });
+                                
                                 console.log("zrobione");
                                 await browser.close();
                                 await res.download('./zgl.pdf');
@@ -922,8 +983,8 @@ function zgloszenie(req, res) {
 
                 });
             });
+       
         });
-
     });
 }
 
@@ -1019,7 +1080,12 @@ function loginAuthQueryWork(req, res, url) {
                     req.session.user = result[0].id_employee;
 
                     console.log("2");
-                    req.session.admin = true;
+                    if (result[0].manager == 1) {
+                        req.session.admin = true;
+                    } else {
+                        req.session.admin = false;
+                    }
+                   
                     console.log("3");
                     console.log(req.session.id);
                     console.log("4");
@@ -1027,7 +1093,7 @@ function loginAuthQueryWork(req, res, url) {
                         res.redirect('/conferences');
                     }
                     else {
-                       
+                        res.redirect('/myevent');
 
                     }
                 }
@@ -1056,7 +1122,7 @@ function conferences(req, res) {
 //GET lista zrealizaowanych szkolen
 function lastconferences(req, res) {
     var currentdate = mydate('date');
-    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, event.NoC, employee.name, employee.last_name FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer INNER JOIN employee ON event.id_employee = employee.id_employee WHERE event.state = 1 AND event.date < ? ORDER BY event.date ASC ', [currentdate], function (error, result, fields) {
+    connection.query('SELECT event.topic, trainer.Name, event.city, event.date, event.price, event.id_event, event.NoC, employee.name, employee.last_name FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer INNER JOIN employee ON event.id_employee = employee.id_employee WHERE event.state = 1 AND event.date < ? ORDER BY event.date DESC ', [currentdate], function (error, result, fields) {
 
 
         for (let i = 0; i < result.length; i++) {
@@ -1226,7 +1292,8 @@ function addnewuser(req, res) {
         console.log(values[1].length);
         //console.log(res.locals.company);
        // console.log(res.locals.event);
-        res.render('pages/work/manager/addnewuser', { req: req.session.user, event: values[0], company: values[1], admin:true });
+        let admin = isAdmin(req, res);
+        res.render('pages/work/manager/addnewuser', { req: req.session.user, event: values[0], company: values[1], admin:admin });
     });
 }
 
@@ -1324,7 +1391,11 @@ function postaddnewuser(req, res) {
                             console.log("Dodano starego");
                             console.log(req.body.nazwisko[i]);
                             if (i >= num - 1) {
-                                res.redirect('/eventdetails:' + even);
+                                if (req.session.admin == true) {
+                                    res.redirect('/eventdetails:' + even);
+                                } else {
+                                    res.redirect('/eventdetail:' + even);
+                                }
                             }
 
                         });
@@ -1339,7 +1410,11 @@ function postaddnewuser(req, res) {
                                 console.log("Dodano nowego ");
                                 console.log(req.body.nazwisko[i]);
                                 if (i >= num - 1) {
-                                    res.redirect('/eventdetails:' + even);
+                                    if (req.session.admin == true) {
+                                        res.redirect('/eventdetails:' + even);
+                                    } else {
+                                        res.redirect('/eventdetail:' + even);
+                                    }
                                 }
 
                             });
@@ -1368,7 +1443,8 @@ function showuser(req, res) {
         connection.query('SELECT id_company, name, name2 FROM company GROUP BY id_company DESC', [], function (error, company, fields) {
             res.locals.company = company;
             res.locals.account = result;
-            res.render('pages/work/manager/user.ejs', { req: req.session.user, account: res.locals.account, company: res.locals.company, update: false, admin: true });
+            let admin = isAdmin(req, res);
+            res.render('pages/work/manager/user.ejs', { req: req.session.user, account: res.locals.account, company: res.locals.company, update: false, admin: admin });
         });
     });
 }
@@ -1378,7 +1454,8 @@ function showcompany(req, res) {
     let company = req.params.id;
     connection.query('SELECT * FROM user INNER JOIN company ON user.id_company = company.id_company WHERE company.id_company = ? GROUP BY user.id_User DESC', [company], function (error, result, fields) {
         res.locals.account = result;
-        res.render('pages/work/manager/company.ejs', { req: req.session.user, account: res.locals.account, update: false, admin: true });
+        let admin = isAdmin(req, res);
+        res.render('pages/work/manager/company.ejs', { req: req.session.user, account: res.locals.account, update: false, admin: admin });
     });
 }
 
@@ -1400,8 +1477,9 @@ function showapplication(req, res) {
                      console.log("results", results);
                      connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [company[0].id_event], function (error, event, fields) {
                              event[0].date = changedate(event[0].date);
-                            res.locals.eventtab = event
-                         res.render('pages/work/manager/application.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab, zgl: res.locals.zgl, company: res.locals.company,   admin:true });
+                         res.locals.eventtab = event
+                         let admin = isAdmin(req, res);
+                         res.render('pages/work/manager/application.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab, zgl: res.locals.zgl, company: res.locals.company,   admin:admin });
 
                      });
                  });
@@ -1548,7 +1626,8 @@ function print(req, res) {
 
 
 
-}function printk(req, res) {
+}
+function printk(req, res) {
     let event = req.params.id;
     connection.query('SELECT * FROM application INNER JOIN user ON application.id_User = user.id_User INNER JOIN company ON user.id_company = company.id_company WHERE application.id_event= ? ORDER BY user.nazwisko', [event], (error, users, fields) => {
         res.locals.result = users;
@@ -1693,10 +1772,104 @@ function printcert(req, res) {
 
 }
 
+function trainers(req, res) {
+
+    connection.query('SELECT * FROM trainer', [], (error, trainer, fields)=>{
+        res.locals.trainers = trainer;
+        res.render('pages/work/manager/trainers', { req: req.session.user, trainer: res.locals.trainers, admin: true });
+    });
+
+}
+
+
+function edittrainer(req, res) {
+    connection.query('UPDATE trainer SET Name= ?, description=? WHERE id_trainer = ? ', [req.body.Name, req.body.description, req.params.id], (error, result, fields) => {
+        res.redirect('back');
+    });
+}
+
+function newtrainer(req, res) {
+    connection.query('INSERT INTO trainer(Name,description) VALUES (?,?) '[req.body.Name, req.body.description], (error, result, fields) => {
+        res.redirect('back');
+    });
+}
+
+function employers(req, res) {
+
+    connection.query('SELECT * FROM employee', [], (error, employer, fields)=>{
+        res.locals.employer = employer;
+        res.render('pages/work/manager/employers', { req: req.session.user, employer: res.locals.employer, admin: true });
+    });
+}
+
+
+
+function editemployer(req, res) {
+
+    bcrypt.hash(req.body.password, 10, (err, p_hash) => {
+        var haslo = p_hash;
+        connection.query('UPDATE employee SET email = ?, password= ?, name = ?, last_name = ?, pesel = ?, adres = ? WHERE id_employee = ?', [req.body.email, haslo, req.body.name, req.body.last_name, req.body.pesel, req.body.adres, req.params.id],(error, result, fields) => {
+            res.redirect('back');
+        });
+    });
+}
+
+function newemployer(req, res) {
+    bcrypt.hash(req.body.password, 10, (err, p_hash) => {
+        var haslo = p_hash;
+        connection.query('INSERT INTO employee (name, last_name, email, password, pesel, adres) VALUES (?,?,?,?,?,?) ', [req.body.name, req.body.last_name, req.body.email, haslo, req.body.pesel, req.body.adres], (error, result, fields) => {
+            res.redirect('back');
+        });
+    });
+}
+
+
+
+ /*
+ * EMPLOYER
+ */
+
+//GET informacje o szkoleniu
+function eventdetail(req, res) {
+    let event = req.params.id;
+    console.log("applicatiom:" + event);
+
+    connection.query('SELECT user.id_user, user.imie, user.nazwisko, user.stanowisko, company.id_company, company.name, company.name2, application.id_application, application.rabat, application.id_zgl, application.zgloszenie FROM application INNER JOIN user ON application.id_User = user.id_user LEFT JOIN company ON user.id_company = company.id_company WHERE application.id_event = ? ', [event], (error, results, fields) => {
+
+        res.locals.detailstab = results;
+        console.log("results", results);
+        connection.query('SELECT event.topic, trainer.Name, trainer.description, event.city, event.date, event.hotel, event.price, event.id_event, event.descriptions, event.state FROM event INNER JOIN trainer ON event.id_trainer = trainer.id_trainer WHERE event.id_event= ? ', [event], function (error, event, fields) {
+            event[0].date = changedate(event[0].date);
+            res.locals.eventtab = event
+            res.render('pages/work/employee/details.ejs', { req: req.session.user, detailstab: res.locals.detailstab, eventtab: res.locals.eventtab, admin: false });
+        });
+
+
+    });
+
+}
+
+
+function isAdmin(req, res) {
+    let admin; {
+        if (req.session.admin == true) {
+            admin = true;
+            return admin;
+        }
+        else {
+            admin = false;
+            return admin;
+        }
+    }
+}
+
 function isLog(req,res) {
     if (req.session.user == undefined || req.session.user == null) {
         req.session.returnTo = req.originalUrl;
         res.redirect('/loginPage');
+    }
+    else {
+        return 1;
     }
 }
 

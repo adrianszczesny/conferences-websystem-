@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Zapisywanie</title>
+    <% include ../../../partials/head %>
+
+</head>
+<body>
+
+    <% include ../../../partials/header-manager %>
+    <form method="POST" action="/addnewuser">
+        <div class="container" style="margin-top:30px;">
+           
+            <tbody>
+                <div class="card">                    
+                    <div class="card-body">
+					<h3 id="title" align="center" style="margin-bottom:30px;"> Nowy klient</h3>
+                        <div class="form-group row">
+                            <label for="event" class="col-sm-2 col-form-label" >Temat:</label>
+                            <div class="col-sm-10 align-self-center">
+                                <%if(event.length == 1){ %>
+								<select class="form-control" id="event" name="event">	                                
+	                                <option value="<%= event[0].id_event %>" selected > <%= event[0].date %> -  <%= event[0].topic %> </option>
+                                </select>
+                                <%} else { %>
+	                            <select class="form-control" id="event" name="event">
+                                    <option selected>Wybierz szkolenie...</option>
+	                                <% for(var i = 0; i < event.length; i++) { %>
+	                                <option value="<%= event[i].id_event %>" > <%= event[i].topic %> </option>
+	                                <% } } %>
+                                </select>
+	                        </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="event" class="col-sm-2 col-form-label" >Instytucja:</label>
+                            <div class="col-sm-10 align-self-center">
+                                <%if(company.length == 1){ %>
+                                <select class="selectpicker" data-live-search="true" id="company" name="company">	                               
+	                                <option value="<%= company[0].id_company %>" selected > <%= company[0].name %> - <%= company[0].name2 %></option>
+                                </select>
+                                <%} else { %>
+	                            <select class="selectpicker" data-live-search="true" id="company" name="company">
+                                    <option selected>Wybierz instytucje...</option>
+	                                <% for(var i = 0; i < company.length; i++) { %>
+	                                <option value="<%= company[i].id_company %>" > <%= company[i].name %> - <%= company[i].name2 %></option>
+	                                <% }  %>
+                                </select>
+                               <% }  %>
+                               <button type="button" id="but" data-toggle="modal" data-target="#newcompany">
+													Dodaj nową firmę
+												</button>
+							</div>
+                        </div>	
+						<hr>
+
+                        <div class="form-group row">
+                        <label for="event" class="col-sm-2 col-form-label align-self-center" > Uczestnicy: 
+                           
+                        </label>
+
+                        <div class="col-sm-10 align-self-center">
+                        <div id="table" class="table-editable">
+                            <span class="table-add float-right mb-3 mr-2">
+                                <a href="#!" class="text-success">
+                                    <i class="fas fa-plus fa-2x" aria-hidden="true"></i>
+                                </a>
+                            </span>
+                            <table class="table table-bordered table-responsive-md table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Imię</th>
+                                        <th class="text-center">Nazwisko</th>
+                                        <th class="text-center">stanowisko</th>
+                                        <th class="text-center">Usuń</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control" id="imie" name="imie"  placeholder="Podaj imię ">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" id="nazwisko" name="nazwisko"  placeholder="Podaj nazwisko ">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" id="stanowisko" name="stanowisko" placeholder="Podaj stanowisko ">
+                                        </td>
+                                        <td>
+                                            <span class="table-remove">
+                                                <button type="button"
+                                                        class="btn btn-danger btn-rounded btn-sm my-0">
+                                                    Usuń
+                                                </button>
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+</div>
+</div>
+<hr>
+ <div class="form-check">
+  <input type="hidden" name="check[0]" value="0" />
+	<input class="form-check-input" type="checkbox" name="check[0]" value="1" />
+  <label class="form-check-label" for="zw">
+   <b>Zwolnie z VAT</b><br>
+   
+  </label>
+</div>
+<hr>
+<div class="form-group row">
+<div class="col-sm-4"></div>
+		<label for="rabat" class="col-sm-2.5 col-form-label">  Wartość rabatu na osobę:</label>
+		<div class="col-sm-1">
+			<input type="text"  class="form-control-plaintext" style=" border:1px solid black;"  id="rabat" name="rabat" value="0" >
+		</div>
+	</div>
+
+<hr>
+<div class="col-md-12 text-center">
+                    <button type="submit" id="but">
+                        Dodaj
+                    </button>
+                </div>
+</div>
+</div>
+
+
+                
+    </form>
+    </div>
+    </tbody>
+    </div>
+    <% include ../../../partials/footer %>
+
+	<!-- Modal do dodawanie nowej firmy  -->
+	<div class="modal fade " id="newcompany" tabindex="-1" role="dialog" aria-labelledby="newcompanyTitle" aria-hidden="true">
+												 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+												  <div class="modal-content">
+												   <div class="modal-header">
+													   <h5 class="modal-title" id="exampleModalLongTitle">Nowa instytucja</h5>
+													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														 <span aria-hidden="true">&times;</span>
+													 </button>
+													 </div>
+                                                    <form method="POST" action="/addnewcompany">
+												  <div class="modal-body">
+												  <h5 class="text-center">Nabywca:</h5>
+													<div class="form-group row">
+		<label for="nip" class="col-sm-2 col-form-label">NIP:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="nip" name="NIP"  placeholder="Podaj NIP(bez myślników)">
+		</div>
+	</div>
+ 
+	<div class="form-group row">
+		<label for="nazwa" class="col-sm-2 col-form-label">Nazwa:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="nazwa" name="nazwa"  placeholder="Podaj nazwe firmy/instytucji">
+		</div>
+	</div>
+  
+	<div class="form-group row">
+		<label for="adres" class="col-sm-2 col-form-label">Adres:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="adres" name="adres"  placeholder="Podaj adres siedziby">
+		</div>
+	</div>
+
+	<div class="form-group row">
+    <label for="Email" class="col-sm-2 col-form-label">e-faktura:</label>
+    <div class="col-sm-10 align-self-center">
+      <input type="text" class="form-control" id="emailfv" name="emailfv"  placeholder="Podaj email do przesłania faktury">
+    </div>
+  </div>
+  <h5 class="text-center">Odbiorca(opcjonalnie):</h5>
+  <div class="form-group row">
+		<label for="nazwa" class="col-sm-2 col-form-label">Nazwa:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="nazwa2" name="nazwa2"  placeholder="Podaj nazwe firmy/instytucji">
+		</div>
+	</div>
+
+	<div class="form-group row">
+		<label for="adres" class="col-sm-2 col-form-label">Adres:</label>
+		<div class="col-sm-10 align-self-center">
+			<input type="text" class="form-control" id="adres2" name="adres2"  placeholder="Podaj adres siedziby">
+		</div>
+	</div>
+													
+
+												  </div>
+												   <div class="modal-footer">
+   
+                                                <button type="submit" class="btn btn-info ">
+                                                     Dodaj
+                                                </button>
+														 </div>
+                                                     </form>
+													</div>
+                                                  
+												 </div>
+												</div>
+	                        </div>
+                        </div>
+    <script>
+
+        const $tableID = $('#table');
+        const $BTN = $('#export-btn');
+        const $EXPORT = $('#export');
+
+
+        const newTr = `
+              <tr class="hide">
+              <td>
+              <input type="text" class="form-control" id="imie" name="imie" placeholder="Podaj imię ">
+              </td>
+               <td>
+              <input type="text" class="form-control" id="nazwisko" name="nazwisko"  placeholder="Podaj nazwisko ">
+              </td>
+                <td>
+              <input type="text" class="form-control" id="stanowisko" name="stanowisko" placeholder="Podaj stanowisko">
+              </td>
+                <td>
+                <span class="table-remove"><button type="button"
+                      class="btn btn-danger btn-rounded btn-sm my-0">Usuń</button></span>
+                </td>
+              </tr>`;
+
+        $('.table-add').on('click', 'i', () => {
+            $('tbody').append(newTr);
+        });
+
+        $tableID.on('click', '.table-remove', function () {
+            $(this).parents('tr').detach();
+        });
+
+
+
+
+    </script>
+
+</body>
+
+</html>

@@ -84,14 +84,14 @@ textarea {
 
 
 table, th {
-    vertical-align:center;
+    vertical-align: middle;
     color: #000066;
     border: 1px solid #000066;
-    text-align:center;
+    text-align: center;
 }
 
 td {
-    vertical-align: center;
+    vertical-align: middle;
     color: black;
     text-align: center;
 }

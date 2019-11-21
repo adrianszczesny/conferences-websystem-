@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+	 <title>
+        Aktualne szkolenia    </title>
+	<meta charset="UTF-8">
+<% include ../../../partials/head %>
+
+</head>
+
+<body>
+
+<% include ../../../partials/header-manager %>
+  <div class="container" >
+
+
+<div class="card" style="background:  #000066; margin-top:30px; ">
+<h3 id="title" align="center" style="color:white; font-size:25px; margin-bottom:20px;">  <% if(last == true){ %>
+	ARCHIWALNE SZKOLENIA
+  <% } else {  %>
+  AKTUALNE SZKOLENIA
+  <% } %> </h3>
+ </div>
+ 
+
+
+  
+  </t>
+	<tbody>
+		<% if(tabresult.length == 0){ %>
+		<h4><br> Brak przydzielonych szkoleń. </h4>
+		<%}else{
+	     for(var i = 0; i < tabresult.length; i++) { %>
+		<h4> </h4>
+		<div class="card">
+			<a href="/eventdetail:<%= tabresult[i].id_event %>" class="card-body">
+				<div class="row ">
+					<div class="col-7 align-self-center">
+						<h5 class="card-title" style="color: #000066;"> <%= tabresult[i].topic %> </h5>
+						
+					</div>
+
+					<div class="col-3">					
+							<p class="card-text"><i class="fas fa-user-graduate"></i>  <%= tabresult[i].Name %> </p>
+							<p class="card-text"><i class="fas fa-map-marker-alt"></i>  <%= tabresult[i].city %></p>
+							<p class="card-text"><i class="fas fa-table"></i> <%= tabresult[i].date %></p>
+							<p class="card-text"><i class="fas fa-coins"></i> <%= tabresult[i].price %> zł </p>
+					</div>
+					<div class="col-2 align-self-center">					
+							
+							<p class="card-text"> ilosc osob: <%= tabresult[i].NoC %></p>
+							<% if(tabresult[i].state==2){ %>
+							<span class="badge badge-danger">ODWOŁANE</span> 
+							<% } %>
+							
+					</div>
+				</div>	
+			</a>  
+		</div>
+        <% };} %>       
+   </tbody>
+ </div>
+
+	 <% include ../../../partials/footer %>		
+</body>
+</html>  
