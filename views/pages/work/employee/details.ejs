@@ -46,6 +46,12 @@
                                         <i class="fas fa-plus fa-2x" aria-hidden="true" style="color:  #000066;"></i></a></span>
                                         <table class="table table-bordered table-responsive-md table-striped text-center">
                                           <thead>
+										  <col width=auto>
+											<col width=auto>
+											<col width=auto>
+											<col width=auto>
+											<col width=auto>
+											<col width="270">
                                             <tr>
 											  <th class= "text-center"> Lp. </th> 
                                               <th class="text-center">Imię</th>
@@ -83,10 +89,47 @@
                                             </td>
 
 
-												<td>
-                                                
-												<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rezygnacja-<%= detailstab[i].id_application %>">
-													Rezygnacja
+												<td style="vertical-align: middle;">
+                                                <button type="button" id="but" data-toggle="modal" style="  border-radius: 25px 0px 0px 25px; width: 150px;" data-target="#powiadom-<%= detailstab[i].id_application %>">
+													Powiadom
+												</button>
+												<div class="modal fade" id="powiadom-<%= detailstab[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="powiadomTitle" aria-hidden="true">
+												 <div class="modal-dialog modal-dialog-centered" role="document">
+												 
+												  <div class="modal-content">
+												   <div class="modal-header">
+													   <h5 class="modal-title" id="rezygnacjaTitle">Powiadomienie uczestnika</h5>
+													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														 <span aria-hidden="true">&times;</span>
+													 </button>
+													 </div>
+												  <div class="modal-body">
+												  <form method="POST" action="/powiadom">
+															<div class="form-group row">
+																<input type="hidden"  class="form-control" name= "application" value="<%= detailstab[i].id_application %>" > 
+																<input type="hidden"  class="form-control" name= "user" value="<%= detailstab[i].id_User %>" > 
+																<div class="col-sm-12 align-self-center">
+																<% if(detailstab[i].email == null){ %>
+																Podaj email uczestnika, a my wyślemy mu link do potwierdzenie szkolenia, aby miał dostęp do szczegółów.
+																<% } else { %>
+																Na podany przez uczestnika e-mail wyślemy link do szczegółów szkolenia.
+																<% } %>
+																<br>
+																	<input type="email" class="form-control" id="email" name="email" placeholder="Podaj e-mail" value="<%= detailstab[i].email %>" >
+																</div>
+															</div>
+															 <button type="submit" class="btn btn-info ">Powiadom </button>
+													 
+													 </form>
+													
+												  </div>
+												   
+													</div>
+												 </div>
+												</div>
+                                            
+												<button type="button" class="btn btn-danger" data-toggle="modal" style="  border-radius: 0px 25px  25px 0px; width:70px;" data-target="#rezygnacja-<%= detailstab[i].id_application %>">
+													Usuń
 												</button>
 												<div class="modal fade" id="rezygnacja-<%= detailstab[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 												 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -98,10 +141,10 @@
 													 </button>
 													 </div>
 												  <div class="modal-body">
-													  Sure? 
+													 Czy klient zrezygnował ze szkolenia? 
 												  </div>
 												   <div class="modal-footer">
-												   <a href="/deleteapp:<%= detailstab[i].id_application %>" class="btn btn-danger">Usuń</a>
+												   <a href="/deleteappw:<%= detailstab[i].id_application %>" class="btn btn-danger">Tak</a>
 														 </div>
 													</div>
 												 </div>

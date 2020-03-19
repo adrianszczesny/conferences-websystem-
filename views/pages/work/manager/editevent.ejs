@@ -73,7 +73,8 @@
   <div class="form-group row">
 		<label for="descriptions" class="col-sm-2 col-form-label">Cel szkolenia:</label>
 		<div class="col-sm-10">
-			<input class="form-control"  type= "input" id="descriptions" value="<%= edit[0].descriptions %>" name="descriptions" rows="3"></textarea>
+			<input class="form-control"  type= "input" id="descriptions" value="<%= edit[0].descriptions %>" name="descriptions"
+                   rows="5"></input>
 		</div>
 	</div>
 	<div class="form-group row">
@@ -82,22 +83,35 @@
       <input type="file" class="form-control-file" id="program" name="program" >
     </div>
   </div>
-
-
-	<div class="form-group row">
-    <label for="trainer" class="col-sm-2 col-form-label" >Konsultant:</label>
+   <div class="form-group row">
+    <label for="worker" class="col-sm-2 col-form-label" >Konsultant:</label>
     <div class="col-sm-10 align-self-center">
 	<select class="form-control" id="employee" name="employee">
-      <option value="<%= edit[0].id_employee %>" selected> <%= edit[0].name %> <%= employee[0].last_name %></option>
+      <option value="<%= edit[0].id_employee %>" selected> <%= edit[0].name %> <%= edit[0].last_name %></option>
 	  <% for(var i = 0; i < employee.length; i++) { %>
 	  <option value="<%= employee[i].id_employee %>" > <%= employee[i].name %> <%= employee[i].last_name %></option>
 	  <% } %>
     </select>
 	</div>
   </div>
+ <div class="form-group row">
+    <label for="koordynator" class="col-sm-2 col-form-label" >Koordynator:</label>
+    <div class="col-sm-10 align-self-center">
+	<select class="form-control" id="koordynator" name="koordynator">
+      <option value="<%= edit[0].id_koordynator %>" selected> <%= edit[0].imie %> <%= edit[0].nazwisko %></option>
+	  <% for(var i = 0; i < koordynator.length; i++) { %>
+	  <option value="<%= koordynator[i].id_koordynator %>" > <%= koordynator[i].imie %> <%= koordynator[i].nazwisko %></option>
+	  <% } %>
+    </select>
+	</div>
+  </div>
  </div>
+
+
+
+
   <div class="col-md-12 text-center"> 
-                    <button type="submit" id="but">
+                    <button type="submit" id="but-finish">
                         Zapisz zmiany
                     </button>
                 </div>

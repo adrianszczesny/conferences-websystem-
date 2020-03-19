@@ -46,13 +46,12 @@
 					<div class="col-6 align-self-center">
 						<h5 class="card-title" style="color: #000066;"> <%= mytabresult[i].topic %> </h5>
 						
-					</div>
-					<div class="col-2 align-self-center">
+
 					<% if(mytabresult[i].state == 2) { %>
 						<span class="badge badge-danger"> SZKOLENIE ODWOŁANE</span> 
 					<% } %>
 					</div>
-					<div class="col-4 ">					
+					<div class="col-6 ">
 						<p class="card-text"><i class="fas fa-user-graduate"></i>  <%= mytabresult[i].Name %> </p>
 						<p class="card-text"><i class="fas fa-map-marker-alt"></i>  <%= mytabresult[i].city %></p>
 						<p class="card-text"><i class="fas fa-table"></i> <%= mytabresult[i].date %></p>
@@ -75,13 +74,13 @@
 		<% for(var i = 0; i < lastmytabresult.length; i++) { %>
 		<h4> </h4>
 		<div class="card">
-		<a href="/details:<%= lastmytabresult[i].id_event %>" class="card-body">
+		<a href="/details:<%= lastmytabresult[i].id_application %>" class="card-body">
 				<div class="row justify-content-between">
-					<div class="col-8 align-self-center">
+					<div class="col-6 align-self-center">
 						<h5 class="card-title"> <%= lastmytabresult[i].topic %> </h5>
 						
 					</div>
-					<div class="col-2 ">					
+					<div class="col-6 ">
 						<p class="card-text"><i class="fas fa-user-graduate"></i>  <%= lastmytabresult[i].Name %> </p>
 						<p class="card-text"><i class="fas fa-map-marker-alt"></i>  <%= lastmytabresult[i].city %></p>
 						<p class="card-text"><i class="fas fa-table"></i> <%= lastmytabresult[i].date %></p>

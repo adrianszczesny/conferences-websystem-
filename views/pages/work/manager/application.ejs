@@ -130,13 +130,13 @@
 
 
 	<% if(detailstab[0].zgloszenie != null ){ %>
-	<button type="button" id="but" style="border-radius: 25px 0px 0px  25px; width: 200px;" data-toggle="modal" data-target="#zgloszenie-<%= detailstab[0].id_application %>" >
+	<button type="button" id="but-edit" style="border-radius: 25px 0px 0px  25px;" data-toggle="modal" data-target="#zgloszenie-<%= detailstab[0].id_application %>" >
 													Dodaj
 												</button>
 
 	<a href="/showzgloszenie:<%= detailstab[0].id_application %>"><input type="button" id="but" class="next action-button" style="  border-radius: 0px 25px  25px 0px; width: 200px;" value="Podgląd"/></a>
 	<% } else{ %>
-	<button type="button" id="but" style="width: 200px;" data-toggle="modal" data-target="#zgloszenie-<%= detailstab[0].id_application %>" >
+	<button type="button" id="but-edit" style="width: 200px;" data-toggle="modal" data-target="#zgloszenie-<%= detailstab[0].id_application %>" >
 													Dodaj
 												</button>
 
@@ -147,7 +147,7 @@
   <div class="form-group row  ">
     <label for="program" class="col-sm-3 col-form-label text-center ">Rabat</label>
     <div class="col-sm-9 align-self-center">
-      <button type="button" id="but" data-toggle="modal" data-target="#rabat-<%= detailstab[0].id_application %>" >
+      <button type="button" id="but-edit" data-toggle="modal" data-target="#rabat-<%= detailstab[0].id_application %>" >
 													<%= detailstab[0].rabat %> zł/os
 												</button>
 												<div class="modal fade" id="zgloszenie-<%= detailstab[0].id_application %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

@@ -17,7 +17,7 @@
 <div class="card" style=" margin-top:30px; ">
 <h3 id="title" align="center" style=" font-size:25px; margin-bottom:20px;"> wykładowcy</h3>
 	<div class="row  align-self-center ">
-<button type="button " id="but" data-toggle="modal" style="width:500px;" data-target="#new">
+<button type="button " id="but-finish" data-toggle="modal"  data-target="#new">
 													Dodaj 
 							</button>
 
@@ -40,7 +40,7 @@
 														 
 															<input type="text" rows="5"  class="form-control" name="description" placeholder="Informacje"/>
 														<br>
-												   <button type="submit" id="but">
+												   <button type="submit" id="but-edit">
 													 Dodaj
 													</button>
 													</form>
@@ -68,7 +68,7 @@
 					</div>
 
 					<div class="col-3">					
-							<button type="button" id="but" data-toggle="modal" data-target="#edit-<%= trainer[i].id_trainer %>">
+							<button type="button" id="but-edit" data-toggle="modal" data-target="#edit-<%= trainer[i].id_trainer %>">
 													Edytuj
 							</button>
 												<div class="modal fade" id="edit-<%= trainer[i].id_trainer %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
@@ -88,7 +88,7 @@
 														 
 															<input type="text" rows="5"  class="form-control" name="description" value="<%= trainer[i].description %>"/>
 														<br>
-												   <button type="submit" id="but">
+												   <button type="submit" id="but-edit">
 													 Zapisz zmiany
 													</button>
 													</form>

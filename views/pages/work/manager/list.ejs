@@ -35,23 +35,24 @@
 		<div class="card">
 			<a href="/eventdetails:<%= tabresult[i].id_event %>" class="card-body">
 				<div class="row ">
-					<div class="col-7 align-self-center">
+					<div class="col-5 align-self-center">
 						<h5 class="card-title" style="color: #000066;"> <%= tabresult[i].topic %> </h5>
 						
 					</div>
 
-					<div class="col-3">					
+					<div class="col-4">
 							<p class="card-text"><i class="fas fa-user-graduate"></i>  <%= tabresult[i].Name %> </p>
 							<p class="card-text"><i class="fas fa-map-marker-alt"></i>  <%= tabresult[i].city %></p>
 							<p class="card-text"><i class="fas fa-table"></i> <%= tabresult[i].date %></p>
 							<p class="card-text"><i class="fas fa-coins"></i> <%= tabresult[i].price %> zł </p>
 					</div>
-					<div class="col-2 align-self-center">					
+					<div class="col-3 align-self-center">
 							
 							<p class="card-text"><%= tabresult[i].name %> <%= tabresult[i].last_name %></p>
-							<p class="card-text"> ilosc osob: <%= tabresult[i].NoC %></p>
+							<p class="card-text"> Potwierdzonych: <%= tabresult[i].NoC %></p>
+							<p class="card-text"> Dochodzących: <%= tabresult[i].NoI %></p>
 							<% if(tabresult[i].state==2){ %>
-							<span class="badge badge-danger">ODWOŁANE</span> 
+							<span class="badge badge-danger">ODWOŁANE</span>
 							<% } %>
 							
 					</div>

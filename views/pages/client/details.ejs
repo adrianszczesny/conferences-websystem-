@@ -24,17 +24,14 @@
 	        <div class="card-body">
 			<h3 id="title" align="center" style="font-size:25px;"> <%= eventtab[0].topic %></h3>
             <div class="row">
-			<div class="col-8">
+			<div class="col text-center">
             <h6><i class="fas fa-user-graduate"></i>  <%= eventtab[0].Name %></h6>
-            <h6><b><i class="fas fa-map-marker-alt"></i> <%= eventtab[0].city %></b>, Hotel <%= eventtab[0].hotel %> </h6> 
+            <h6><b><i class="fas fa-map-marker-alt"></i> <%= eventtab[0].city %></b>, <%= eventtab[0].hotel %> </h6>
             <h6> <b><i class="fas fa-table"></i> <%= eventtab[0].date %> r.</b> (godz. 9:00-15:00)</h6>
 			<h6> <i class="fas fa-coins"> <%= eventtab[0].price %> zł/os. netto</i></h6>
 			</div>
-			<div class="col-4 align-self-center">
-            <a href="/info:<%= eventtab[0].id_event %>"><input type="button" id="but"  style=" width: 300px;" value="Informacje o szkoleniu"/> </a>
 			</div>
-			</div>
-        
+				<br>
                <hr> <h3 id="title" align="center"> Uczestnicy</h3>
                                 <div id="table" class="table-editable">
                                         <span class="table-add float-right mb-3 mr-2"><a href="/buy:<%= eventtab[0].id_event %>" class="text-success">
@@ -90,7 +87,7 @@
 																<% if(detailstab[i].email == null){ %>
 																Podaj email uczestnika, a my wyślemy mu link do potwierdzenie szkolenia, aby miał dostęp do szczegółów.
 																<% } else { %>
-																Na podany przez uczestnika e-mail wyślemy link do potwierdzenia szkolenia.
+																Na podany przez uczestnika e-mail wyślemy link do szczegółów szkolenia.
 																<% } %>
 																<br>
 																	<input type="email" class="form-control" id="email" name="email" placeholder="Podaj e-mail" value="<%= detailstab[i].email %>" >
@@ -140,38 +137,45 @@
 
 
  <hr><h3 id="title" align="center"> Dokumenty</h3> <hr><br>
-	<div class="form-group row">
+	<div class="form-group row text-center">
 		<label for="program" class="col-sm-3 col-form-label text-center">Program szkolenia:</label>
-		<div class="col-sm-9">
-		    <a href="/showprogram:<%= eventtab[0].id_event %>" ><input type="button" id="but" style="  border-radius: 25px 0px 0px  25px; width: 200px;" value="Otwórz"/> </a>
-			<a href="/info/download:<%= eventtab[0].id_event %>"><input type="button" id="but"  style="  border-radius: 0px 25px  25px 0px; width: 200px;" value="Pobierz"/></a>
+		<div class="col-sm-5">
+		    <a href="/showprogram:<%= eventtab[0].id_event %>" ><input type="button" id="but-edit" style="  border-radius: 25px 0px 0px  25px; " value="Otwórz"/> </a>
+			<a href="/info/download:<%= eventtab[0].id_event %>"><input type="button" id="but-edit"  style="  border-radius: 0px 25px  25px 0px;" value="Pobierz"/></a>
 		</div>
     </div>
   <hr>
 
-  <div class="form-group row ">
+  <div class="form-group row text-center">
     <label for="program" class="col-sm-3 col-form-label text-center ">Generuj zgłoszenie na szkolenie:</label>
     <div class="col-sm-5 align-self-center">
-      <a href="/zgloszenie:<%= detailstab[0].id_application %>" onclick="myFunction()"> <input type="button" id="but" class="next action-button" style=" width: 420px;" value="Generuj"/></a>
+      <a href="/zgloszenie:<%= detailstab[0].id_application %>" onclick="myFunction()"> <input type="button" id="but-edit" class="next action-button" value="Generuj"/></a>
     </div>
   </div>
   <hr />
+	<% if(detailstab[0].zgloszenie != null ){ %>
   	<div class="form-group row text-center">
     <label for="zgloszenie" class="col-sm-3 col-form-label align-self-center">Załącz zgłoszenie:
-	<% if(detailstab[0].zgloszenie != null ){ %>
 	<span class="badge badge-success">Dodane</span>
-	<% } %>
 	</label>
     <div class="col-sm-5 ">
-	 <button type="button" id="but" style="border-radius: 25px 0px 0px  25px; width: 200px;" data-toggle="modal" data-target="#zgloszenie-<%= detailstab[0].id_application %>" >
+	 <button type="button" id="but-edit" style="border-radius: 25px 0px 0px  25px;" data-toggle="modal" data-target="#zgloszenie-<%= detailstab[0].id_application %>" >
 													Dodaj
 												</button>
 
 
-	<% if(detailstab[0].zgloszenie != null ){ %>
-	<a href="/showzgloszenie:<%= detailstab[0].id_application %>"><input type="button" id="but" class="next action-button" style="  border-radius: 0px 25px  25px 0px; width: 200px;" value="Podgląd"/></a>
+	<a href="/showzgloszenie:<%= detailstab[0].id_application %>"><input type="button" id="but-edit" class="next action-button" style="  border-radius: 0px 25px  25px 0px; width: 200px;" value="Podgląd"/></a>
+
+	<% } else { %>
+	<div class="form-group row text-center">
+    <label for="zgloszenie" class="col-sm-3 col-form-label align-self-center">Załącz zgłoszenie:
+
+	</label>
+    <div class="col-sm-5 ">
+	 <button type="button" id="but-edit"  data-toggle="modal" data-target="#zgloszenie-<%= detailstab[0].id_application %>" >
+													Dodaj
+												</button>
 	<% } %>
-	
 	</div>
   </div>
 
@@ -187,7 +191,7 @@
 												  <div class="modal-body">
 													 <form method="POST" action="/addzgloszenie:<%= detailstab[0].id_application %>" enctype="multipart/form-data" >
 													<input type="file" class="form-control-file" id="zgloszenie" name="zgloszenie" ></input><br>
-													<button type="submit" id="but">
+													<button type="submit" id="but-edit">
 													 Załącz skan zgłoszenia
 													</button>
 													</form>

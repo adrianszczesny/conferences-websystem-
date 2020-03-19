@@ -19,19 +19,22 @@
             <div class="card-body">
 				<h3 id="title" align="center"> <%= eventtab[0].topic %></h3>
 				<div class="row ">
-					<div class="col-7 align-self-center">
+					<div class="col-6 align-self-center">
 						<h6><i class="fas fa-user-graduate"></i>  <%= eventtab[0].Name %></h5>
 						<h6><b><i class="fas fa-map-marker-alt"></i> <%= eventtab[0].city %></b>, Hotel <%= eventtab[0].hotel %> </h5> 
 						<h6> <b><i class="fas fa-table"></i> <%= eventtab[0].date %> r.</b> (godz. 9:00-15:00)</h5>
 						<h6> <i class="fas fa-coins"> <%= eventtab[0].price %> zł/os. netto</i></h5>
+						<h6> <i class="fas fa-user"> <%= eventtab[0].name %>  <%= eventtab[0].last_name %> </i></h5>
+						<h6> <i class="fas fa-car"> <%= eventtab[0].imie %>  <%= eventtab[0].nazwisko %></i></h5>
+
 					</div>
-					<div class="col-5 align-self-center">
-						<a  href="/editevents:<%= eventtab[0].id_event %>" > <input id="but" type="button" name="next"  style="border-radius: 25px 0px 0px  25px; width: 200px;" value="Edytuj szkolenie" /> </a>
+					<div class="col-6 align-self-center">
+						<a  href="/editevents:<%= eventtab[0].id_event %>" > <input id="but-edit" type="button" name="next"  style="border-radius: 25px 0px 0px  25px; " value="Edytuj szkolenie" /> </a>
 						<% if(eventtab[0].state==1){ %>
-						<input type="button" id="but" name="next" data-toggle="modal" data-target="#odwolanie" class="next action-button"  style="background:#990000; border-radius: 0px 25px  25px 0px; width: 200px;" value="Odwołaj szkolenie"/></a>
+						<input type="button" id="but-edit" name="next" data-toggle="modal" data-target="#odwolanie" class="next action-button"  style="background:#990000; border-radius: 0px 25px  25px 0px; " value="Odwołaj szkolenie"/></a>
 						<% } %>	  
 						<% if(eventtab[0].state==2){ %>
-						<input type="button" id="but" name="next" data-toggle="modal" data-target="#przywracanie" class="next action-button"  style=" background:green; border-radius: 0px 25px  25px 0px; width: 200px;" value="Przywróć szkolenie"/></a>
+						<input type="button" id="but-edit" name="next" data-toggle="modal" data-target="#przywracanie" class="next action-button"  style=" background:green; border-radius: 0px 25px  25px 0px; " value="Przywróć szkolenie"/></a>
 						<% } %>				
 					</div>
 			
@@ -45,10 +48,10 @@
 								</button>
 							</div>
 							<div class="modal-body">
-								Sure? 
+								Czy na pewno chcesz odwołać szkolenie?
 							</div>
 							<div class="modal-footer">
-								<a href="/deleteevent:<%= eventtab[0].id_event %>" class="btn btn-danger">Odwołaj szkolenie</a>
+								<a href="/deleteevent:<%= eventtab[0].id_event %>" class="btn btn-danger">Tak, odwołaj szkolenie</a>
 							</div>
 						</div>
 				</div>
@@ -67,7 +70,7 @@
 								Sure? 
 							</div>
 							<div class="modal-footer">
-								<a href="/reevent:<%= eventtab[0].id_event %>" class="btn btn-danger"> Przywróć szkolenie</a>
+								<a href="/reevent:<%= eventtab[0].id_event %>" class="btn btn-success"> Przywróć szkolenie</a>
 							</div>
 						</div>
 				</div>
@@ -89,8 +92,30 @@
                                 <div id="table" class="table-editable ">
                                         <span class="table-add float-right mb-3 mr-2" ><a href="/addnewuser?event=<%= eventtab[0].id_event %>" class="text-success">
                                         <i class="fas fa-plus fa-2x" aria-hidden="true" style="color:  #000066;"></i></a></span>
+
+									<ul id="list-nav" class="nav justify-content-center" role="tablist">
+
+										<li class="nav-item text-center">
+											<a class="nav-link active" href="#home" id="but-edit" style="border-radius: 25px 0px 0px  25px;"  role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true" >Potwierdzeni</a>
+										</li>
+
+										<li class="nav-item text-center">
+											<a class="nav-link" href="#last" role="tab" id="but-edit" style="border-radius: 0px 25px 25px  0px;" data-toggle="tab" aria-controls="last" >Dochodzący</a>
+										</li>
+
+									</ul>
+									<div id="list-nav-content" class="tab-content">
+
+										<div role="tabpanel" class="tab-pane fade show active" id="home" aria-labelledby="home-tab">
                                         <table class="table table-bordered table-responsive-md table-striped text-center">
                                           <thead>
+										  
+											<col width=auto>
+											<col width=auto>
+											<col width=auto>
+											<col width=auto>
+											<col width=auto>
+											<col width="270">
                                             <tr>
 											  <th class= "text-center"> Lp. </th> 
                                               <th class="text-center">Imię</th>
@@ -128,10 +153,48 @@
                                             </td>
 
 
-												<td>
+												<td style="vertical-align: middle;">
+												<button type="button" id="but" data-toggle="modal" style="  border-radius: 25px 0px 0px 25px; width: 150px;" data-target="#powiadom-<%= detailstab[i].id_application %>">
+													Powiadom
+												</button>
+												<div class="modal fade" id="powiadom-<%= detailstab[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="powiadomTitle" aria-hidden="true">
+												 <div class="modal-dialog modal-dialog-centered" role="document">
+												 
+												  <div class="modal-content">
+												   <div class="modal-header">
+													   <h5 class="modal-title" id="rezygnacjaTitle">Powiadomienie uczestnika</h5>
+													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														 <span aria-hidden="true">&times;</span>
+													 </button>
+													 </div>
+												  <div class="modal-body">
+												  <form method="POST" action="/powiadom">
+															<div class="form-group row">
+																<input type="hidden"  class="form-control" name= "application" value="<%= detailstab[i].id_application %>" > 
+																<input type="hidden"  class="form-control" name= "user" value="<%= detailstab[i].id_User %>" > 
+																<div class="col-sm-12 align-self-center">
+																<% if(detailstab[i].email == null){ %>
+																Podaj email uczestnika, a my wyślemy mu link do potwierdzenie szkolenia, aby miał dostęp do szczegółów.
+																<% } else { %>
+																Na podany przez uczestnika e-mail wyślemy link do szczegółów szkolenia.
+																<% } %>
+																<br>
+																	<input type="email" class="form-control" id="email" name="email" placeholder="Podaj e-mail" value="<%= detailstab[i].email %>" >
+																</div>
+															</div>
+															 <button type="submit" class="btn btn-info ">Powiadom </button>
+													 
+													 </form>
+													
+												  </div>
+												   
+													</div>
+												 </div>
+												</div>
+                                            
                                                 
-												<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rezygnacja-<%= detailstab[i].id_application %>">
-													Rezygnacja
+												<button type="button" class="btn btn-danger" data-toggle="modal" style="  border-radius: 0px 25px  25px 0px; width: 70px;" data-target="#rezygnacja-<%= detailstab[i].id_application %>">
+													Usuń
 												</button>
 												<div class="modal fade" id="rezygnacja-<%= detailstab[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 												 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -143,10 +206,10 @@
 													 </button>
 													 </div>
 												  <div class="modal-body">
-													  Sure? 
+													  Czy klient zrezygnował ze szkolenia?
 												  </div>
 												   <div class="modal-footer">
-												   <a href="/deleteapp:<%= detailstab[i].id_application %>" class="btn btn-danger">Usuń</a>
+												   <a href="/deleteappw:<%= detailstab[i].id_application %>" class="btn btn-danger">Tak</a>
 														 </div>
 													</div>
 												 </div>
@@ -156,14 +219,128 @@
                                            <% } %>
                                           
                                         </table>
+										</div>
+											<div role="tabpanel" class="tab-pane fade" id="last" aria-labelledby="last-tab">
+                                      <table class="table table-bordered table-responsive-md table-striped text-center">
+                                          <thead>
+
+											<col width=auto>
+											<col width=auto>
+											<col width=auto>
+											<col width=auto>
+											<col width=auto>
+											<col width="270">
+                                            <tr>
+											  <th class= "text-center"> Lp. </th>
+                                              <th class="text-center">Imię</th>
+                                              <th class="text-center">Nazwisko</th>
+                                              <th class="text-center">Instytucja</th>
+                                              <th class="text-center">Zgłoszenie</th>
+											   <th class="text-center"> </th>
+                                            </tr>
+                                          </thead>
+
+											<% for(let i = 0; i < detailstabn.length; i++) { %>
+
+                                            <tr>
+											<td>
+											<a href="/showapplication:<%= detailstabn[i].id_application %>" ><%= i+1 %>.</a>
+											</td>
+                                            <td>
+                                            <a href="/showapplication:<%= detailstabn[i].id_application %>" ><%= detailstabn[i].imie %></a>
+                                            </td>
+                                             <td>
+                                            <a href="/showapplication:<%= detailstabn[i].id_application %>" ><%= detailstabn[i].nazwisko %></a>
+                                            </td>
+                                              <td>
+                                            <a href="/showcompany:<%= detailstabn[i].id_company %>" > <%= detailstabn[i].name %> </a> -
+											 <a href="/showcompany:<%= detailstabn[i].id_company %>" ><%= detailstabn[i].name2 %> </a>
+                                            </td>
+
+                                            <td>
+
+												<% if(detailstabn[i].zgloszenie != null ){ %>
+												<span class="badge badge-success"><i class="fas fa-check" style = " color:white"></i></span>
+												<% } else { %>
+												<span class="badge badge-danger"><i class="fas fa-minus" style = " color:white"></i></span>
+												<% } %>
+                                            </td>
+
+
+												<td style="vertical-align: middle;">
+												<button type="button" id="but" data-toggle="modal" style="  border-radius: 25px 0px 0px 25px; width: 150px;" data-target="#powiadom-<%= detailstabn[i].id_application %>">
+													Powiadom
+												</button>
+												<div class="modal fade" id="powiadom-<%= detailstabn[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="powiadomTitle" aria-hidden="true">
+												 <div class="modal-dialog modal-dialog-centered" role="document">
+
+												  <div class="modal-content">
+												   <div class="modal-header">
+													   <h5 class="modal-title" id="rezygnacjaTitle">Powiadomienie uczestnika</h5>
+													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														 <span aria-hidden="true">&times;</span>
+													 </button>
+													 </div>
+												  <div class="modal-body">
+												  <form method="POST" action="/powiadom">
+															<div class="form-group row">
+																<input type="hidden"  class="form-control" name= "application" value="<%= detailstabn[i].id_application %>" >
+																<input type="hidden"  class="form-control" name= "user" value="<%= detailstabn[i].id_User %>" >
+																<div class="col-sm-12 align-self-center">
+																<% if(detailstabn[i].email == null){ %>
+																Podaj email uczestnika, a my wyślemy mu link do potwierdzenie szkolenia, aby miał dostęp do szczegółów.
+																<% } else { %>
+																Na podany przez uczestnika e-mail wyślemy link do szczegółów szkolenia.
+																<% } %>
+																<br>
+																	<input type="email" class="form-control" id="email" name="email" placeholder="Podaj e-mail" value="<%= detailstabn[i].email %>" >
+																</div>
+															</div>
+															 <button type="submit" class="btn btn-info ">Powiadom </button>
+
+													 </form>
+
+												  </div>
+
+													</div>
+												 </div>
+												</div>
+
+
+												<button type="button" class="btn btn-danger" data-toggle="modal" style="  border-radius: 0px 25px  25px 0px; width: 70px;" data-target="#rezygnacja-<%= detailstabn[i].id_application %>">
+													Usuń
+												</button>
+												<div class="modal fade" id="rezygnacja-<%= detailstabn[i].id_application %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												 <div class="modal-dialog modal-dialog-centered" role="document">
+												  <div class="modal-content">
+												   <div class="modal-header">
+													   <h5 class="modal-title" id="exampleModalLongTitle">Rezygnacja</h5>
+													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														 <span aria-hidden="true">&times;</span>
+													 </button>
+													 </div>
+												  <div class="modal-body">
+													  Czy klient zrezygnował ze szkolenia?
+												  </div>
+												   <div class="modal-footer">
+												   <a href="/deleteappw:<%= detailstabn[i].id_application %>" class="btn btn-danger">Tak</a>
+														 </div>
+													</div>
+												 </div>
+												</div>
+                                            </td>
+                                            </tr>
+                                           <% } %>
+
+                                        </table>
                                       </div>
-                                      
 									</div>
+								</div>
 									
                       </div>
 		<div class= "row">
 		<div class="col-12 text-center">
-		<a href="/finishfv:<%= eventtab[0].id_event %>">  <input type="button" id="but" class="next action-button" style=" width: 450px;" value="Pakuj szkolenie"/></a>
+		<a href="/finishfv:<%= eventtab[0].id_event %>">  <input type="button" id="but-finish" class="next action-button"" value="Pakuj szkolenie"/></a>
 		</div>
 		</div>
                   
@@ -177,7 +354,17 @@
 <% include ../../../partials/error %>
 </main>
 <% include ../../../partials/footer %>
+<script>
+	// Initialize tooltip component
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
 
+	// Initialize popover component
+	$(function () {
+		$('[data-toggle="popover"]').popover()
+	})
+</script>
 
 </body>
 </html> 

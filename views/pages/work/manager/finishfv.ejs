@@ -24,8 +24,13 @@
             <!-- fieldsets -->
             <fieldset>
                 <h2 id="title">Faktury</h2>
-                <h3 class="fs-subtitle">Upewnij się,że wszystkie dane są zgodne</h3>
-				<a href="/finishfv:<%= company[0][6] %>"> <input type="button" name="next" class="next action-button" style=" width: 450px;" value="Generuj wszystkie"/> </a>
+
+                <% if(company!=null){ %>
+                    <h3 class="fs-subtitle">Upewnij się,że wszystkie dane są zgodne</h3>
+				<a href="/makeinvoices:<%= company[0][6] %>"> <input type="button" name="next" class="next action-button" style=" width: 450px;" value="Generuj wszystkie"/> </a>
+                <% } else{%>
+                    <h3 class="fs-subtitle">Brak potwierdzonych uczestników. </h3>
+                    <% } %>
                  <div id="table" class="table-editable " style="margin-top: 25px;">
                          <table class="table table-bordered table-responsive-md table-striped text-center">
                                          <thead>
@@ -37,8 +42,7 @@
                                             </tr>
                                           </thead>
                                                                              
-											<% for(let i = 0; i <  company.length; i++) { %>
-                                            
+											<% if(company!=null) { for(let i = 0; i <  company.length; i++) { %>
                                             <tr>
 											<td> 
 											<%= i+1 %>.
@@ -53,12 +57,16 @@
                                           <%= company[i][3] %> * <%= company[i][2] %> - <%= company[i][4] %> = <%= company[i][5] %>
                                             </td>
                                             </tr>
-                                           <% } %>
+                                           <% } } %>
                                           
                                           
                                         </table>
                                       </div>
-                <a href="/finishcert:<%= company[0][6] %>"> <input type="button" name="next" class="next action-button" value="Dalej"/> </a>
+
+                <% if(company != null) { %>
+                    <a href="/finishcert:<%= company[0][6] %>"> <input type="button" name="next" class="next action-button" value="Dalej"/> </a>
+                <% } %>
+
             </fieldset>
         </form>
    

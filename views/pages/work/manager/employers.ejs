@@ -17,7 +17,7 @@
 <div class="card" style=" margin-top:30px; ">
 <h3 id="title" align="center" style=" font-size:25px; margin-bottom:20px;"> Pracownicy</h3>
 	<div class="row  align-self-center ">
-<button type="button " id="but" data-toggle="modal" style="width:500px;" data-target="#new">
+<button type="button " id="but-finish" data-toggle="modal" data-target="#new">
 													Dodaj 
 							</button>
 
@@ -27,7 +27,7 @@
 												 <div class="modal-dialog modal-dialog-centered modal-lg" role="document"   >
 												  <div class="modal-content" >
 												   <div class="modal-header text-center">
-													   <h3 class= "col-10 modal-title text-center" id="title" align="center" style="font-size:20px; margin-bottom:20px;"> Nowy prowadzący </h3>
+													   <h3 class= "col-10 modal-title text-center" id="title" align="center" style="font-size:20px; margin-bottom:20px;"> Nowy pracownik </h3>
 													  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 														 <span aria-hidden="true">&times;</span>
 													 </button>
@@ -48,7 +48,7 @@
 														<input type="text" class="form-control" name="adres" placeholder="Adres"/>
 													
 														<br>
-												   <button type="submit" id="but">
+												   <button type="submit" id="but-edit">
 													 Dodaj
 													</button>
 													</form>
@@ -76,7 +76,7 @@
 					</div>
 
 					<div class="col-3">					
-							<button type="button" id="but" data-toggle="modal" data-target="#edit-<%= employer[i].id_employee %>">
+							<button type="button" id="but-edit" data-toggle="modal" data-target="#edit-<%= employer[i].id_employee %>">
 													Edytuj
 							</button>
 												<div class="modal fade" id="edit-<%= employer[i].id_employee %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
